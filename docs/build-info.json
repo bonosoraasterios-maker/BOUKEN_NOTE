@@ -1,0 +1,15 @@
+{
+  "engineVersion": "1.0.0-phase1",
+  "frozenSource": "BOUKEN_NOTE_v23_46_LIVECODES_IMPORT(1).txt",
+  "frozenSha256": "b3d2f8fa21c0a59008292d968c90e9d670ccdcd31339f332308ae757b59331d9",
+  "runtimeSource": "BOUKEN_NOTE_v23_46_PARTS_PHASE1_LIVECODES_IMPORT.txt",
+  "runtimeSourceSha256": "44f8099b172efdf3c9bafb62e7a3f0fadbb88d849d6a4a32ac3eb2ba5653962d",
+  "extractedUniqueAssets": 26,
+  "runtimeScripts": [
+    "game.js",
+    "patch-weekly-arm.js",
+    "patch-visual-runtime.js",
+    "patch-background-runtime.js"
+  ],
+  "note": "Phase 1 externalization only; gameplay logic intentionally retained."
+}

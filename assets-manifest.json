@@ -1,0 +1,160 @@
+{
+  "assets": [
+    {
+      "path": "images/backgrounds/scene_legacy.webp",
+      "mime": "image/webp",
+      "bytes": 114272,
+      "sha1": "83e11eca3738afa1e4f3e670119d4e9ec2211f49"
+    },
+    {
+      "path": "images/ui/attack_button.webp",
+      "mime": "image/webp",
+      "bytes": 9960,
+      "sha1": "8432ce4d9dfeb88346d798b1ec1a9c02b994c1af"
+    },
+    {
+      "path": "images/effects/starlight_union.webp",
+      "mime": "image/webp",
+      "bytes": 312802,
+      "sha1": "ba129ecb6f98892cffb527862b9e4ce934d8dcd7"
+    },
+    {
+      "path": "images/characters/aria.webp",
+      "mime": "image/webp",
+      "bytes": 22364,
+      "sha1": "092d40158d18f76953c2729d8442a1c27f2fcce0"
+    },
+    {
+      "path": "images/characters/ceres.webp",
+      "mime": "image/webp",
+      "bytes": 22664,
+      "sha1": "726d2d3e25efa85a61e3a90878fb5b043442a02a"
+    },
+    {
+      "path": "images/characters/linnet.webp",
+      "mime": "image/webp",
+      "bytes": 21704,
+      "sha1": "d9b748b951723902b44dbb8f21f4049ccfa6e885"
+    },
+    {
+      "path": "images/enemies/daily_enemy.webp",
+      "mime": "image/webp",
+      "bytes": 197310,
+      "sha1": "a5e99ed8b55b44639063b59bb998480271caa0c0"
+    },
+    {
+      "path": "sounds/se/slash_1.mp4",
+      "mime": "audio/mp4",
+      "bytes": 9456,
+      "sha1": "8b604fbd1ce9901d47b1781176d7028870a425d2"
+    },
+    {
+      "path": "sounds/se/slash_2.mp4",
+      "mime": "audio/mp4",
+      "bytes": 9676,
+      "sha1": "4ae82217da0e19ffe1f3083f07f94cb79db01656"
+    },
+    {
+      "path": "sounds/se/slash_3.mp4",
+      "mime": "audio/mp4",
+      "bytes": 9526,
+      "sha1": "3d44c33932d99a8129c31d921cdb9ff05363430e"
+    },
+    {
+      "path": "sounds/se/enemy_attack.wav",
+      "mime": "audio/wav",
+      "bytes": 57374,
+      "sha1": "9b3b608be011a6bed84845b63926e216ab29728f"
+    },
+    {
+      "path": "sounds/se/charge.wav",
+      "mime": "audio/wav",
+      "bytes": 110294,
+      "sha1": "b0983ed26672226dbd85d1d5f2c4c2dfe28ebee8"
+    },
+    {
+      "path": "sounds/se/union_hit.mp4",
+      "mime": "audio/mp4",
+      "bytes": 10932,
+      "sha1": "64760311411941dc1898a516463ffa7416ddf707"
+    },
+    {
+      "path": "sounds/bgm/battle_bgm.mp4",
+      "mime": "audio/mp4",
+      "bytes": 1506745,
+      "sha1": "aec3950df794b66db99117624565d795edb9e4d3"
+    },
+    {
+      "path": "sounds/se/slash_heavy.mp4",
+      "mime": "audio/mp4",
+      "bytes": 13336,
+      "sha1": "74bdc7b55103c9dcf4cb1d178a19e3ea7bd9cb9a"
+    },
+    {
+      "path": "sounds/se/enemy_hit.mp4",
+      "mime": "audio/mp4",
+      "bytes": 12167,
+      "sha1": "b2b4fd604d68fec6bb04f7e1bc479a555422f6a6"
+    },
+    {
+      "path": "sounds/se/heal.mp4",
+      "mime": "audio/mp4",
+      "bytes": 23458,
+      "sha1": "c7a4dea86597eb8b8e9c1d595c01d93e21c0a769"
+    },
+    {
+      "path": "sounds/se/revive.mp4",
+      "mime": "audio/mp4",
+      "bytes": 28238,
+      "sha1": "6acb36c531d47296ce92fecc24c79c6d125238c1"
+    },
+    {
+      "path": "sounds/se/holy.mp4",
+      "mime": "audio/mp4",
+      "bytes": 22234,
+      "sha1": "bb57206ddfbe4815ee77e1a3985e21baebd6ed99"
+    },
+    {
+      "path": "sounds/se/barrier.mp4",
+      "mime": "audio/mp4",
+      "bytes": 18965,
+      "sha1": "5956e21f2dd377ff5a1e2c588b2bc7045b855405"
+    },
+    {
+      "path": "images/ui/lower_reference.webp",
+      "mime": "image/webp",
+      "bytes": 81136,
+      "sha1": "36c768d809a3d513d85c71c69ca3cab33c7996f8"
+    },
+    {
+      "path": "images/enemies/daily_enemy_overlay.png",
+      "mime": "image/png",
+      "bytes": 236337,
+      "sha1": "4d7b8b62656983250ace20913dc05827564e38b4"
+    },
+    {
+      "path": "images/enemies/weekly_enemy.webp",
+      "mime": "image/webp",
+      "bytes": 590874,
+      "sha1": "ba3fe4998ebd670c234ee1c6836b314dafbe5bcf"
+    },
+    {
+      "path": "images/backgrounds/battlefield_clean.webp",
+      "mime": "image/webp",
+      "bytes": 387704,
+      "sha1": "bfd15c161653f61fbfc4508e44856fc0d40e039f"
+    },
+    {
+      "path": "images/characters/protagonist.webp",
+      "mime": "image/webp",
+      "bytes": 236690,
+      "sha1": "9790b104448ee2d5c66d142e2fa822f73e87d0cd"
+    },
+    {
+      "path": "images/ui/title_logo.webp",
+      "mime": "image/webp",
+      "bytes": 25162,
+      "sha1": "3dab1ae41e917ff780d14d6c8b84f93d4653ddce"
+    }
+  ]
+}
