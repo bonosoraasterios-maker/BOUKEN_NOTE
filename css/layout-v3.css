@@ -1,0 +1,244 @@
+/* ============================================================
+   BOUKEN NOTE Engine v1 — Patch 03
+   REFERENCE-LOCK LAYOUT
+   Goal: match the approved URL-less landscape reference, not merely fit 16:9.
+   Logic/save/battle rules unchanged.
+   ============================================================ */
+
+:root{
+  --bn-gold:#caa65f;
+  --bn-gold-dark:#6b4d21;
+  --bn-navy:#030a18;
+  --bn-panel:rgba(2,9,23,.94);
+}
+
+/* Upper/lower boundary in the approved reference is ~57%. */
+.lowerRef{
+  background:linear-gradient(to bottom,
+    transparent 0 55.5%,
+    rgba(2,7,20,.12) 55.5%,
+    rgba(2,7,20,.54) 58%,
+    rgba(2,7,20,.88) 66%,
+    rgba(2,7,20,.95) 100%)!important;
+}
+
+/* ---------- title block ---------- */
+.sceneLoreV29{
+  left:2.4%!important;
+  top:2.6%!important;
+  width:17.8%!important;
+}
+.sceneLoreV29 .ttl{width:100%!important}
+.targetLoreMeta{
+  position:absolute;
+  left:2.9%;
+  top:12.3%;
+  z-index:44;
+  color:#fff;
+  font-family:serif;
+  font-weight:900;
+  text-shadow:0 2px 5px #000,0 0 8px #6ea7ff66;
+  pointer-events:none;
+}
+.targetLoreMeta .chapter{font-size:clamp(8px,1.15vw,17px);letter-spacing:.04em}
+.targetLoreMeta .wave{margin-top:.55em;font-size:clamp(9px,1.35vw,20px);letter-spacing:.06em}
+
+/* ---------- battlefield geometry ---------- */
+.heroOriginalV29{
+  left:2.0%!important;
+  top:5.5%!important;
+  width:38.5%!important;
+  height:52.5%!important;
+  background-size:auto 108%!important;
+  background-position:left bottom!important;
+}
+.weeklyOriginalArt{
+  left:63.0%!important;
+  top:5.5%!important;
+  width:31.0%!important;
+  height:44.5%!important;
+  background-position:center bottom!important;
+}
+.weeklyBarrierLabel{top:8.8%!important;right:3.0%!important}
+.dailyFormation{
+  left:39.5%!important;
+  top:20.0%!important;
+  width:24.0%!important;
+  height:31.5%!important;
+}
+.dailyFormation[data-count="1"] .dailyPawn:nth-child(1){
+  left:5%!important;
+  top:0!important;
+  width:88%!important;
+  height:100%!important;
+  transform:scale(.98)!important;
+}
+/* The approved reference has one clean name/HP block below the daily enemy,
+   not the old date label + mini bar attached to the sprite. */
+.dailyPawn .enemyName,.dailyPawn .hpMini,.dailyPawn .age{display:none!important}
+
+.dailyFootStatus{
+  position:absolute;
+  left:42.0%;
+  top:46.0%;
+  width:19.0%;
+  z-index:63;
+  color:#fff;
+  text-shadow:0 2px 4px #000;
+  pointer-events:none;
+  font-family:system-ui,-apple-system,sans-serif;
+  font-weight:900;
+}
+.dailyFootStatus .dname{font-size:clamp(7px,.95vw,13px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dailyFootStatus .drow{display:flex;justify-content:space-between;gap:8px;margin-top:2px;font-size:clamp(7px,.9vw,12px)}
+.dailyFootStatus .dbar{height:7px;margin-top:3px;border-radius:999px;background:#260d19;border:1px solid #6f3048;overflow:hidden}
+.dailyFootStatus .dbar i{display:block;height:100%;background:linear-gradient(90deg,#c62e58,#ff6f92)}
+
+.scene .weeklyFootStatus,
+.scene[data-daily-count="0"] .weeklyFootStatus,
+.scene[data-daily-count="1"] .weeklyFootStatus,
+.scene[data-daily-count="2"] .weeklyFootStatus,
+.scene[data-daily-count="3"] .weeklyFootStatus,
+.scene[data-daily-count="4"] .weeklyFootStatus,
+.scene[data-daily-count="5"] .weeklyFootStatus,
+.scene[data-daily-count="6"] .weeklyFootStatus,
+.scene[data-daily-count="7"] .weeklyFootStatus{
+  right:12.8%!important;
+  bottom:auto!important;
+  top:46.0%!important;
+  width:25.0%!important;
+}
+.weeklyFootStatus .wname{font-size:clamp(7px,.95vw,13px)!important}
+.weeklyFootStatus .wrow{font-size:clamp(7px,.9vw,12px)!important}
+.weeklyFootStatus .wbar{height:7px!important}
+
+/* ---------- lower three-column mission block ---------- */
+.missionFrame{
+  top:57.0%!important;
+  height:39.5%!important;
+  border:1.5px solid var(--bn-gold)!important;
+  background:
+    linear-gradient(180deg,rgba(5,15,34,.97),rgba(2,8,20,.97))!important;
+  box-shadow:inset 0 0 0 1px var(--bn-gold-dark),0 5px 16px #000c!important;
+}
+.missionFrameDaily{left:1.25%!important;width:11.6%!important}
+.missionFrameWeekly{left:13.0%!important;width:11.6%!important}
+.missionFrameSpecial{left:24.75%!important;width:11.6%!important}
+.missionFrame::before{top:5%!important;font-size:clamp(9px,1.02vw,15px)!important}
+.missionFrame::after{top:16%!important;left:6%!important;right:6%!important}
+
+/* Mission rows should read as a single rectangular row, not floating pills. */
+.overlayText{
+  height:6.4%!important;
+  padding:3px 4px!important;
+  border:1px solid rgba(173,139,76,.62)!important;
+  border-right:0!important;
+  border-radius:0!important;
+  background:rgba(4,12,28,.72)!important;
+  font-size:clamp(6px,.62vw,9px)!important;
+  line-height:1.08!important;
+  display:flex!important;
+  align-items:center!important;
+}
+.lowerRef .quest{height:6.4%!important}
+.lowerRef .quest button{
+  border:1px solid rgba(173,139,76,.62)!important;
+  border-left:0!important;
+  border-radius:0!important;
+  background:rgba(4,12,28,.72)!important;
+  font-family:serif!important;
+  font-weight:900!important;
+  font-size:clamp(7px,.72vw,10px)!important;
+  color:#f7dda4!important;
+}
+/* Daily */
+.dqt0,.dqt1,.dqt2{left:1.85%!important;width:7.4%!important}
+.rd0,.rd1,.rd2{left:9.25%!important;width:2.85%!important}
+.dqt0,.rd0{top:66.0%!important}.dqt1,.rd1{top:73.5%!important}.dqt2,.rd2{top:81.0%!important}
+/* Weekly */
+.wqt0,.wqt1,.wqt2{left:13.6%!important;width:7.4%!important}
+.rw0,.rw1,.rw2{left:21.0%!important;width:2.85%!important}
+.wqt0,.rw0{top:66.0%!important}.wqt1,.rw1{top:73.5%!important}.wqt2,.rw2{top:81.0%!important}
+/* Special */
+.sqt0,.sqt1,.sqt2{left:25.35%!important;width:7.4%!important}
+.rs0,.rs1,.rs2{left:32.75%!important;width:2.85%!important}
+.sqt0,.rs0{top:66.0%!important}.sqt1,.rs1{top:73.5%!important}.sqt2,.rs2{top:81.0%!important}
+
+.missionEdit{
+  top:89.8%!important;
+  height:4.6%!important;
+  border-radius:999px!important;
+  font-size:clamp(6px,.65vw,9px)!important;
+}
+.missionEditDaily{left:2.05%!important;width:9.9%!important}
+.missionEditWeekly{left:13.8%!important;width:9.9%!important}
+.missionEditSpecial{left:25.55%!important;width:9.9%!important}
+
+/* ---------- party cards ---------- */
+.partyParts{
+  left:38.1%!important;
+  top:57.0%!important;
+  width:37.2%!important;
+  height:39.6%!important;
+  gap:1.1%!important;
+}
+.characterCard{
+  padding:2.4% 2.6% 2.5%!important;
+  gap:1.1%!important;
+  grid-template-rows:auto minmax(0,1fr) auto auto!important;
+  border:1.5px solid #d6ad61!important;
+  background:linear-gradient(180deg,rgba(3,11,27,.98),rgba(1,6,16,.99))!important;
+}
+.charHeader{min-height:15%!important;align-items:center!important}
+.charName{font-family:serif!important;font-size:clamp(8px,.92vw,13px)!important;line-height:1.0!important}
+.charName::after{display:block;margin-top:2px;font-size:.84em;color:#f1e0bf;font-weight:800}
+.characterCard[data-id="aria"] .charName::after{content:"Lv.26"}
+.characterCard[data-id="ceres"] .charName::after{content:"Lv.24"}
+.characterCard[data-id="linnet"] .charName::after{content:"Lv.24"}
+.charMeta{display:none!important}
+.charArtWrap{margin:0!important;border:1px solid #32445e!important}
+.charArt{object-fit:cover!important;object-position:center 18%!important}
+.charHpLine{font-family:serif!important;font-size:clamp(6px,.62vw,9px)!important}
+.charHpLine strong{font-size:clamp(8px,.85vw,12px)!important}
+.charHpTrack{height:5px!important}
+.charAbilities{grid-template-columns:1fr 1fr!important;gap:7%!important;padding:0 6%!important}
+.abilitySlot{
+  min-height:34px!important;
+  aspect-ratio:1.25/1!important;
+  padding:2px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:1px solid #9a7b3f!important;
+  border-radius:2px!important;
+  background:linear-gradient(180deg,#0d1b34,#061023)!important;
+}
+.abilityIcon{width:auto!important;height:auto!important;font-size:clamp(15px,1.75vw,27px)!important;line-height:1!important}
+.abilityKind,.abilityName{display:none!important}
+
+/* ---------- right action column ---------- */
+.lowerAttack{
+  left:82.1%!important;
+  top:55.0%!important;
+  width:13.4%!important;
+  height:23.0%!important;
+}
+.refDate{display:none!important}
+.rewardSingle{
+  left:77.4%!important;
+  top:77.5%!important;
+  width:21.0%!important;
+  height:19.0%!important;
+  padding:7px 9px!important;
+  grid-template-rows:auto auto auto minmax(24px,1fr)!important;
+  background:linear-gradient(180deg,rgba(4,14,31,.98),rgba(2,9,21,.98))!important;
+  border:1.5px solid #b89551!important;
+  box-shadow:inset 0 0 0 1px #61471f,0 5px 16px #000c!important;
+}
+.rewardHead{font-family:serif!important;font-size:clamp(9px,1.0vw,15px)!important}
+.rewardLine,.rewardLine span{font-size:clamp(6px,.62vw,9px)!important}
+.rewardLine strong{font-size:clamp(7px,.72vw,11px)!important}
+#rewardSingleBtn{min-height:22px!important;border-radius:999px!important}
+
+/* Keep the target composition clean. */
+#dailyHUD,#weeklyHUD{display:none!important}
