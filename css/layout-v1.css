@@ -1,0 +1,198 @@
+/* ============================================================
+   BOUKEN NOTE Engine v1 — Native 16:9 layout layer
+   Purpose: layout only. Battle logic / save / skills untouched.
+   This file intentionally overrides legacy positioning without
+   adding more rules to the old 110KB game.css.
+   ============================================================ */
+
+html,body{width:100%;min-height:100%;background:#020714}
+body{display:flex;align-items:flex-start;justify-content:center;overflow-x:hidden}
+
+/* One game canvas. */
+#g{
+  position:relative!important;
+  width:min(100vw,1280px)!important;
+  max-width:1280px!important;
+  aspect-ratio:16/9!important;
+  min-height:0!important;
+  background:#020714!important;
+  overflow:hidden!important;
+}
+
+/* The existing battle scene becomes the full canvas. */
+.scene{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  aspect-ratio:auto!important;
+  z-index:1!important;
+  overflow:hidden!important;
+  background-size:cover!important;
+  background-position:center center!important;
+}
+
+/* Upper visuals: keep their approved art, only adapt the canvas. */
+.heroOriginalV29{
+  left:-4.5%!important;
+  top:5.0%!important;
+  width:43.0%!important;
+  height:63.0%!important;
+  background-position:left top!important;
+  background-size:auto 111%!important;
+}
+.sceneLoreV29{left:2.6%!important;top:2.1%!important;width:30.5%!important}
+.coinHud{z-index:50!important}
+.weeklyOriginalArt{left:69%!important;top:7.5%!important;width:28%!important;height:48%!important}
+.weeklyBarrierLabel{top:7.0%!important;right:3.3%!important}
+.weeklyFootStatus{right:3.4%!important;bottom:43.8%!important;width:29%!important}
+.dailyFormation{left:39%!important;top:15%!important;width:40%!important;height:42%!important}
+.dailyFormation[data-count="1"] .dailyPawn:nth-child(1){left:17%!important;top:17%!important;width:40%!important;height:67%!important;transform:scale(1.02)!important}
+
+/* The old lower section is no longer a second screen. */
+.lowerRef{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  aspect-ratio:auto!important;
+  z-index:35!important;
+  background:none!important;
+  border:0!important;
+  overflow:visible!important;
+  pointer-events:none!important;
+}
+.lowerRef::before,.lowerRef::after{display:none!important;content:none!important}
+
+/* Soft lower HUD base; still transparent enough to keep the battlefield visible. */
+.lowerRef{
+  background:linear-gradient(to bottom,
+    transparent 0 53%,
+    rgba(2,7,20,.22) 53%,
+    rgba(2,7,20,.88) 59%,
+    rgba(2,7,20,.98) 100%)!important;
+}
+
+/* ===== A: mission block — left lower 35% ===== */
+.overlayText{
+  z-index:45!important;
+  padding:3px 5px!important;
+  border:1px solid #8f7449!important;
+  border-radius:6px!important;
+  background:rgba(5,15,30,.93)!important;
+  font-size:clamp(7px,.86vw,11px)!important;
+  line-height:1.1!important;
+}
+.lowerRef .quest{z-index:46!important;pointer-events:auto!important}
+.lowerRef .quest button{
+  border-radius:999px!important;
+  font-size:clamp(8px,.92vw,12px)!important;
+  background:linear-gradient(180deg,#13375f,#0b2542)!important;
+}
+
+/* Daily column */
+.dqt0,.dqt1,.dqt2{left:2.6%!important;width:6.9%!important;height:5.9%!important}
+.dqt0{top:64.0%!important}.dqt1{top:72.0%!important}.dqt2{top:80.0%!important}
+.rd0,.rd1,.rd2{left:9.8%!important;width:3.8%!important;height:5.9%!important}
+.rd0{top:64.0%!important}.rd1{top:72.0%!important}.rd2{top:80.0%!important}
+#rDTotal{left:2.6%!important;bottom:5.2%!important;width:11.0%!important;height:5.5%!important}
+.dqt0::before{content:'デイリー';position:absolute;left:-2%;top:-125%;width:160%;color:#f5ead0;font-family:serif;font-weight:900;font-size:clamp(11px,1.15vw,16px);text-align:left;pointer-events:none}
+
+/* Weekly column */
+.wqt0,.wqt1,.wqt2{left:14.5%!important;width:7.1%!important;height:5.9%!important}
+.wqt0{top:64.0%!important}.wqt1{top:72.0%!important}.wqt2{top:80.0%!important}
+.rw0,.rw1,.rw2{left:21.9%!important;width:3.8%!important;height:5.9%!important}
+.rw0{top:64.0%!important}.rw1{top:72.0%!important}.rw2{top:80.0%!important}
+#rWTotal{left:14.5%!important;bottom:5.2%!important;width:11.2%!important;height:5.5%!important}
+.wqt0::before{content:'ウィークリー';position:absolute;left:-2%;top:-125%;width:170%;color:#f5ead0;font-family:serif;font-weight:900;font-size:clamp(11px,1.15vw,16px);text-align:left;pointer-events:none}
+
+/* Special column */
+.sqt0,.sqt1,.sqt2{left:26.6%!important;width:7.1%!important;height:5.9%!important}
+.sqt0{top:64.0%!important}.sqt1{top:72.0%!important}.sqt2{top:80.0%!important}
+.rs0,.rs1,.rs2{left:34.0%!important;width:3.8%!important;height:5.9%!important}
+.rs0{top:64.0%!important}.rs1{top:72.0%!important}.rs2{top:80.0%!important}
+#rSTotal{left:26.6%!important;bottom:5.2%!important;width:11.2%!important;height:5.5%!important}
+.sqt0::before{content:'スペシャル';position:absolute;left:-2%;top:-125%;width:165%;color:#f5ead0;font-family:serif;font-weight:900;font-size:clamp(11px,1.15vw,16px);text-align:left;pointer-events:none}
+
+.refTotal{
+  z-index:45!important;
+  font-size:clamp(8px,.95vw,12px)!important;
+  background:rgba(7,20,38,.95)!important;
+}
+
+/* ===== B: three compact vertical character cards ===== */
+.partyParts{
+  left:39.2%!important;
+  top:58.0%!important;
+  width:35.2%!important;
+  height:35.5%!important;
+  gap:1.5%!important;
+  z-index:48!important;
+}
+.characterCard{
+  padding:3.0% 3.2% 3.2%!important;
+  gap:1.4%!important;
+  grid-template-rows:auto minmax(0,1fr) auto auto!important;
+  border:1.5px solid #d0aa5e!important;
+  box-shadow:inset 0 0 0 1px #6b532d,0 5px 14px #000c!important;
+}
+.charName{font-size:clamp(10px,1.05vw,15px)!important}
+.charMeta{font-size:clamp(6px,.7vw,9px)!important}
+.charArtWrap{min-height:0!important}
+.charArt{object-fit:cover!important;object-position:center 22%!important}
+.charHpLine{font-size:clamp(6px,.66vw,9px)!important}
+.charHpLine strong{font-size:clamp(9px,.9vw,12px)!important}
+.charHpTrack{height:5px!important}
+.abilitySlot{min-height:31px!important;padding:3px 2px!important}
+.abilityIcon{width:14px!important;height:14px!important}
+.abilityKind{font-size:clamp(5px,.52vw,7px)!important}
+.abilityName{font-size:clamp(6px,.58vw,8px)!important}
+
+/* ===== C: action block — right lower ===== */
+.lowerAttack{
+  left:78.3%!important;
+  top:56.0%!important;
+  width:17.8%!important;
+  height:21.5%!important;
+  z-index:55!important;
+  pointer-events:auto!important;
+  background:url(../images/ui/attack_button.webp) center/contain no-repeat!important;
+  border:0!important;
+  border-radius:50%!important;
+  color:transparent!important;
+  filter:drop-shadow(0 5px 12px rgba(0,0,0,.7))!important;
+}
+.refDate{
+  left:81.0%!important;
+  top:74.0%!important;
+  width:13.0%!important;
+  height:7.2%!important;
+  z-index:55!important;
+  font-size:clamp(9px,.92vw,13px)!important;
+}
+.rewardSingle{
+  left:77.2%!important;
+  top:82.0%!important;
+  width:20.8%!important;
+  height:15.2%!important;
+  z-index:55!important;
+  padding:6px 8px!important;
+  gap:3px!important;
+  grid-template-rows:auto auto auto minmax(22px,1fr)!important;
+  pointer-events:auto!important;
+}
+.rewardHead{font-size:clamp(9px,.9vw,12px)!important;padding-bottom:2px!important}
+.rewardLine{font-size:clamp(6px,.62vw,8px)!important}
+.rewardLine span{font-size:clamp(6px,.58vw,8px)!important}
+.rewardLine strong{font-size:clamp(7px,.68vw,9px)!important}
+#rewardSingleBtn{min-height:23px!important;max-height:30px!important;font-size:clamp(8px,.8vw,11px)!important}
+
+/* Main battle screen only. Editing / debug UI remains outside the play field. */
+.panels{display:none!important}
+.uiModal{z-index:200!important}
+
+/* Landscape-first. In portrait, keep the complete 16:9 canvas visible. */
+@media (orientation:portrait){
+  body{align-items:flex-start}
+  #g{width:100vw!important;height:auto!important}
+}
