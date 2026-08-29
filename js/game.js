@@ -32,7 +32,7 @@ const MAX_DAILY_STACK=7, MAX_MAGIC_SP=5, MAX_TAME_SP=5, MAX_BEAST_HP=200;
 const BASE_ENEMY_DMG=100;
 const ALLY_DMG=100, TAME_DMG=50, UNION_DMG=100;
 const DAILY_ENEMY_ART="images/enemies/daily_enemy.webp";
-const DAILY_REWARD=5, WEEKLY_REWARD=30, WEEKLY_BOSS_BONUS=10;
+const DAILY_REWARD=50, WEEKLY_REWARD=100, WEEKLY_BOSS_BONUS=10;
 
 const MAX_WARRIOR_SP=5;
 function preemptChance(){
@@ -754,8 +754,8 @@ function render(){
       const bt=Math.max(0,Math.floor(Number(S.bleed[i])||0));bb.textContent='出血 ×'+bt;bb.classList.toggle('on',bt>0);
     }
   }
-  $$('.daily').forEach(q=>{const i=+q.dataset.i;q.classList.toggle('done',!!S.daily[i]);q.querySelector('button').textContent=S.daily[i]?'CLEAR':'+5'});
-  $$('.weekly').forEach(q=>{const i=+q.dataset.i;q.classList.toggle('done',!!S.weekly[i]);q.querySelector('button').textContent=S.weekly[i]?'CLEAR':'+30'});
+  $$('.daily').forEach(q=>{const i=+q.dataset.i;q.classList.toggle('done',!!S.daily[i]);q.querySelector('button').textContent=S.daily[i]?'CLEAR':'+50'});
+  $$('.weekly').forEach(q=>{const i=+q.dataset.i;q.classList.toggle('done',!!S.weekly[i]);q.querySelector('button').textContent=S.weekly[i]?'CLEAR':'+100'});
   $$('.special').forEach(q=>{const i=+q.dataset.i;q.classList.toggle('done',!!S.special[i]);q.querySelector('button').textContent=S.special[i]?'CLEAR':'+100'});
   const rD=$('#rDTotal');if(rD)rD.textContent='本日 +'+(S.daily.filter(Boolean).length*DAILY_REWARD);
   const rW=$('#rWTotal');if(rW)rW.textContent='今週 +'+(S.weekly.filter(Boolean).length*WEEKLY_REWARD);
@@ -1400,8 +1400,8 @@ async function startBattle(){
 }
 
 $('#attack').addEventListener('click',startBattle);
-$$('.daily button').forEach(btn=>btn.onclick=e=>{startBGM();const q=e.currentTarget.closest('.quest'),i=+q.dataset.i;if(S.daily[i]||busy)return;S.daily[i]=1;S.coin+=DAILY_REWARD;S.skillSP=Math.max(0,(S.skillSP||0)+1);S.battlePts=Math.min(3,S.battlePts+1);save();render();toast('デイリー達成！ +5ポイント ／ SKILL SP +1 ／ 攻撃Pt +1');const dc=S.daily.filter(Boolean).length;const cure=dc>=3?'全員':dc+'体';log('SKILL SP '+S.skillSP+' ／ 攻撃Pt '+S.battlePts+'/3 ／ 先制率 '+preemptChance()+'% ／ 星晶浄化《ステラ・リリース》：'+cure+'浄化 ／ 3Ptでスターライト・ユニオン。')});
-$$('.weekly button').forEach(btn=>btn.onclick=e=>{const q=e.currentTarget.closest('.quest'),i=+q.dataset.i;if(S.weekly[i]||busy)return;S.weekly[i]=1;S.coin+=WEEKLY_REWARD;save();render();const wc=S.weekly.filter(Boolean).length;const hits=wc===1?5:wc===2?6:10;toast('ウィークリー達成 +30ポイント ／ オーバーブレイク '+hits+'連撃！')});
+$$('.daily button').forEach(btn=>btn.onclick=e=>{startBGM();const q=e.currentTarget.closest('.quest'),i=+q.dataset.i;if(S.daily[i]||busy)return;S.daily[i]=1;S.coin+=DAILY_REWARD;S.skillSP=Math.max(0,(S.skillSP||0)+1);S.battlePts=Math.min(3,S.battlePts+1);save();render();toast('デイリー達成！ +50ポイント ／ SKILL SP +1 ／ 攻撃Pt +1');const dc=S.daily.filter(Boolean).length;const cure=dc>=3?'全員':dc+'体';log('SKILL SP '+S.skillSP+' ／ 攻撃Pt '+S.battlePts+'/3 ／ 先制率 '+preemptChance()+'% ／ 星晶浄化《ステラ・リリース》：'+cure+'浄化 ／ 3Ptでスターライト・ユニオン。')});
+$$('.weekly button').forEach(btn=>btn.onclick=e=>{const q=e.currentTarget.closest('.quest'),i=+q.dataset.i;if(S.weekly[i]||busy)return;S.weekly[i]=1;S.coin+=WEEKLY_REWARD;save();render();const wc=S.weekly.filter(Boolean).length;const hits=wc===1?5:wc===2?6:10;toast('ウィークリー達成 +100ポイント ／ オーバーブレイク '+hits+'連撃！')});
 $$('.special button').forEach(btn=>btn.onclick=e=>{const q=e.currentTarget.closest('.quest'),i=+q.dataset.i;if(S.special[i]||busy)return;S.special[i]=1;S.coin+=100;save();render();toast('スペシャル達成 +100 COIN')});
 
 $('#tameBtn').onclick=()=>{};
