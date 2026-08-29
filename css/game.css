@@ -1,0 +1,2126 @@
+/* ===== SOURCE STYLE 00: anonymous_00 ===== */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#020714;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
+body{display:flex;justify-content:center;min-height:100dvh}
+button{font:inherit;color:inherit}
+#g{width:min(100vw,750px);background:#020714;overflow:hidden}
+.scene{position:relative;width:100%;aspect-ratio:750/455;background:url(../images/backgrounds/scene_legacy.webp) center/100% 100% no-repeat;pointer-events:none;overflow:hidden}
+.attackHit{
+  position:absolute;z-index:18;
+  right:2.7%;top:68.2%;
+  width:19.0%;height:17.4%;
+  border:0!important;border-radius:50%;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:transparent!important;
+  outline:none!important;
+}
+.attackHit::before,.attackHit::after{display:none!important;content:none!important}
+.attackHit:active{background:transparent!important;transform:none!important;box-shadow:none!important}
+
+
+
+.attackVisual{
+  position:absolute;z-index:17;
+  left:75.33%;top:63.19%;
+  width:24.4%;height:35.42%;
+  background:url(../images/ui/attack_button.webp) center/100% 100% no-repeat;
+  pointer-events:none;
+}
+.attackHit{
+  position:absolute;z-index:19;
+  left:77.6%;top:64.4%;
+  width:20.5%;height:22.4%;
+  border:0;border-radius:50%;
+  background:transparent;
+  color:transparent;
+}
+.attackHit:active{background:#8ccfff12}
+.battleDateDynamic{
+  position:absolute;z-index:20;
+  left:76.6%;top:89.0%;
+  width:22.6%;height:8.4%;
+  display:grid;place-items:center;
+  text-align:center;
+  color:#fff0c3;
+  font-family:serif;font-weight:900;
+  font-size:clamp(11px,2.2vw,16px);
+  line-height:1.15;
+  text-shadow:0 2px 3px #000;
+  pointer-events:none;
+}
+.toast{position:absolute;z-index:30;left:50%;top:51%;transform:translate(-50%,-50%);width:min(84%,520px);padding:11px 14px;text-align:center;background:#051127ef;border:1px solid #c6a256;border-radius:10px;font-weight:900;box-shadow:0 10px 30px #000b;opacity:0;pointer-events:none}
+.toast.show{animation:toast 1.55s ease}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-42%) scale(.92)}14%,72%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-57%)}}
+.float{position:absolute;z-index:24;font-weight:1000;font-size:clamp(25px,6vw,48px);color:#fff1b1;text-shadow:0 3px 0 #6d2636,0 0 14px #ff8798;pointer-events:none;animation:float .9s ease forwards}
+@keyframes float{0%{opacity:0;transform:translateY(10px) scale(.7)}20%{opacity:1;transform:translateY(0) scale(1.15)}100%{opacity:0;transform:translateY(-45px) scale(1)}}
+.sceneFlash{position:absolute;z-index:20;inset:0;background:#eafbff;opacity:0;pointer-events:none}
+.sceneFlash.go{animation:flash .34s ease}
+@keyframes flash{50%{opacity:.68}}
+.shakeLight{animation:shakeL .28s linear}
+.shakeHeavy{animation:shakeH .39s linear}
+@keyframes shakeL{0%,100%{transform:translate3d(0,0,0)}20%{transform:translate3d(-2px,1px,0)}40%{transform:translate3d(2px,-1px,0)}60%{transform:translate3d(-2px,-1px,0)}80%{transform:translate3d(2px,1px,0)}}
+@keyframes shakeH{0%,100%{transform:translate3d(0,0,0)}10%{transform:translate3d(-8px,4px,0)}20%{transform:translate3d(7px,-5px,0)}30%{transform:translate3d(-7px,-3px,0)}40%{transform:translate3d(8px,5px,0)}50%{transform:translate3d(-6px,3px,0)}60%{transform:translate3d(6px,-4px,0)}70%{transform:translate3d(-5px,4px,0)}80%{transform:translate3d(5px,-3px,0)}90%{transform:translate3d(-3px,2px,0)}}
+.union{position:absolute;z-index:40;inset:0;display:none;place-items:center;background:radial-gradient(circle,#e8fbffbf 0,#69cbff73 24%,#4b46b96a 54%,#020714f2 84%);padding:18px}
+.union.on{display:grid;animation:union 2.7s ease both}
+.unionFrame{position:relative;width:min(94%,700px);max-height:78vh;margin-top:8px;border-radius:22px;overflow:hidden;filter:drop-shadow(0 0 30px #62c4ff99) drop-shadow(0 22px 34px #000c);animation:unionZoom 2.35s ease both}
+.unionFrame img{display:block;width:100%;height:auto;max-height:76vh;object-fit:contain;transform:none;transform-origin:center center}
+.unionFrame:before{content:"";position:absolute;inset:0;border:2px solid #d8bf7d;border-radius:22px;pointer-events:none;z-index:2;box-shadow:inset 0 0 0 1px #fff3}
+.unionGlow{position:absolute;inset:-18%;background:radial-gradient(circle,#fff8 0,#8ddfff55 25%,transparent 60%);z-index:1;animation:uglow 2.2s ease both;pointer-events:none}
+@keyframes uglow{0%{opacity:0;transform:scale(.7)}26%{opacity:1;transform:scale(1)}100%{opacity:.42;transform:scale(1.18)}}
+@keyframes union{0%{opacity:0}11%,86%{opacity:1}100%{opacity:0}}
+@keyframes unionZoom{0%{transform:scale(.93)}22%{transform:scale(1)}100%{transform:scale(1.015)}}
+.panels{
+  padding:6px 8px 12px;
+  background:
+    linear-gradient(180deg,#07111fe8,#030914f4),
+    radial-gradient(circle at 50% 0,#1c3d6a22,transparent 55%);
+  border-top:1px solid #7a633a;
+}
+.cols{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:4px;
+  border:1px solid #7a633a;
+  background:#050b13;
+  box-shadow:inset 0 0 26px #31517a18;
+}
+.panel{
+  min-height:255px;
+  border-right:1px solid #6c5838;
+  background:linear-gradient(180deg,#0b1728ee,#06101bef);
+  padding:5px 6px 4px;
+  position:relative;
+}
+.panel:last-child{border-right:0}
+.panel h3{
+  margin:0;
+  padding:3px 1px 2px;
+  text-align:center;
+  font-family:serif;
+  color:#f2e8c8;
+  font-size:clamp(10px,2.1vw,15px);
+  letter-spacing:.04em;
+  border-bottom:1px solid #6a5738;
+}
+.panel .sub{
+  text-align:center;
+  color:#bca87d;
+  font-size:clamp(7px,1.2vw,9px);
+  padding:2px 0 5px;
+  min-height:17px;
+}
+.quest{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:3px;
+  align-items:center;
+  border-top:1px solid #2a374a;
+  padding:5px 1px;
+  min-height:43px;
+}
+.quest .qtxt{
+  font-size:clamp(7px,1.42vw,10px);
+  line-height:1.22;
+  color:#e5ebf4;
+}
+.quest button,.shop button{
+  min-width:42px;
+  border:1px solid #c49a50;
+  border-radius:999px;
+  background:#102844;
+  padding:3px 5px;
+  font-size:clamp(7px,1.35vw,10px);
+  font-weight:900;
+  white-space:nowrap;
+  box-shadow:inset 0 0 8px #4fa4ff18;
+}
+.quest.done button{
+  background:#174b69;
+  border-color:#73bce1;
+  color:#ecfbff;
+}
+.shop{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:3px;
+  align-items:center;
+  border-top:1px solid #2a374a;
+  padding:4px 1px;
+  min-height:42px;
+  font-size:clamp(7px,1.28vw,9px);
+  color:#e5ebf4;
+}
+.total{
+  position:absolute;
+  left:4px;right:4px;bottom:4px;
+  padding:5px 2px 2px;
+  text-align:center;
+  color:#efc66f;
+  font-weight:900;
+  font-size:clamp(8px,1.55vw,11px);
+  border-top:1px solid #765f3b;
+  background:linear-gradient(180deg,transparent,#0b1627b0);
+}
+
+/* Detailed class info / reset controls stay available but do not dominate the main screen. */
+.utility{
+  margin-top:6px;
+  border:1px solid #334561;
+  border-radius:7px;
+  background:#050b15;
+  overflow:hidden;
+}
+.utility summary{
+  list-style:none;
+  cursor:pointer;
+  padding:7px 10px;
+  text-align:center;
+  color:#bcd0e8;
+  font-size:11px;
+  font-weight:800;
+}
+.utility summary::-webkit-details-marker{display:none}
+.utility summary::after{content:" ＋";color:#d5af64}
+.utility[open] summary::after{content:" －"}
+
+.skillStrip{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:4px;
+  padding:6px 6px 0;
+}
+.skillCard{
+  border:1px solid #5f5138;
+  border-radius:4px;
+  background:#091425;
+  padding:5px;
+  text-align:center;
+  min-height:60px;
+}
+.skillCard b{
+  display:block;
+  color:#ffe1a0;
+  font-size:clamp(8px,1.55vw,11px);
+  margin-bottom:2px;
+}
+.skillCard span{
+  display:block;
+  color:#c8d7eb;
+  font-size:clamp(7px,1.25vw,9px);
+  line-height:1.2;
+}
+.skillCard button{
+  margin-top:4px;
+  border:1px solid #a8894d;
+  border-radius:999px;
+  background:#102c52;
+  padding:3px 6px;
+  font-size:9px;
+  font-weight:900;
+}
+.skillCard button:disabled{opacity:.42}
+
+.log{
+  margin:6px;
+  padding:6px 8px;
+  border:1px solid #23334e;
+  border-radius:6px;
+  background:#030916;
+  color:#bdd0ea;
+  font-size:10px;
+  min-height:30px;
+}
+.controls{
+  display:flex;
+  gap:5px;
+  padding:0 6px 6px;
+}
+.controls button{
+  flex:1;
+  border:1px solid #4c6389;
+  border-radius:7px;
+  background:#0b1a30;
+  padding:6px;
+  font-size:10px;
+  font-weight:800;
+}
+.enemyHUD.defeated{opacity:0;transition:opacity .45s ease;pointer-events:none}
+
+@media(max-width:430px){
+  .panel{min-height:242px;padding:4px 4px 3px}
+  .quest{min-height:39px;padding:4px 0}
+  .shop{min-height:39px;padding:4px 0}
+  .quest button,.shop button{min-width:38px;padding:3px 4px}
+}
+
+/* ===== v23_14 ghostwriter fixes ===== */
+.rshop1,.rshop2,.rshop3,.shoprow1,.shoprow2,.shoprow3{display:none!important}
+.refCoin{display:none!important}
+.shoprow0{
+  left:71.6%!important;top:69.7%!important;width:18.8%!important;height:8.8%!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;
+  gap:2px!important;padding:5px 10px!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#071427fb,#0b2142f5)!important;
+  border:1px solid #8b6a33!important;box-shadow:0 4px 14px #000b!important
+}
+.shoprow0 .shopName{font-size:clamp(11px,1.95vw,14px)!important;font-weight:1000!important;line-height:1.05!important;color:#fff6d8!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.7vw,12px)!important;font-weight:900!important;line-height:1.05!important;color:#ffd78d!important}
+.rshop0{left:91.1%!important;top:69.65%!important;width:7.0%!important;height:8.8%!important}
+.rshop0 button{
+  width:100%!important;height:100%!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#9a6d29,#6f4d1d)!important;border:1px solid #efc97a!important;
+  color:#fff!important;font-weight:1000!important;box-shadow:0 2px 10px #0008!important
+}
+#dailyHUD,#weeklyHUD{display:block!important;pointer-events:none!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  background:linear-gradient(180deg,#081729fa,#0b1120fa)!important;
+  border:1px solid #8b6a33!important;border-radius:14px!important;
+  box-shadow:0 0 0 8px #122543e8,0 8px 18px #000b!important;
+  padding:7px 10px 9px!important;color:#fff!important;overflow:hidden!important
+}
+#dailyHUD .title,#weeklyHUD .title{display:block!important;font-size:clamp(10px,1.8vw,13px)!important;font-weight:1000!important;line-height:1.1!important;color:#f3f8ff!important}
+#dailyHUD .row,#weeklyHUD .row{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-top:4px!important;font-size:clamp(9px,1.65vw,12px)!important;font-weight:800!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(11px,2.0vw,14px)!important;font-weight:1000!important;color:#fff!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{display:block!important;height:10px!important;margin-top:6px!important;border-radius:999px!important;background:#250f19!important;border:1px solid #5f3041!important;overflow:hidden!important}
+#dailyHUD .eBar i,#weeklyHUD .eBar i{display:block!important;height:100%!important;background:linear-gradient(90deg,#d5426c,#ff7ca2)!important}
+#dailyHUD .dailyStack{display:none!important}
+#dailyHUD{left:36.6%!important;top:13.4%!important;width:24.6%!important;min-height:11.8%!important;z-index:45!important}
+#weeklyHUD{left:63.0%!important;top:6.0%!important;width:31.5%!important;min-height:13.2%!important;z-index:46!important}
+.union.overbreak{background:radial-gradient(circle,#ffe4f4d4 0,#ff67c495 24%,#7d3bff85 54%,#070110f5 84%)!important}
+.union.overbreak::before{
+  content:'SPECIAL FINISH';position:absolute;top:6%;left:50%;transform:translateX(-50%);
+  z-index:50;color:#fff3d8;font-weight:1000;letter-spacing:.18em;font-size:clamp(14px,2.2vw,24px);
+  text-shadow:0 0 14px #ff61d0,0 0 26px #6d42ff,0 4px 8px #000
+}
+.union.overbreak .unionFrame{filter:drop-shadow(0 0 38px #ff77d8aa) drop-shadow(0 24px 42px #000e)!important}
+.union.overbreak .unionFrame::before{border-color:#ffd77b!important;box-shadow:inset 0 0 0 1px #fff5,0 0 26px #ff7ce466!important}
+.union.overbreak .unionFrame::after{
+  content:'STARLIGHT UNION OVERBREAK';position:absolute;left:5%;right:5%;bottom:6%;text-align:center;
+  z-index:3;font-size:clamp(16px,3.5vw,34px);font-weight:1000;letter-spacing:.08em;color:#fff7d7;
+  text-shadow:0 0 18px #ff59d6,0 0 32px #6d3bff,0 4px 8px #000
+}
+.union.overbreak .unionGlow{background:radial-gradient(circle,#fff9 0,#ff8fe855 24%,transparent 62%)!important}
+.union.overbreak img{filter:saturate(1.22) hue-rotate(-18deg) contrast(1.06)!important}
+
+
+/* ===== v23_15 layout + sfx refinements ===== */
+.shoprow0{
+  left:72.0%!important;top:68.6%!important;width:18.8%!important;height:12.0%!important;
+  display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:flex-start!important;
+  gap:4px!important;padding:7px 10px!important;border-radius:16px!important;
+  background:linear-gradient(180deg,#061325fc,#0a1e3df2)!important;
+  border:1px solid #9a7535!important;box-shadow:0 6px 16px #000b!important;
+}
+.shoprow0 .shopName,.shoprow0 .shopCostText{white-space:pre-line!important}
+.shoprow0 .shopName{font-size:clamp(11px,1.8vw,14px)!important;line-height:1.12!important;color:#fff3d2!important;font-weight:1000!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.55vw,12px)!important;line-height:1.16!important;color:#ffd78d!important;font-weight:900!important}
+.rshop0{left:72.0%!important;top:81.3%!important;width:18.8%!important;height:6.1%!important}
+.rshop0 button{width:100%!important;height:100%!important;border-radius:14px!important;font-size:clamp(12px,2vw,15px)!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  min-height:0!important;padding:7px 10px 8px!important;border-radius:18px!important;
+}
+#dailyHUD{left:37.2%!important;top:6.3%!important;width:18.8%!important;z-index:46!important}
+#weeklyHUD{left:57.6%!important;top:6.3%!important;width:21.0%!important;z-index:46!important}
+#dailyHUD .title,#weeklyHUD .title{font-size:clamp(10px,1.65vw,12px)!important;line-height:1.0!important;letter-spacing:.01em!important}
+#dailyHUD .row,#weeklyHUD .row{margin-top:3px!important;font-size:clamp(9px,1.5vw,11px)!important}
+#dailyHUD .row span,#weeklyHUD .row span{display:none!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(10px,1.9vw,13px)!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{height:8px!important;margin-top:5px!important}
+#dailyPatch,#weeklyPatch{opacity:1!important}
+#dailyPatch{left:39.2%!important;top:40.0%!important;width:23.6%!important;height:18.8%!important;z-index:14!important}
+#weeklyPatch{left:64.8%!important;top:7.9%!important;width:29.6%!important;height:15.6%!important;z-index:14!important}
+
+
+/* ===== v23.20 FINAL UI / GAMEPLAY LAYOUT ===== */
+#dailyHUD,#weeklyHUD,#dailyPatch,#weeklyPatch,.refCoin,.shopRowText,.refShop{display:none!important}
+/* The cleaned scene asset already removed the baked Daily enemy + old Weekly HP panel. */
+.scene{background-position:center!important;background-size:100% 100%!important}
+
+/* Reward exchange: exactly one editable reward. */
+.rewardSingle{
+  position:absolute;z-index:70;
+  left:72.0%;top:52.0%;width:26.0%;height:37.0%;
+  padding:9px 10px 10px;border:1px solid #9a7535;border-radius:16px;
+  background:linear-gradient(180deg,#061427fc,#0a1d39fa);
+  box-shadow:0 8px 20px #000b,inset 0 0 18px #315d8d18;
+  display:flex;flex-direction:column;gap:8px;
+}
+.rewardHead{font-family:serif;text-align:center;color:#f2e8c8;font-weight:1000;font-size:clamp(11px,1.75vw,14px);padding-bottom:5px;border-bottom:1px solid #725a35}
+.rewardLine{display:grid;grid-template-columns:auto 1fr;gap:7px;align-items:baseline;color:#bdcce2;font-size:clamp(8px,1.35vw,10px);line-height:1.15}
+.rewardLine strong{color:#fff2cb;font-size:clamp(10px,1.72vw,13px);font-weight:1000;min-width:0;overflow-wrap:anywhere}
+#rewardSingleBtn{margin-top:auto;width:100%;min-height:38px;border:1px solid #e3b760;border-radius:12px;background:linear-gradient(180deg,#a4762c,#74501e);color:#fff7e4;font-weight:1000;font-size:clamp(12px,2vw,16px);box-shadow:0 3px 10px #0008}
+
+/* Weekly barrier indication: frameless, no HP card. */
+.weeklyBarrierLabel{position:absolute;z-index:23;right:4.2%;top:16.0%;color:#d8ecff;font-weight:1000;font-size:clamp(8px,1.2vw,10px);letter-spacing:.08em;text-shadow:0 0 8px #60c8ff,0 2px 4px #000;pointer-events:none}
+.weeklyBarrierLabel::before{content:'◇ '}.weeklyBarrierLabel::after{content:' BARRIER FIELD'}
+
+/* Current Daily sprites remain the only Daily enemy HP bars. */
+.dailyFormation{z-index:24!important}
+.dailyPawn{filter:drop-shadow(0 7px 8px #000c) drop-shadow(0 0 8px #68c8ff55)!important}
+
+/* Star Blessing readability */
+.blessingFlash{position:absolute;z-index:39;inset:0;pointer-events:none;background:radial-gradient(circle,#fffad8dd 0,#9bdcff88 30%,transparent 68%);animation:blessFlash 1.05s ease both}
+@keyframes blessFlash{0%{opacity:0;transform:scale(.7)}30%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.15)}}
+
+
+/* ===== SOURCE STYLE 01: v23_39_status_ui ===== */
+.refHp .bleedBadge{position:absolute;left:0;top:-17px;display:none;padding:1px 5px;border-radius:999px;background:rgba(57,0,10,.88);border:1px solid rgba(255,86,104,.72);color:#ffd7dc;font-size:clamp(6px,.9vw,8px);font-weight:900;line-height:1.35;letter-spacing:.02em;text-shadow:0 1px 2px #000;box-shadow:0 0 6px rgba(255,39,68,.35);white-space:nowrap;z-index:9}
+.refHp .bleedBadge.on{display:block}
+.refHp .bleedBadge::before{content:'◆';color:#ff3e58;margin-right:3px;font-size:.8em}
+
+
+/* ===== SOURCE STYLE 02: v23_46_parts_phase1 ===== */
+/* ===== Character UI componentization checkpoint =====
+   v1.2: frames / art / HP gauge / potential / skill are separate DOM/CSS parts.
+   Only the ally-card area is migrated in this checkpoint. */
+.partyParts{
+  position:absolute;left:12.55%;top:.7%;width:62.1%;height:41.2%;z-index:70;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.15%;
+  pointer-events:none;
+}
+.characterCard{
+  --role:#7ecbff;
+  min-width:0;position:relative;overflow:hidden;isolation:isolate;
+  display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;
+  gap:2.2%;padding:4.2% 4.4% 4.4%;
+  background:linear-gradient(180deg,#07101dfc 0%,#091426fd 62%,#050b15fe 100%);
+  border:1.5px solid #cda65b;border-radius:4px;
+  box-shadow:inset 0 0 0 1px #6b532d,0 3px 12px #000c;
+  color:#fff;pointer-events:none;
+}
+.characterCard::before{
+  content:"";position:absolute;inset:3px;border:1px solid #56452c;border-radius:2px;pointer-events:none;z-index:5;
+}
+.characterCard::after{
+  content:"";position:absolute;left:50%;top:0;width:12px;height:12px;transform:translate(-50%,-55%) rotate(45deg);
+  background:#0c2440;border:1px solid #d4ae64;box-shadow:0 0 8px var(--role);z-index:6;
+}
+.characterCard[data-class="defender"]{--role:#b89bff}
+.characterCard[data-class="attacker"]{--role:#ffd27b}
+.charHeader{position:relative;z-index:3;min-width:0;display:flex;align-items:flex-start;gap:5px;line-height:1.02}
+.classMark{flex:0 0 13px;width:13px;height:13px;margin-top:1px;transform:rotate(45deg);border:1px solid #e7c378;background:var(--role);box-shadow:0 0 7px color-mix(in srgb,var(--role) 72%,transparent)}
+.charTitle{min-width:0;flex:1}
+.charName{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:serif;font-weight:900;font-size:clamp(9px,1.85vw,14px);color:#fff7dd;text-shadow:0 1px 2px #000}
+.charMeta{display:block;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(6px,1.12vw,8px);font-weight:800;color:#bfcce0}
+.charArtWrap{position:relative;min-height:0;overflow:hidden;margin:0 1px;border:1px solid #3d4c63;background:radial-gradient(circle at 50% 35%,color-mix(in srgb,var(--role) 25%,transparent),#06101e 68%);box-shadow:inset 0 0 12px #000}
+.charArt{display:block;width:100%;height:100%;object-fit:cover;object-position:center center;filter:saturate(1.06) contrast(1.03)}
+.characterCard.down .charArt{filter:grayscale(1) brightness(.55)}
+.charHp{position:relative;z-index:3;min-width:0}
+.charHpLine{display:flex;align-items:baseline;justify-content:space-between;gap:3px;color:#e8edf7;font-size:clamp(6px,1.05vw,8px);font-weight:800;line-height:1}
+.charHpLine strong{font-family:serif;font-size:clamp(8px,1.45vw,11px);color:#fff;white-space:nowrap}
+.charHpTrack{height:5px;margin-top:3px;border:1px solid #82693e;border-radius:999px;background:#1d1016;overflow:hidden;box-shadow:inset 0 1px 2px #000}
+.charHpFill{display:block;height:100%;width:100%;background:linear-gradient(90deg,#0b9163,#6fd77c);transition:width .35s ease}
+.characterCard.down .charHpFill{width:0!important}
+.charAbilities{position:relative;z-index:3;display:grid;grid-template-columns:1fr 1fr;gap:4px;min-width:0}
+.abilitySlot{min-width:0;min-height:29px;border:1px solid #82683d;border-radius:4px;background:#081426;padding:3px 3px 2px;text-align:center;overflow:hidden}
+.abilityIcon{width:13px;height:13px;margin:0 auto 1px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--role) 75%,#fff);border-radius:3px;background:color-mix(in srgb,var(--role) 20%,#06101e);color:#fff;font-size:8px;font-weight:1000;box-shadow:inset 0 0 5px color-mix(in srgb,var(--role) 20%,transparent)}
+.abilityKind{display:block;color:#9eb0c8;font-size:clamp(5px,.82vw,6px);font-weight:800;line-height:1;white-space:nowrap}
+.abilityName{display:block;margin-top:1px;color:#fff3d5;font-size:clamp(5.5px,.94vw,7px);font-weight:900;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* The legacy HP overlays are superseded by each card's own independent HP component. */
+#rhp0,#rhp1,#rhp2{display:none!important}
+
+
+/* ===== SOURCE STYLE 03: anonymous_03 ===== */
+/* v23.13: move Daily HUD away from the hero */
+#dailyHUD{left:38.0%!important;top:6.5%!important;width:21.2%!important;min-height:15.5%!important}
+
+/* v23.13: readable editable lower section */
+.overlayText{
+  position:absolute;display:flex;align-items:center;justify-content:flex-start;
+  padding:2px 5px;background:#081527ee;border:1px solid #8f7449;border-radius:6px;
+  color:#f9f5e8;font-weight:900;font-size:clamp(6px,1.12vw,9px);line-height:1.12;
+  box-shadow:0 1px 6px #0009;z-index:38;pointer-events:none;white-space:normal;overflow:hidden
+}
+.dqt0{left:2.8%;top:55.4%;width:9.8%;height:8.5%}
+.dqt1{left:2.8%;top:65.7%;width:9.8%;height:8.5%}
+.dqt2{left:2.8%;top:75.8%;width:9.8%;height:8.5%}
+
+.wqt0{left:25.5%;top:55.4%;width:10.0%;height:8.5%}
+.wqt1{left:25.5%;top:65.7%;width:10.0%;height:8.5%}
+.wqt2{left:25.5%;top:75.8%;width:10.0%;height:8.5%}
+
+.sqt0{left:49.3%;top:55.4%;width:10.1%;height:8.5%}
+.sqt1{left:49.3%;top:65.7%;width:10.1%;height:8.5%}
+.sqt2{left:49.3%;top:75.8%;width:10.1%;height:8.5%}
+
+.shopRowText{
+  position:absolute;left:72.0%;width:18.4%;height:8.0%;
+  display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px;
+  padding:1px 6px;background:#091624ee;border:1px solid #8f7449;border-radius:6px;
+  color:#f6f0df;font-weight:900;font-size:clamp(6.2px,1.12vw,9px);line-height:1.1;
+  box-shadow:0 1px 6px #0009;z-index:38;pointer-events:none
+}
+.shoprow0{top:54.2%}.shoprow1{top:64.3%}.shoprow2{top:74.0%}.shoprow3{top:83.7%}
+.shopName{display:block;overflow:hidden}
+.shopCostText{display:block;color:#ffe19c;white-space:nowrap}
+
+.editorBlock{margin-top:12px;padding:10px;border:1px solid #51443a;border-radius:12px;background:#0d1420d9}
+.editorTitle{font-weight:900;color:#fff3d0;font-size:14px;margin-bottom:4px}
+.editorHint{color:#cad7ef;font-size:12px;line-height:1.45;margin-bottom:8px}
+.editorGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.editorGrid label{display:flex;flex-direction:column;gap:4px;color:#ecf3ff;font-size:12px;font-weight:800}
+.editorGrid input{width:100%;box-sizing:border-box;border:1px solid #87683d;border-radius:8px;background:#08101ae8;color:#fff;padding:8px;font-size:12px}
+.editorBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.editorBtns button{border:1px solid #b88d49;border-radius:999px;background:#11385ce8;color:#fff2c3;padding:8px 12px;font-weight:900}
+@media (max-width:640px){
+  .editorGrid{grid-template-columns:1fr}
+}
+
+/* ===== v23_14 ghostwriter fixes ===== */
+.rshop1,.rshop2,.rshop3,.shoprow1,.shoprow2,.shoprow3{display:none!important}
+.refCoin{display:none!important}
+.shoprow0{
+  left:71.6%!important;top:69.7%!important;width:18.8%!important;height:8.8%!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;
+  gap:2px!important;padding:5px 10px!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#071427fb,#0b2142f5)!important;
+  border:1px solid #8b6a33!important;box-shadow:0 4px 14px #000b!important
+}
+.shoprow0 .shopName{font-size:clamp(11px,1.95vw,14px)!important;font-weight:1000!important;line-height:1.05!important;color:#fff6d8!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.7vw,12px)!important;font-weight:900!important;line-height:1.05!important;color:#ffd78d!important}
+.rshop0{left:91.1%!important;top:69.65%!important;width:7.0%!important;height:8.8%!important}
+.rshop0 button{
+  width:100%!important;height:100%!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#9a6d29,#6f4d1d)!important;border:1px solid #efc97a!important;
+  color:#fff!important;font-weight:1000!important;box-shadow:0 2px 10px #0008!important
+}
+#dailyHUD,#weeklyHUD{display:block!important;pointer-events:none!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  background:linear-gradient(180deg,#081729fa,#0b1120fa)!important;
+  border:1px solid #8b6a33!important;border-radius:14px!important;
+  box-shadow:0 0 0 8px #122543e8,0 8px 18px #000b!important;
+  padding:7px 10px 9px!important;color:#fff!important;overflow:hidden!important
+}
+#dailyHUD .title,#weeklyHUD .title{display:block!important;font-size:clamp(10px,1.8vw,13px)!important;font-weight:1000!important;line-height:1.1!important;color:#f3f8ff!important}
+#dailyHUD .row,#weeklyHUD .row{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-top:4px!important;font-size:clamp(9px,1.65vw,12px)!important;font-weight:800!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(11px,2.0vw,14px)!important;font-weight:1000!important;color:#fff!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{display:block!important;height:10px!important;margin-top:6px!important;border-radius:999px!important;background:#250f19!important;border:1px solid #5f3041!important;overflow:hidden!important}
+#dailyHUD .eBar i,#weeklyHUD .eBar i{display:block!important;height:100%!important;background:linear-gradient(90deg,#d5426c,#ff7ca2)!important}
+#dailyHUD .dailyStack{display:none!important}
+#dailyHUD{left:36.6%!important;top:13.4%!important;width:24.6%!important;min-height:11.8%!important;z-index:45!important}
+#weeklyHUD{left:63.0%!important;top:6.0%!important;width:31.5%!important;min-height:13.2%!important;z-index:46!important}
+.union.overbreak{background:radial-gradient(circle,#ffe4f4d4 0,#ff67c495 24%,#7d3bff85 54%,#070110f5 84%)!important}
+.union.overbreak::before{
+  content:'SPECIAL FINISH';position:absolute;top:6%;left:50%;transform:translateX(-50%);
+  z-index:50;color:#fff3d8;font-weight:1000;letter-spacing:.18em;font-size:clamp(14px,2.2vw,24px);
+  text-shadow:0 0 14px #ff61d0,0 0 26px #6d42ff,0 4px 8px #000
+}
+.union.overbreak .unionFrame{filter:drop-shadow(0 0 38px #ff77d8aa) drop-shadow(0 24px 42px #000e)!important}
+.union.overbreak .unionFrame::before{border-color:#ffd77b!important;box-shadow:inset 0 0 0 1px #fff5,0 0 26px #ff7ce466!important}
+.union.overbreak .unionFrame::after{
+  content:'STARLIGHT UNION OVERBREAK';position:absolute;left:5%;right:5%;bottom:6%;text-align:center;
+  z-index:3;font-size:clamp(16px,3.5vw,34px);font-weight:1000;letter-spacing:.08em;color:#fff7d7;
+  text-shadow:0 0 18px #ff59d6,0 0 32px #6d3bff,0 4px 8px #000
+}
+.union.overbreak .unionGlow{background:radial-gradient(circle,#fff9 0,#ff8fe855 24%,transparent 62%)!important}
+.union.overbreak img{filter:saturate(1.22) hue-rotate(-18deg) contrast(1.06)!important}
+
+
+/* ===== v23_15 layout + sfx refinements ===== */
+.shoprow0{
+  left:72.0%!important;top:68.6%!important;width:18.8%!important;height:12.0%!important;
+  display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:flex-start!important;
+  gap:4px!important;padding:7px 10px!important;border-radius:16px!important;
+  background:linear-gradient(180deg,#061325fc,#0a1e3df2)!important;
+  border:1px solid #9a7535!important;box-shadow:0 6px 16px #000b!important;
+}
+.shoprow0 .shopName,.shoprow0 .shopCostText{white-space:pre-line!important}
+.shoprow0 .shopName{font-size:clamp(11px,1.8vw,14px)!important;line-height:1.12!important;color:#fff3d2!important;font-weight:1000!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.55vw,12px)!important;line-height:1.16!important;color:#ffd78d!important;font-weight:900!important}
+.rshop0{left:72.0%!important;top:81.3%!important;width:18.8%!important;height:6.1%!important}
+.rshop0 button{width:100%!important;height:100%!important;border-radius:14px!important;font-size:clamp(12px,2vw,15px)!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  min-height:0!important;padding:7px 10px 8px!important;border-radius:18px!important;
+}
+#dailyHUD{left:37.2%!important;top:6.3%!important;width:18.8%!important;z-index:46!important}
+#weeklyHUD{left:57.6%!important;top:6.3%!important;width:21.0%!important;z-index:46!important}
+#dailyHUD .title,#weeklyHUD .title{font-size:clamp(10px,1.65vw,12px)!important;line-height:1.0!important;letter-spacing:.01em!important}
+#dailyHUD .row,#weeklyHUD .row{margin-top:3px!important;font-size:clamp(9px,1.5vw,11px)!important}
+#dailyHUD .row span,#weeklyHUD .row span{display:none!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(10px,1.9vw,13px)!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{height:8px!important;margin-top:5px!important}
+#dailyPatch,#weeklyPatch{opacity:1!important}
+#dailyPatch{left:39.2%!important;top:40.0%!important;width:23.6%!important;height:18.8%!important;z-index:14!important}
+#weeklyPatch{left:64.8%!important;top:7.9%!important;width:29.6%!important;height:15.6%!important;z-index:14!important}
+
+
+/* ===== SOURCE STYLE 04: anonymous_04 ===== */
+body.modalOpen{overflow:hidden}
+.enemyHUD.compact{padding:6px 8px 8px!important;min-height:auto!important;background:linear-gradient(180deg,#091426f0,#080d18f2)!important;border:1px solid #80576e!important;border-radius:12px!important;box-shadow:0 8px 18px #000a!important}
+.enemyHUD.compact .title{font-size:clamp(10px,1.7vw,13px)!important;line-height:1.1!important;font-weight:1000!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.enemyHUD.compact .row,.enemyHUD.compact .dailyStack{display:none!important}
+.enemyHUD.compact .eBar{height:10px!important;margin-top:6px!important;background:#260d17!important;border:1px solid #4d2432!important;box-shadow:inset 0 1px 4px #000a!important}
+.enemyHUD.compact .eBar i{background:linear-gradient(90deg,#ca2f5e,#ff6d95)!important}
+#dailyHUD.compact{left:40.2%!important;top:7.0%!important;width:20.8%!important}
+#weeklyHUD.compact{left:63.2%!important;top:7.0%!important;width:29.6%!important}
+.uiModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:#020712c9;backdrop-filter:blur(6px);z-index:200}
+.uiModal.show{display:flex}
+.uiModalInner{width:min(940px,100%);max-height:86vh;overflow:auto;border:1px solid #7e6240;border-radius:18px;background:linear-gradient(180deg,#07111be8,#0c1624f5);box-shadow:0 24px 60px #000d;padding:14px}
+.uiModalHead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+.uiModalTitle{color:#fff1c6;font-weight:1000;font-size:16px}
+.uiModalClose{border:1px solid #b88d49;border-radius:999px;background:#153553;color:#fff2c3;padding:8px 12px;font-weight:900}
+#openUiModal{border:1px solid #b88d49;border-radius:999px;background:#153553;color:#fff2c3;padding:8px 12px;font-weight:900}
+.editorBlock.modalized{margin-top:0!important;border:none!important;background:transparent!important;padding:0!important}
+.editorBlock.modalized .editorTitle,.editorBlock.modalized .editorHint{display:none!important}
+.editorGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+@media (max-width:640px){.uiModalInner{padding:12px}.editorGrid{grid-template-columns:1fr!important}}
+
+/* ===== v23_14 ghostwriter fixes ===== */
+.rshop1,.rshop2,.rshop3,.shoprow1,.shoprow2,.shoprow3{display:none!important}
+.refCoin{display:none!important}
+.shoprow0{
+  left:71.6%!important;top:69.7%!important;width:18.8%!important;height:8.8%!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;
+  gap:2px!important;padding:5px 10px!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#071427fb,#0b2142f5)!important;
+  border:1px solid #8b6a33!important;box-shadow:0 4px 14px #000b!important
+}
+.shoprow0 .shopName{font-size:clamp(11px,1.95vw,14px)!important;font-weight:1000!important;line-height:1.05!important;color:#fff6d8!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.7vw,12px)!important;font-weight:900!important;line-height:1.05!important;color:#ffd78d!important}
+.rshop0{left:91.1%!important;top:69.65%!important;width:7.0%!important;height:8.8%!important}
+.rshop0 button{
+  width:100%!important;height:100%!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#9a6d29,#6f4d1d)!important;border:1px solid #efc97a!important;
+  color:#fff!important;font-weight:1000!important;box-shadow:0 2px 10px #0008!important
+}
+#dailyHUD,#weeklyHUD{display:block!important;pointer-events:none!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  background:linear-gradient(180deg,#081729fa,#0b1120fa)!important;
+  border:1px solid #8b6a33!important;border-radius:14px!important;
+  box-shadow:0 0 0 8px #122543e8,0 8px 18px #000b!important;
+  padding:7px 10px 9px!important;color:#fff!important;overflow:hidden!important
+}
+#dailyHUD .title,#weeklyHUD .title{display:block!important;font-size:clamp(10px,1.8vw,13px)!important;font-weight:1000!important;line-height:1.1!important;color:#f3f8ff!important}
+#dailyHUD .row,#weeklyHUD .row{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-top:4px!important;font-size:clamp(9px,1.65vw,12px)!important;font-weight:800!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(11px,2.0vw,14px)!important;font-weight:1000!important;color:#fff!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{display:block!important;height:10px!important;margin-top:6px!important;border-radius:999px!important;background:#250f19!important;border:1px solid #5f3041!important;overflow:hidden!important}
+#dailyHUD .eBar i,#weeklyHUD .eBar i{display:block!important;height:100%!important;background:linear-gradient(90deg,#d5426c,#ff7ca2)!important}
+#dailyHUD .dailyStack{display:none!important}
+#dailyHUD{left:36.6%!important;top:13.4%!important;width:24.6%!important;min-height:11.8%!important;z-index:45!important}
+#weeklyHUD{left:63.0%!important;top:6.0%!important;width:31.5%!important;min-height:13.2%!important;z-index:46!important}
+.union.overbreak{background:radial-gradient(circle,#ffe4f4d4 0,#ff67c495 24%,#7d3bff85 54%,#070110f5 84%)!important}
+.union.overbreak::before{
+  content:'SPECIAL FINISH';position:absolute;top:6%;left:50%;transform:translateX(-50%);
+  z-index:50;color:#fff3d8;font-weight:1000;letter-spacing:.18em;font-size:clamp(14px,2.2vw,24px);
+  text-shadow:0 0 14px #ff61d0,0 0 26px #6d42ff,0 4px 8px #000
+}
+.union.overbreak .unionFrame{filter:drop-shadow(0 0 38px #ff77d8aa) drop-shadow(0 24px 42px #000e)!important}
+.union.overbreak .unionFrame::before{border-color:#ffd77b!important;box-shadow:inset 0 0 0 1px #fff5,0 0 26px #ff7ce466!important}
+.union.overbreak .unionFrame::after{
+  content:'STARLIGHT UNION OVERBREAK';position:absolute;left:5%;right:5%;bottom:6%;text-align:center;
+  z-index:3;font-size:clamp(16px,3.5vw,34px);font-weight:1000;letter-spacing:.08em;color:#fff7d7;
+  text-shadow:0 0 18px #ff59d6,0 0 32px #6d3bff,0 4px 8px #000
+}
+.union.overbreak .unionGlow{background:radial-gradient(circle,#fff9 0,#ff8fe855 24%,transparent 62%)!important}
+.union.overbreak img{filter:saturate(1.22) hue-rotate(-18deg) contrast(1.06)!important}
+
+
+/* ===== v23_15 layout + sfx refinements ===== */
+.shoprow0{
+  left:72.0%!important;top:68.6%!important;width:18.8%!important;height:12.0%!important;
+  display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:flex-start!important;
+  gap:4px!important;padding:7px 10px!important;border-radius:16px!important;
+  background:linear-gradient(180deg,#061325fc,#0a1e3df2)!important;
+  border:1px solid #9a7535!important;box-shadow:0 6px 16px #000b!important;
+}
+.shoprow0 .shopName,.shoprow0 .shopCostText{white-space:pre-line!important}
+.shoprow0 .shopName{font-size:clamp(11px,1.8vw,14px)!important;line-height:1.12!important;color:#fff3d2!important;font-weight:1000!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.55vw,12px)!important;line-height:1.16!important;color:#ffd78d!important;font-weight:900!important}
+.rshop0{left:72.0%!important;top:81.3%!important;width:18.8%!important;height:6.1%!important}
+.rshop0 button{width:100%!important;height:100%!important;border-radius:14px!important;font-size:clamp(12px,2vw,15px)!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  min-height:0!important;padding:7px 10px 8px!important;border-radius:18px!important;
+}
+#dailyHUD{left:37.2%!important;top:6.3%!important;width:18.8%!important;z-index:46!important}
+#weeklyHUD{left:57.6%!important;top:6.3%!important;width:21.0%!important;z-index:46!important}
+#dailyHUD .title,#weeklyHUD .title{font-size:clamp(10px,1.65vw,12px)!important;line-height:1.0!important;letter-spacing:.01em!important}
+#dailyHUD .row,#weeklyHUD .row{margin-top:3px!important;font-size:clamp(9px,1.5vw,11px)!important}
+#dailyHUD .row span,#weeklyHUD .row span{display:none!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(10px,1.9vw,13px)!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{height:8px!important;margin-top:5px!important}
+#dailyPatch,#weeklyPatch{opacity:1!important}
+#dailyPatch{left:39.2%!important;top:40.0%!important;width:23.6%!important;height:18.8%!important;z-index:14!important}
+#weeklyPatch{left:64.8%!important;top:7.9%!important;width:29.6%!important;height:15.6%!important;z-index:14!important}
+
+
+/* ===== SOURCE STYLE 05: anonymous_05 ===== */
+/* ===== v23.13 enemy HUD: name + bar only ===== */
+.enemyHUD.compact{
+  min-height:0!important;
+  padding:0!important;
+  background:transparent!important;
+  border:none!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.enemyHUD.compact::before{
+  content:"";
+  position:absolute;
+  left:-7%;right:-7%;top:-22%;bottom:-26%;
+  background:linear-gradient(90deg,rgba(5,13,28,.92),rgba(5,13,28,.70) 72%,rgba(5,13,28,0));
+  filter:blur(.2px);
+  z-index:-1;
+  pointer-events:none;
+}
+.enemyHUD.compact .title{
+  font-size:clamp(10px,1.7vw,13px)!important;
+  font-weight:1000!important;
+  line-height:1.05!important;
+  color:#f7f5ff!important;
+  text-shadow:0 2px 4px #000,0 0 7px #7d5cff88!important;
+}
+.enemyHUD.compact .row,
+.enemyHUD.compact .dailyStack{display:none!important}
+.enemyHUD.compact .eBar{
+  height:9px!important;
+  margin-top:5px!important;
+  background:#230d18!important;
+  border:1px solid #6a3247!important;
+  border-radius:999px!important;
+  box-shadow:inset 0 1px 4px #000b,0 0 7px #f84d7c26!important;
+}
+.enemyHUD.compact .eBar i{
+  background:linear-gradient(90deg,#c92b5b,#ff7199)!important;
+  box-shadow:0 0 7px #ff5f8a66!important;
+}
+#dailyHUD.compact{left:41.2%!important;top:8.0%!important;width:19.4%!important}
+#weeklyHUD.compact{left:65.0%!important;top:8.0%!important;width:26.6%!important}
+
+/* cover the baked old HP boxes/coin that exist inside the background image */
+.scene::after{
+  content:"";
+  position:absolute;
+  z-index:16;
+  right:0;top:0;
+  width:38%;height:20%;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(6,16,34,.88),rgba(6,16,34,.58) 70%,rgba(6,16,34,0));
+  clip-path:polygon(27% 0,100% 0,100% 100%,0 100%,0 26%);
+}
+.coinHud{
+  z-index:35!important;
+  right:1.8%!important;
+  top:.4%!important;
+  min-width:17.2%!important;
+  height:6.7%!important;
+  background:#071324f7!important;
+}
+
+/* party HP overlays: slightly more opaque so baked HP text/bar doesn't show through */
+.refHp{
+  background:#06111fff!important;
+  box-shadow:0 2px 8px #000d!important;
+}
+
+/* skill descriptions */
+#warriorSPWrap,#tamePassiveNote{color:#ffe29c;font-weight:900}
+
+/* editor modal stays separate/stylish */
+.uiModal{z-index:220!important}
+
+/* ===== v23_14 ghostwriter fixes ===== */
+.rshop1,.rshop2,.rshop3,.shoprow1,.shoprow2,.shoprow3{display:none!important}
+.refCoin{display:none!important}
+.shoprow0{
+  left:71.6%!important;top:69.7%!important;width:18.8%!important;height:8.8%!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;
+  gap:2px!important;padding:5px 10px!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#071427fb,#0b2142f5)!important;
+  border:1px solid #8b6a33!important;box-shadow:0 4px 14px #000b!important
+}
+.shoprow0 .shopName{font-size:clamp(11px,1.95vw,14px)!important;font-weight:1000!important;line-height:1.05!important;color:#fff6d8!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.7vw,12px)!important;font-weight:900!important;line-height:1.05!important;color:#ffd78d!important}
+.rshop0{left:91.1%!important;top:69.65%!important;width:7.0%!important;height:8.8%!important}
+.rshop0 button{
+  width:100%!important;height:100%!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#9a6d29,#6f4d1d)!important;border:1px solid #efc97a!important;
+  color:#fff!important;font-weight:1000!important;box-shadow:0 2px 10px #0008!important
+}
+#dailyHUD,#weeklyHUD{display:block!important;pointer-events:none!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  background:linear-gradient(180deg,#081729fa,#0b1120fa)!important;
+  border:1px solid #8b6a33!important;border-radius:14px!important;
+  box-shadow:0 0 0 8px #122543e8,0 8px 18px #000b!important;
+  padding:7px 10px 9px!important;color:#fff!important;overflow:hidden!important
+}
+#dailyHUD .title,#weeklyHUD .title{display:block!important;font-size:clamp(10px,1.8vw,13px)!important;font-weight:1000!important;line-height:1.1!important;color:#f3f8ff!important}
+#dailyHUD .row,#weeklyHUD .row{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-top:4px!important;font-size:clamp(9px,1.65vw,12px)!important;font-weight:800!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(11px,2.0vw,14px)!important;font-weight:1000!important;color:#fff!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{display:block!important;height:10px!important;margin-top:6px!important;border-radius:999px!important;background:#250f19!important;border:1px solid #5f3041!important;overflow:hidden!important}
+#dailyHUD .eBar i,#weeklyHUD .eBar i{display:block!important;height:100%!important;background:linear-gradient(90deg,#d5426c,#ff7ca2)!important}
+#dailyHUD .dailyStack{display:none!important}
+#dailyHUD{left:36.6%!important;top:13.4%!important;width:24.6%!important;min-height:11.8%!important;z-index:45!important}
+#weeklyHUD{left:63.0%!important;top:6.0%!important;width:31.5%!important;min-height:13.2%!important;z-index:46!important}
+.union.overbreak{background:radial-gradient(circle,#ffe4f4d4 0,#ff67c495 24%,#7d3bff85 54%,#070110f5 84%)!important}
+.union.overbreak::before{
+  content:'SPECIAL FINISH';position:absolute;top:6%;left:50%;transform:translateX(-50%);
+  z-index:50;color:#fff3d8;font-weight:1000;letter-spacing:.18em;font-size:clamp(14px,2.2vw,24px);
+  text-shadow:0 0 14px #ff61d0,0 0 26px #6d42ff,0 4px 8px #000
+}
+.union.overbreak .unionFrame{filter:drop-shadow(0 0 38px #ff77d8aa) drop-shadow(0 24px 42px #000e)!important}
+.union.overbreak .unionFrame::before{border-color:#ffd77b!important;box-shadow:inset 0 0 0 1px #fff5,0 0 26px #ff7ce466!important}
+.union.overbreak .unionFrame::after{
+  content:'STARLIGHT UNION OVERBREAK';position:absolute;left:5%;right:5%;bottom:6%;text-align:center;
+  z-index:3;font-size:clamp(16px,3.5vw,34px);font-weight:1000;letter-spacing:.08em;color:#fff7d7;
+  text-shadow:0 0 18px #ff59d6,0 0 32px #6d3bff,0 4px 8px #000
+}
+.union.overbreak .unionGlow{background:radial-gradient(circle,#fff9 0,#ff8fe855 24%,transparent 62%)!important}
+.union.overbreak img{filter:saturate(1.22) hue-rotate(-18deg) contrast(1.06)!important}
+
+
+/* ===== v23_15 layout + sfx refinements ===== */
+.shoprow0{
+  left:72.0%!important;top:68.6%!important;width:18.8%!important;height:12.0%!important;
+  display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:flex-start!important;
+  gap:4px!important;padding:7px 10px!important;border-radius:16px!important;
+  background:linear-gradient(180deg,#061325fc,#0a1e3df2)!important;
+  border:1px solid #9a7535!important;box-shadow:0 6px 16px #000b!important;
+}
+.shoprow0 .shopName,.shoprow0 .shopCostText{white-space:pre-line!important}
+.shoprow0 .shopName{font-size:clamp(11px,1.8vw,14px)!important;line-height:1.12!important;color:#fff3d2!important;font-weight:1000!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.55vw,12px)!important;line-height:1.16!important;color:#ffd78d!important;font-weight:900!important}
+.rshop0{left:72.0%!important;top:81.3%!important;width:18.8%!important;height:6.1%!important}
+.rshop0 button{width:100%!important;height:100%!important;border-radius:14px!important;font-size:clamp(12px,2vw,15px)!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  min-height:0!important;padding:7px 10px 8px!important;border-radius:18px!important;
+}
+#dailyHUD{left:37.2%!important;top:6.3%!important;width:18.8%!important;z-index:46!important}
+#weeklyHUD{left:57.6%!important;top:6.3%!important;width:21.0%!important;z-index:46!important}
+#dailyHUD .title,#weeklyHUD .title{font-size:clamp(10px,1.65vw,12px)!important;line-height:1.0!important;letter-spacing:.01em!important}
+#dailyHUD .row,#weeklyHUD .row{margin-top:3px!important;font-size:clamp(9px,1.5vw,11px)!important}
+#dailyHUD .row span,#weeklyHUD .row span{display:none!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(10px,1.9vw,13px)!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{height:8px!important;margin-top:5px!important}
+#dailyPatch,#weeklyPatch{opacity:1!important}
+#dailyPatch{left:39.2%!important;top:40.0%!important;width:23.6%!important;height:18.8%!important;z-index:14!important}
+#weeklyPatch{left:64.8%!important;top:7.9%!important;width:29.6%!important;height:15.6%!important;z-index:14!important}
+
+
+/* ===== SOURCE STYLE 06: anonymous_06 ===== */
+/* ===== v23.13: enemy display = name + HP bar only, no frame ===== */
+.enemyHUD.compact{
+  padding:0!important;
+  min-height:0!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.enemyHUD.compact::before,
+.enemyHUD.compact::after{display:none!important;content:none!important}
+.enemyHUD.compact .title{
+  display:block!important;
+  padding:0!important;
+  margin:0 0 5px 2px!important;
+  background:transparent!important;
+  border:0!important;
+  color:#f8f7ff!important;
+  font-size:clamp(10px,1.72vw,13px)!important;
+  line-height:1!important;
+  font-weight:1000!important;
+  text-shadow:0 2px 4px #000,0 0 8px #6f7dff99!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.enemyHUD.compact .row,
+.enemyHUD.compact .dailyStack{display:none!important}
+.enemyHUD.compact .eBar{
+  height:8px!important;
+  margin:0!important;
+  padding:0!important;
+  background:#220b16!important;
+  border:1px solid #78324a!important;
+  border-radius:999px!important;
+  box-shadow:inset 0 1px 4px #000b,0 0 8px #ff5b8733!important;
+  overflow:hidden!important;
+}
+.enemyHUD.compact .eBar i{
+  display:block!important;
+  height:100%!important;
+  background:linear-gradient(90deg,#c62755,#ff7198)!important;
+  box-shadow:0 0 8px #ff5c8888!important;
+}
+#dailyHUD.compact{
+  left:40.8%!important;
+  top:7.3%!important;
+  width:19.2%!important;
+}
+#weeklyHUD.compact{
+  left:65.0%!important;
+  top:7.3%!important;
+  width:26.5%!important;
+}
+
+/* Hide the old HUD/coin baked into the background image using soft, frameless mist. */
+.bakedHudMask{
+  position:absolute;
+  z-index:16;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at center,
+      rgba(5,18,41,.995) 0%,
+      rgba(6,23,50,.985) 46%,
+      rgba(12,40,79,.90) 65%,
+      rgba(20,62,111,.46) 79%,
+      rgba(20,62,111,0) 100%);
+  filter:blur(.2px);
+}
+.bakedDailyMask{
+  left:36.0%;top:44.0%;width:25.5%;height:25.5%;
+}
+.bakedWeeklyMask{
+  left:65.0%;top:2.5%;width:33.8%;height:29.0%;
+}
+.bakedCoinMask{
+  right:-1.5%;top:-2.0%;width:21.0%;height:14.0%;
+}
+
+/* Dynamic UI stays above the soft masks. */
+.dailyFormation{z-index:18!important}
+#dailyHUD{z-index:33!important}
+#weeklyHUD{z-index:34!important}
+.coinHud{z-index:35!important}
+
+/* Holy Field skill copy */
+.skillCard strong{font-weight:1000}
+
+/* ===== v23_14 ghostwriter fixes ===== */
+.rshop1,.rshop2,.rshop3,.shoprow1,.shoprow2,.shoprow3{display:none!important}
+.refCoin{display:none!important}
+.shoprow0{
+  left:71.6%!important;top:69.7%!important;width:18.8%!important;height:8.8%!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;
+  gap:2px!important;padding:5px 10px!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#071427fb,#0b2142f5)!important;
+  border:1px solid #8b6a33!important;box-shadow:0 4px 14px #000b!important
+}
+.shoprow0 .shopName{font-size:clamp(11px,1.95vw,14px)!important;font-weight:1000!important;line-height:1.05!important;color:#fff6d8!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.7vw,12px)!important;font-weight:900!important;line-height:1.05!important;color:#ffd78d!important}
+.rshop0{left:91.1%!important;top:69.65%!important;width:7.0%!important;height:8.8%!important}
+.rshop0 button{
+  width:100%!important;height:100%!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#9a6d29,#6f4d1d)!important;border:1px solid #efc97a!important;
+  color:#fff!important;font-weight:1000!important;box-shadow:0 2px 10px #0008!important
+}
+#dailyHUD,#weeklyHUD{display:block!important;pointer-events:none!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  background:linear-gradient(180deg,#081729fa,#0b1120fa)!important;
+  border:1px solid #8b6a33!important;border-radius:14px!important;
+  box-shadow:0 0 0 8px #122543e8,0 8px 18px #000b!important;
+  padding:7px 10px 9px!important;color:#fff!important;overflow:hidden!important
+}
+#dailyHUD .title,#weeklyHUD .title{display:block!important;font-size:clamp(10px,1.8vw,13px)!important;font-weight:1000!important;line-height:1.1!important;color:#f3f8ff!important}
+#dailyHUD .row,#weeklyHUD .row{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-top:4px!important;font-size:clamp(9px,1.65vw,12px)!important;font-weight:800!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(11px,2.0vw,14px)!important;font-weight:1000!important;color:#fff!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{display:block!important;height:10px!important;margin-top:6px!important;border-radius:999px!important;background:#250f19!important;border:1px solid #5f3041!important;overflow:hidden!important}
+#dailyHUD .eBar i,#weeklyHUD .eBar i{display:block!important;height:100%!important;background:linear-gradient(90deg,#d5426c,#ff7ca2)!important}
+#dailyHUD .dailyStack{display:none!important}
+#dailyHUD{left:36.6%!important;top:13.4%!important;width:24.6%!important;min-height:11.8%!important;z-index:45!important}
+#weeklyHUD{left:63.0%!important;top:6.0%!important;width:31.5%!important;min-height:13.2%!important;z-index:46!important}
+.union.overbreak{background:radial-gradient(circle,#ffe4f4d4 0,#ff67c495 24%,#7d3bff85 54%,#070110f5 84%)!important}
+.union.overbreak::before{
+  content:'SPECIAL FINISH';position:absolute;top:6%;left:50%;transform:translateX(-50%);
+  z-index:50;color:#fff3d8;font-weight:1000;letter-spacing:.18em;font-size:clamp(14px,2.2vw,24px);
+  text-shadow:0 0 14px #ff61d0,0 0 26px #6d42ff,0 4px 8px #000
+}
+.union.overbreak .unionFrame{filter:drop-shadow(0 0 38px #ff77d8aa) drop-shadow(0 24px 42px #000e)!important}
+.union.overbreak .unionFrame::before{border-color:#ffd77b!important;box-shadow:inset 0 0 0 1px #fff5,0 0 26px #ff7ce466!important}
+.union.overbreak .unionFrame::after{
+  content:'STARLIGHT UNION OVERBREAK';position:absolute;left:5%;right:5%;bottom:6%;text-align:center;
+  z-index:3;font-size:clamp(16px,3.5vw,34px);font-weight:1000;letter-spacing:.08em;color:#fff7d7;
+  text-shadow:0 0 18px #ff59d6,0 0 32px #6d3bff,0 4px 8px #000
+}
+.union.overbreak .unionGlow{background:radial-gradient(circle,#fff9 0,#ff8fe855 24%,transparent 62%)!important}
+.union.overbreak img{filter:saturate(1.22) hue-rotate(-18deg) contrast(1.06)!important}
+
+
+/* ===== v23_15 layout + sfx refinements ===== */
+.shoprow0{
+  left:72.0%!important;top:68.6%!important;width:18.8%!important;height:12.0%!important;
+  display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:flex-start!important;
+  gap:4px!important;padding:7px 10px!important;border-radius:16px!important;
+  background:linear-gradient(180deg,#061325fc,#0a1e3df2)!important;
+  border:1px solid #9a7535!important;box-shadow:0 6px 16px #000b!important;
+}
+.shoprow0 .shopName,.shoprow0 .shopCostText{white-space:pre-line!important}
+.shoprow0 .shopName{font-size:clamp(11px,1.8vw,14px)!important;line-height:1.12!important;color:#fff3d2!important;font-weight:1000!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.55vw,12px)!important;line-height:1.16!important;color:#ffd78d!important;font-weight:900!important}
+.rshop0{left:72.0%!important;top:81.3%!important;width:18.8%!important;height:6.1%!important}
+.rshop0 button{width:100%!important;height:100%!important;border-radius:14px!important;font-size:clamp(12px,2vw,15px)!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  min-height:0!important;padding:7px 10px 8px!important;border-radius:18px!important;
+}
+#dailyHUD{left:37.2%!important;top:6.3%!important;width:18.8%!important;z-index:46!important}
+#weeklyHUD{left:57.6%!important;top:6.3%!important;width:21.0%!important;z-index:46!important}
+#dailyHUD .title,#weeklyHUD .title{font-size:clamp(10px,1.65vw,12px)!important;line-height:1.0!important;letter-spacing:.01em!important}
+#dailyHUD .row,#weeklyHUD .row{margin-top:3px!important;font-size:clamp(9px,1.5vw,11px)!important}
+#dailyHUD .row span,#weeklyHUD .row span{display:none!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(10px,1.9vw,13px)!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{height:8px!important;margin-top:5px!important}
+#dailyPatch,#weeklyPatch{opacity:1!important}
+#dailyPatch{left:39.2%!important;top:40.0%!important;width:23.6%!important;height:18.8%!important;z-index:14!important}
+#weeklyPatch{left:64.8%!important;top:7.9%!important;width:29.6%!important;height:15.6%!important;z-index:14!important}
+
+
+/* ===== SOURCE STYLE 07: anonymous_07 ===== */
+/* ===== v23.13 visual cleanup ===== */
+#dailyHUD,#weeklyHUD,.refCoin{display:none!important}
+.lowerRef::before{left:70.2%!important;top:51.2%!important;width:28.9%!important;height:37.8%!important;border-radius:12px!important;background:linear-gradient(180deg,rgba(7,18,34,.98),rgba(7,18,34,.96))!important;box-shadow:0 8px 28px rgba(0,0,0,.34) inset!important}
+.shopRowText,.refShop{z-index:42!important}
+.shopRowText{left:71.3%!important;width:19.8%!important;height:7.9%!important;padding:3px 8px!important}
+.shoprow0{top:55.4%!important}.shoprow1{top:65.0%!important}.shoprow2{top:74.7%!important}.shoprow3{top:84.2%!important}
+.rshop0{left:91.8%!important;top:55.2%!important;width:6.2%!important;height:7.1%!important}
+.rshop1{left:91.8%!important;top:64.95%!important;width:6.2%!important;height:7.1%!important}
+.rshop2{left:91.8%!important;top:74.7%!important;width:6.2%!important;height:7.1%!important}
+.rshop3{left:91.8%!important;top:84.45%!important;width:6.2%!important;height:7.1%!important}
+.bakedDailyMask{left:31.0%!important;top:43.6%!important;width:27.0%!important;height:20.0%!important;background:radial-gradient(ellipse at center,rgba(6,20,44,.998) 0%,rgba(7,24,52,.994) 68%,rgba(16,55,100,0) 100%)!important}
+.bakedWeeklyMask{left:62.2%!important;top:7.0%!important;width:32.2%!important;height:18.2%!important;background:radial-gradient(ellipse at center,rgba(6,20,44,.998) 0%,rgba(7,24,52,.994) 68%,rgba(16,55,100,0) 100%)!important}
+.bakedCenterEnemyMask{position:absolute!important;z-index:17!important;pointer-events:none!important;left:43.5%!important;top:29.0%!important;width:39.5%!important;height:50.0%!important;background:radial-gradient(ellipse at center,rgba(6,20,44,.995) 0%,rgba(6,20,44,.985) 58%,rgba(12,44,84,.75) 80%,rgba(12,44,84,0) 100%)!important}
+#scene::after{content:"";position:absolute;right:7.6%;top:1.4%;width:10.8%;height:9.5%;pointer-events:none;z-index:17;background:radial-gradient(ellipse at center,rgba(6,20,44,.995) 0%,rgba(6,20,44,.92) 72%,rgba(6,20,44,0) 100%)}
+.dailyFormation{z-index:24!important}.dailyPawn{z-index:calc(var(--z,20) + 8)!important}
+.beastAlive{display:block;line-height:1.28!important}
+
+/* ===== v23_14 ghostwriter fixes ===== */
+.rshop1,.rshop2,.rshop3,.shoprow1,.shoprow2,.shoprow3{display:none!important}
+.refCoin{display:none!important}
+.shoprow0{
+  left:71.6%!important;top:69.7%!important;width:18.8%!important;height:8.8%!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;
+  gap:2px!important;padding:5px 10px!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#071427fb,#0b2142f5)!important;
+  border:1px solid #8b6a33!important;box-shadow:0 4px 14px #000b!important
+}
+.shoprow0 .shopName{font-size:clamp(11px,1.95vw,14px)!important;font-weight:1000!important;line-height:1.05!important;color:#fff6d8!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.7vw,12px)!important;font-weight:900!important;line-height:1.05!important;color:#ffd78d!important}
+.rshop0{left:91.1%!important;top:69.65%!important;width:7.0%!important;height:8.8%!important}
+.rshop0 button{
+  width:100%!important;height:100%!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#9a6d29,#6f4d1d)!important;border:1px solid #efc97a!important;
+  color:#fff!important;font-weight:1000!important;box-shadow:0 2px 10px #0008!important
+}
+#dailyHUD,#weeklyHUD{display:block!important;pointer-events:none!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  background:linear-gradient(180deg,#081729fa,#0b1120fa)!important;
+  border:1px solid #8b6a33!important;border-radius:14px!important;
+  box-shadow:0 0 0 8px #122543e8,0 8px 18px #000b!important;
+  padding:7px 10px 9px!important;color:#fff!important;overflow:hidden!important
+}
+#dailyHUD .title,#weeklyHUD .title{display:block!important;font-size:clamp(10px,1.8vw,13px)!important;font-weight:1000!important;line-height:1.1!important;color:#f3f8ff!important}
+#dailyHUD .row,#weeklyHUD .row{display:flex!important;justify-content:space-between!important;align-items:center!important;margin-top:4px!important;font-size:clamp(9px,1.65vw,12px)!important;font-weight:800!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(11px,2.0vw,14px)!important;font-weight:1000!important;color:#fff!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{display:block!important;height:10px!important;margin-top:6px!important;border-radius:999px!important;background:#250f19!important;border:1px solid #5f3041!important;overflow:hidden!important}
+#dailyHUD .eBar i,#weeklyHUD .eBar i{display:block!important;height:100%!important;background:linear-gradient(90deg,#d5426c,#ff7ca2)!important}
+#dailyHUD .dailyStack{display:none!important}
+#dailyHUD{left:36.6%!important;top:13.4%!important;width:24.6%!important;min-height:11.8%!important;z-index:45!important}
+#weeklyHUD{left:63.0%!important;top:6.0%!important;width:31.5%!important;min-height:13.2%!important;z-index:46!important}
+.union.overbreak{background:radial-gradient(circle,#ffe4f4d4 0,#ff67c495 24%,#7d3bff85 54%,#070110f5 84%)!important}
+.union.overbreak::before{
+  content:'SPECIAL FINISH';position:absolute;top:6%;left:50%;transform:translateX(-50%);
+  z-index:50;color:#fff3d8;font-weight:1000;letter-spacing:.18em;font-size:clamp(14px,2.2vw,24px);
+  text-shadow:0 0 14px #ff61d0,0 0 26px #6d42ff,0 4px 8px #000
+}
+.union.overbreak .unionFrame{filter:drop-shadow(0 0 38px #ff77d8aa) drop-shadow(0 24px 42px #000e)!important}
+.union.overbreak .unionFrame::before{border-color:#ffd77b!important;box-shadow:inset 0 0 0 1px #fff5,0 0 26px #ff7ce466!important}
+.union.overbreak .unionFrame::after{
+  content:'STARLIGHT UNION OVERBREAK';position:absolute;left:5%;right:5%;bottom:6%;text-align:center;
+  z-index:3;font-size:clamp(16px,3.5vw,34px);font-weight:1000;letter-spacing:.08em;color:#fff7d7;
+  text-shadow:0 0 18px #ff59d6,0 0 32px #6d3bff,0 4px 8px #000
+}
+.union.overbreak .unionGlow{background:radial-gradient(circle,#fff9 0,#ff8fe855 24%,transparent 62%)!important}
+.union.overbreak img{filter:saturate(1.22) hue-rotate(-18deg) contrast(1.06)!important}
+
+
+/* ===== v23_15 layout + sfx refinements ===== */
+.shoprow0{
+  left:72.0%!important;top:68.6%!important;width:18.8%!important;height:12.0%!important;
+  display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:flex-start!important;
+  gap:4px!important;padding:7px 10px!important;border-radius:16px!important;
+  background:linear-gradient(180deg,#061325fc,#0a1e3df2)!important;
+  border:1px solid #9a7535!important;box-shadow:0 6px 16px #000b!important;
+}
+.shoprow0 .shopName,.shoprow0 .shopCostText{white-space:pre-line!important}
+.shoprow0 .shopName{font-size:clamp(11px,1.8vw,14px)!important;line-height:1.12!important;color:#fff3d2!important;font-weight:1000!important}
+.shoprow0 .shopCostText{font-size:clamp(10px,1.55vw,12px)!important;line-height:1.16!important;color:#ffd78d!important;font-weight:900!important}
+.rshop0{left:72.0%!important;top:81.3%!important;width:18.8%!important;height:6.1%!important}
+.rshop0 button{width:100%!important;height:100%!important;border-radius:14px!important;font-size:clamp(12px,2vw,15px)!important}
+#dailyHUD,#weeklyHUD,.enemyHUD.compact{
+  min-height:0!important;padding:7px 10px 8px!important;border-radius:18px!important;
+}
+#dailyHUD{left:37.2%!important;top:6.3%!important;width:18.8%!important;z-index:46!important}
+#weeklyHUD{left:57.6%!important;top:6.3%!important;width:21.0%!important;z-index:46!important}
+#dailyHUD .title,#weeklyHUD .title{font-size:clamp(10px,1.65vw,12px)!important;line-height:1.0!important;letter-spacing:.01em!important}
+#dailyHUD .row,#weeklyHUD .row{margin-top:3px!important;font-size:clamp(9px,1.5vw,11px)!important}
+#dailyHUD .row span,#weeklyHUD .row span{display:none!important}
+#dailyHUD .row b,#weeklyHUD .row b{font-size:clamp(10px,1.9vw,13px)!important}
+#dailyHUD .eBar,#weeklyHUD .eBar{height:8px!important;margin-top:5px!important}
+#dailyPatch,#weeklyPatch{opacity:1!important}
+#dailyPatch{left:39.2%!important;top:40.0%!important;width:23.6%!important;height:18.8%!important;z-index:14!important}
+#weeklyPatch{left:64.8%!important;top:7.9%!important;width:29.6%!important;height:15.6%!important;z-index:14!important}
+
+
+/* ===== SOURCE STYLE 08: anonymous_08 ===== */
+/* ===== v23.20 FINAL UI / GAMEPLAY LAYOUT ===== */
+#dailyHUD,#weeklyHUD,#dailyPatch,#weeklyPatch,.refCoin,.shopRowText,.refShop{display:none!important}
+/* The cleaned scene asset already removed the baked Daily enemy + old Weekly HP panel. */
+.scene{background-position:center!important;background-size:100% 100%!important}
+
+/* Reward exchange: exactly one editable reward. */
+.rewardSingle{
+  position:absolute;z-index:70;
+  left:72.0%;top:52.0%;width:26.0%;height:37.0%;
+  padding:9px 10px 10px;border:1px solid #9a7535;border-radius:16px;
+  background:linear-gradient(180deg,#061427fc,#0a1d39fa);
+  box-shadow:0 8px 20px #000b,inset 0 0 18px #315d8d18;
+  display:flex;flex-direction:column;gap:8px;
+}
+.rewardHead{font-family:serif;text-align:center;color:#f2e8c8;font-weight:1000;font-size:clamp(11px,1.75vw,14px);padding-bottom:5px;border-bottom:1px solid #725a35}
+.rewardLine{display:grid;grid-template-columns:auto 1fr;gap:7px;align-items:baseline;color:#bdcce2;font-size:clamp(8px,1.35vw,10px);line-height:1.15}
+.rewardLine strong{color:#fff2cb;font-size:clamp(10px,1.72vw,13px);font-weight:1000;min-width:0;overflow-wrap:anywhere}
+#rewardSingleBtn{margin-top:auto;width:100%;min-height:38px;border:1px solid #e3b760;border-radius:12px;background:linear-gradient(180deg,#a4762c,#74501e);color:#fff7e4;font-weight:1000;font-size:clamp(12px,2vw,16px);box-shadow:0 3px 10px #0008}
+
+/* Weekly barrier indication: frameless, no HP card. */
+.weeklyBarrierLabel{position:absolute;z-index:23;right:4.2%;top:16.0%;color:#d8ecff;font-weight:1000;font-size:clamp(8px,1.2vw,10px);letter-spacing:.08em;text-shadow:0 0 8px #60c8ff,0 2px 4px #000;pointer-events:none}
+.weeklyBarrierLabel::before{content:'◇ '}.weeklyBarrierLabel::after{content:' BARRIER FIELD'}
+
+/* Current Daily sprites remain the only Daily enemy HP bars. */
+.dailyFormation{z-index:24!important}
+.dailyPawn{filter:drop-shadow(0 7px 8px #000c) drop-shadow(0 0 8px #68c8ff55)!important}
+
+/* Star Blessing readability */
+.blessingFlash{position:absolute;z-index:39;inset:0;pointer-events:none;background:radial-gradient(circle,#fffad8dd 0,#9bdcff88 30%,transparent 68%);animation:blessFlash 1.05s ease both}
+@keyframes blessFlash{0%{opacity:0;transform:scale(.7)}30%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.15)}}
+
+
+/* ===== SOURCE STYLE 09: v23_20_FINAL_LAYOUT ===== */
+/* ===== v23.20 FINAL: restore the proven layout, then override old patches ===== */
+/* v23.20 restored lower layout */
+.partyHp,.attackCover,.attackVisual,.battleDateDynamic,.attackHit{display:none!important}
+#g{position:relative}
+.panels{padding:0 8px 14px;background:#020714}
+.lowerRef{
+  position:relative;width:100%;aspect-ratio:750/498;
+  background:url(../images/ui/lower_reference.webp) center/100% 100% no-repeat;
+  overflow:hidden;border-top:1px solid #765d34;
+}
+.lowerAttack{
+  position:absolute;left:77.2%;top:0%;width:22.8%;height:31%;
+  border:0;border-radius:50%;background:transparent;color:transparent;
+}
+.lowerAttack:active{background:#8dd4ff12}
+
+.refHp{position:absolute;width:18.5%;height:6.1%;background:#07101ee8;border:1px solid #5b4933;border-radius:3px;padding:1px 4px;box-shadow:0 2px 7px #0008}
+.refHp .num{font-weight:900;font-size:clamp(8px,1.65vw,12px);line-height:12px;color:#fff}
+.refHp .bar{height:4px;background:#1b1015;border-radius:6px;overflow:hidden;margin-top:1px}
+.refHp .bar i{display:block;height:100%;background:linear-gradient(90deg,#15a05a,#7ee26f);transition:width .45s ease}
+.refHp.down{filter:grayscale(1);opacity:.6}
+#rhp0{left:13.4%;top:24.7%} #rhp1{left:34.1%;top:24.7%} #rhp2{left:54.8%;top:24.7%}
+
+.refDate{position:absolute;left:79.0%;top:31.0%;width:20%;height:12.4%;display:grid;place-items:center;text-align:center;background:#081326ed;border:1px solid #d2a650;border-radius:999px;color:#fff1c5;font-family:serif;font-weight:900;font-size:clamp(10px,2vw,15px);line-height:1.2}
+.refCoin{position:absolute;left:82.0%;top:49.0%;width:15%;height:6%;display:grid;place-items:center;background:#0a1728e8;border-radius:8px;color:#ffe097;font-weight:900;font-size:clamp(9px,1.8vw,13px)}
+
+.lowerRef .quest{position:absolute;display:block;border:0;padding:0;min-height:0;background:none}
+.lowerRef .quest button{width:100%;height:100%;border:1px solid #c79a50;border-radius:999px;background:#0c2d4ef0;color:#fff4cb;font-weight:900;padding:0;font-size:clamp(8px,1.55vw,11px);box-shadow:0 1px 6px #0007}
+.lowerRef .quest.done button{background:#15516ff0;border-color:#78c9ee;color:#eefbff}
+.rd0{left:13.6%;top:56.2%;width:10.5%;height:7.7%} .rd1{left:13.6%;top:66.5%;width:10.5%;height:7.7%} .rd2{left:13.6%;top:76.5%;width:10.5%;height:7.7%}
+.rw0{left:36.5%;top:56.2%;width:8.3%;height:7.7%} .rw1{left:36.5%;top:66.5%;width:8.3%;height:7.7%} .rw2{left:36.5%;top:76.5%;width:8.3%;height:7.7%}
+.rs0{left:60.4%;top:56.2%;width:8.4%;height:7.7%} .rs1{left:60.4%;top:66.5%;width:8.4%;height:7.7%} .rs2{left:60.4%;top:76.5%;width:8.4%;height:7.7%}
+
+.refShop{position:absolute;display:block;background:none;border:0}
+.refShop button{width:100%;height:100%;border:1px solid #9f7d46;border-radius:4px;background:#2a241be8;color:#f2ddad;font-weight:900;font-size:clamp(7px,1.3vw,9px);padding:0}
+.rshop0{left:92.0%;top:55.0%;width:5.5%;height:6.4%} .rshop1{left:92.0%;top:65.0%;width:5.5%;height:6.4%} .rshop2{left:92.0%;top:74.7%;width:5.5%;height:6.4%} .rshop3{left:92.0%;top:84.3%;width:5.5%;height:6.4%}
+
+.refTotal{position:absolute;bottom:1.7%;height:7.2%;display:grid;place-items:center;background:#08172be8;border:1px solid #c79a50;border-radius:999px;color:#ffe4a4;font-weight:900;font-size:clamp(8px,1.55vw,11px)}
+#rDTotal{left:2.7%;width:22.2%} #rWTotal{left:26.0%;width:22.2%} #rSTotal{left:49.2%;width:22.2%}
+
+.lowerFloat{position:absolute;z-index:30;font-weight:1000;font-size:clamp(24px,5.5vw,42px);color:#fff1b1;text-shadow:0 3px 0 #6d2636,0 0 14px #ff8798;pointer-events:none;animation:float .9s ease forwards}
+
+
+
+/* Restore accumulated Daily-enemy formation sizing (missing in v23.19). */
+.dailyFormation{position:absolute;z-index:18;left:45.5%;top:38.5%;width:47.0%;height:48.5%;pointer-events:none;overflow:visible}
+.dailyPawn{position:absolute;left:var(--x);top:var(--y);width:31.5%;height:39%;transform:scale(var(--scale,1));transform-origin:50% 100%;z-index:var(--z,20);filter:drop-shadow(0 8px 11px #000c) drop-shadow(0 0 8px #68bfff55)}
+.dailyPawn .enemyArt{position:absolute;inset:-4% -4% 14% -4%;width:108%;height:90%;object-fit:contain!important;border-radius:0!important;-webkit-mask-image:none!important;mask-image:none!important;filter:drop-shadow(0 7px 8px #000b) drop-shadow(0 0 7px #6bc8ff55)}
+.dailyPawn .hpMini{position:absolute;left:7%;right:7%;bottom:10%;height:8%;border-radius:999px;background:#1d0b15;border:1px solid #bd6681;overflow:hidden;box-shadow:0 2px 5px #000a}
+.dailyPawn .hpMini i{display:block;height:100%;width:var(--hp,100%);background:linear-gradient(90deg,#b62550,#ff678c)}
+.dailyPawn .age{position:absolute;left:-8%;right:-8%;bottom:-1%;text-align:center;color:#f3f9ff;font-weight:1000;font-size:clamp(7px,1.2vw,10px);white-space:nowrap;text-shadow:0 1px 4px #000,0 0 6px #5abaff}
+.dailyPawn.active{width:28%!important;height:46%!important;filter:drop-shadow(0 9px 12px #000d) drop-shadow(0 0 11px #71d2ff77)!important}
+
+/* Remove the two upper enemy HP cards completely. */
+#dailyHUD,#weeklyHUD{display:none!important}
+/* v23.19 uses a cleaned scene background, so legacy patch rectangles are unnecessary. */
+#dailyPatch,#weeklyPatch{display:none!important}
+
+/* Keep only one reward item. */
+.refCoin,.shopRowText,.refShop{display:none!important}
+.rewardSingle{
+  position:absolute!important;z-index:70!important;
+  left:72.6%!important;top:52.0%!important;width:25.4%!important;height:36.5%!important;
+  padding:8px 10px 10px!important;border:1px solid #9a7535!important;border-radius:15px!important;
+  background:linear-gradient(180deg,#061427fc,#0a1d39fa)!important;
+  box-shadow:0 7px 18px #000b,inset 0 0 18px #315d8d18!important;
+  display:flex!important;flex-direction:column!important;gap:7px!important;overflow:hidden!important;
+}
+.rewardHead{font-family:serif!important;text-align:center!important;color:#f2e8c8!important;font-weight:1000!important;font-size:clamp(10px,1.7vw,14px)!important;padding-bottom:5px!important;border-bottom:1px solid #725a35!important;white-space:nowrap!important}
+.rewardLine{display:grid!important;grid-template-columns:41% 59%!important;gap:4px!important;align-items:center!important;color:#bdcce2!important;font-size:clamp(7px,1.25vw,9px)!important;line-height:1.1!important;min-width:0!important}
+.rewardLine span{white-space:nowrap!important}
+.rewardLine strong{color:#fff2cb!important;font-size:clamp(9px,1.45vw,11px)!important;font-weight:1000!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;overflow-wrap:normal!important}
+#rewardSingleBtn{margin-top:auto!important;width:100%!important;height:24%!important;min-height:34px!important;border:1px solid #e3b760!important;border-radius:12px!important;background:linear-gradient(180deg,#a4762c,#74501e)!important;color:#fff7e4!important;font-weight:1000!important;font-size:clamp(11px,1.9vw,15px)!important;box-shadow:0 3px 10px #0008!important}
+
+/* Editable mission labels remain aligned over the reference image. */
+.overlayText{z-index:38!important}
+/* Make the party HP overlays clean and readable without covering skill icons. */
+.refHp{top:24.0%!important;height:7.6%!important;padding:2px 5px!important;background:#06111ff7!important;border:1px solid #7a6340!important;z-index:35!important;box-shadow:0 2px 8px #000b!important}
+.refHp .num{font-size:clamp(9px,1.8vw,13px)!important;line-height:14px!important}
+.refHp .bar{height:4px!important;margin-top:2px!important}
+#rhp0{left:13.4%!important} #rhp1{left:34.1%!important} #rhp2{left:54.8%!important}
+
+/* Weekly barrier text only; no redundant HP frame. */
+.weeklyBarrierLabel{right:4.2%!important;top:28.0%!important;z-index:23!important}
+
+/* Prevent stale pre-v23.20 absolute-layout patches from winning. */
+.lowerRef::before,.lowerRef::after{display:none!important;content:none!important}
+
+
+/* ===== SOURCE STYLE 10: v23_20_coin_fix ===== */
+/* final polish verified in local render */
+.scene::after{display:none!important;content:none!important}
+.coinHud{
+  position:absolute!important;z-index:35!important;right:2.2%!important;top:.6%!important;
+  min-width:13.8%!important;height:6.8%!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  border:1.5px solid #cfa75c!important;border-radius:999px!important;background:#071324f7!important;
+  color:#ffe9aa!important;font-weight:1000!important;font-size:clamp(15px,3.2vw,24px)!important;
+  box-shadow:0 5px 14px #0008,inset 0 0 10px #fff1!important
+}
+.coinHud::before{content:'●';font-size:.82em;margin-right:.36em;color:#f6ca66;text-shadow:0 0 5px #ffc95c}
+.refDate{background:#061225!important;box-shadow:0 3px 9px #000a!important}
+
+
+/* ===== SOURCE STYLE 11: v23_23_final_fixes ===== */
+/* ===== v23.36 requested fixes ===== */
+
+/* 1) Weekly HP returns as a small frameless status under BARRIER FIELD. */
+#dailyHUD{display:none!important}
+#weeklyHUD{
+  display:block!important;
+  position:absolute!important;
+  left:auto!important;right:4.1%!important;top:31.2%!important;
+  width:23.5%!important;height:auto!important;min-height:0!important;
+  padding:0!important;margin:0!important;
+  background:transparent!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;z-index:25!important;pointer-events:none!important;
+}
+#weeklyHUD .title,#weeklyHUD .dailyStack{display:none!important}
+#weeklyHUD .row{
+  display:flex!important;justify-content:flex-end!important;align-items:center!important;
+  margin:0 0 4px!important;padding:0!important;background:transparent!important;border:0!important;
+  color:#eef7ff!important;text-shadow:0 2px 5px #000,0 0 8px #59c8ff!important;
+}
+#weeklyHUD .row span{display:none!important}
+#weeklyHUD .row b{
+  display:block!important;font-size:clamp(10px,1.7vw,13px)!important;
+  line-height:1!important;font-weight:1000!important;white-space:nowrap!important;
+}
+#weeklyHUD .eBar{
+  display:block!important;width:100%!important;height:8px!important;margin:0!important;
+  border-radius:999px!important;overflow:hidden!important;background:#260d17!important;
+  border:1px solid #754058!important;box-shadow:0 0 8px #f75b8c33!important;
+}
+#weeklyHUD .eBar i{
+  display:block!important;height:100%!important;
+  background:linear-gradient(90deg,#c72f5c,#ff719a)!important;
+  box-shadow:0 0 8px #ff679255!important;
+}
+.weeklyBarrierLabel{right:4.1%!important;top:27.2%!important;z-index:26!important}
+
+/* 2) Daily enemy graphics: single CSS image source + hard visibility guarantees. */
+.dailyPawn{
+  display:block!important;visibility:visible!important;opacity:1!important;overflow:visible!important;
+  isolation:isolate!important;
+}
+.dailyPawn .enemyArt{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  position:absolute!important;inset:-4% -5% 15% -5%!important;
+  width:110%!important;height:89%!important;
+  background-image:url("../images/enemies/daily_enemy_overlay.png")!important;
+  background-size:contain!important;background-position:center bottom!important;background-repeat:no-repeat!important;
+  border:0!important;border-radius:0!important;clip-path:none!important;
+  -webkit-mask-image:none!important;mask-image:none!important;
+  filter:drop-shadow(0 7px 8px #000c) drop-shadow(0 0 7px #66c4ff66)!important;
+}
+.dailyPawn::before,.dailyPawn::after{pointer-events:none!important}
+
+/* 3) Reward exchange fits entirely inside the right column. */
+.rewardSingle{
+  left:72.6%!important;top:52.4%!important;width:24.7%!important;height:35.8%!important;
+  box-sizing:border-box!important;padding:8px 9px 9px!important;
+  display:flex!important;flex-direction:column!important;gap:6px!important;overflow:hidden!important;
+}
+.rewardHead{
+  flex:0 0 auto!important;font-size:clamp(10px,1.55vw,13px)!important;
+  line-height:1.05!important;padding-bottom:4px!important;white-space:nowrap!important;
+}
+.rewardLine{
+  flex:0 0 auto!important;display:flex!important;flex-direction:column!important;
+  align-items:flex-start!important;gap:2px!important;min-width:0!important;
+  font-size:clamp(7px,1.16vw,9px)!important;line-height:1.05!important;
+}
+.rewardLine span{
+  display:block!important;color:#aebed8!important;font-size:clamp(7px,1.08vw,8px)!important;
+  white-space:nowrap!important;
+}
+.rewardLine strong{
+  display:block!important;width:100%!important;max-width:100%!important;
+  color:#fff1c8!important;font-size:clamp(9px,1.45vw,11px)!important;
+  line-height:1.08!important;font-weight:1000!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+#rewardSingleBtn{
+  flex:1 1 auto!important;margin-top:auto!important;width:100%!important;
+  min-height:34px!important;max-height:42px!important;
+  box-sizing:border-box!important;font-size:clamp(11px,1.75vw,14px)!important;
+}
+
+/* The old reference-image shop controls stay hidden. */
+.refCoin,.shopRowText,.refShop{display:none!important}
+
+
+/* ===== SOURCE STYLE 12: v23_23_final_fixes ===== */
+/* ===== v23.36 requested visual/gameplay fixes ===== */
+
+/* A. Daily enemy art: every generated enemy gets a real IMG, never a CSS-only blank. */
+.dailyFormation{z-index:28!important}
+.dailyPawn{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  overflow:visible!important;isolation:isolate!important;
+}
+.dailyPawn .enemyArt{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  position:absolute!important;inset:-5% -6% 13% -6%!important;
+  width:112%!important;height:92%!important;object-fit:contain!important;
+  background:none!important;border:0!important;border-radius:0!important;
+  clip-path:none!important;-webkit-mask-image:none!important;mask-image:none!important;
+  filter:drop-shadow(0 7px 8px #000c) drop-shadow(0 0 8px #6bc8ff66)!important;
+  z-index:2!important;pointer-events:none!important;
+}
+.dailyPawn .hpMini,.dailyPawn .age{z-index:4!important}
+
+/* A single Daily enemy should resemble the original early-game presentation:
+   larger and clearly readable, rather than a tiny icon. */
+.dailyFormation[data-count="1"] .dailyPawn{
+  left:-2%!important;top:17%!important;
+  width:42%!important;height:68%!important;
+  transform:scale(1.06)!important;z-index:32!important;
+}
+.dailyFormation[data-count="1"] .dailyPawn .enemyArt{
+  inset:-7% -8% 13% -8%!important;width:116%!important;height:94%!important;
+}
+.dailyFormation[data-count="1"] .dailyPawn .hpMini{
+  left:6%!important;right:6%!important;bottom:9%!important;height:6.5%!important;
+}
+.dailyFormation[data-count="1"] .dailyPawn .age{
+  bottom:-1%!important;font-size:clamp(8px,1.4vw,11px)!important;
+}
+
+/* B. Reward exchange: lock all contents INSIDE the right column. */
+.rewardSingle{
+  left:72.4%!important;top:50.8%!important;width:24.8%!important;height:39.2%!important;
+  box-sizing:border-box!important;padding:8px 10px 9px!important;
+  display:grid!important;
+  grid-template-rows:auto auto auto minmax(34px,1fr)!important;
+  align-content:stretch!important;gap:6px!important;
+  overflow:hidden!important;border-radius:15px!important;
+}
+.rewardHead{
+  margin:0!important;padding:0 0 5px!important;
+  font-size:clamp(10px,1.55vw,13px)!important;line-height:1.05!important;
+  white-space:nowrap!important;text-align:center!important;
+}
+.rewardLine{
+  display:grid!important;grid-template-columns:38% 62%!important;
+  align-items:center!important;gap:3px!important;
+  margin:0!important;padding:0!important;min-width:0!important;
+  font-size:clamp(7px,1.10vw,8.5px)!important;line-height:1.05!important;
+}
+.rewardLine span{
+  display:block!important;min-width:0!important;white-space:nowrap!important;
+  font-size:clamp(7px,1.05vw,8px)!important;line-height:1.05!important;
+}
+.rewardLine strong{
+  display:block!important;min-width:0!important;max-width:100%!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  font-size:clamp(8.5px,1.35vw,10.5px)!important;line-height:1.05!important;
+}
+#rewardSingleBtn{
+  align-self:end!important;margin:0!important;width:100%!important;height:100%!important;
+  min-height:34px!important;max-height:42px!important;box-sizing:border-box!important;
+  font-size:clamp(11px,1.75vw,14px)!important;border-radius:11px!important;
+}
+
+/* C. Rapid Union barrage visual: short slash flashes instead of slow pulses. */
+.union.rapidHit .unionGlow{
+  animation:none!important;
+  opacity:1!important;
+  background:
+    linear-gradient(118deg,transparent 0 36%,#fff 39%,#79d8ff 42%,transparent 46%),
+    linear-gradient(62deg,transparent 0 44%,#fff8 47%,#b27cff 50%,transparent 54%)!important;
+}
+.union.overbreak.rapidHit .unionGlow{
+  background:
+    linear-gradient(118deg,transparent 0 34%,#fff 38%,#ff8de6 41%,transparent 45%),
+    linear-gradient(62deg,transparent 0 42%,#fff 46%,#8867ff 50%,transparent 54%)!important;
+}
+.union.rapidHit .unionFrame{transform:scale(1.018)!important}
+
+/* Keep the v23.21 Weekly HP + Barrier Field presentation. */
+#weeklyHUD{z-index:25!important}
+.weeklyBarrierLabel{z-index:26!important}
+
+
+/* ===== SOURCE STYLE 13: v23_23_final_fixes ===== */
+/* ===== v23.36 requested polish ===== */
+
+/* 1) Battle messages: lower, below the protagonist's face. */
+.toast{
+  top:70.5%!important;
+  width:min(80%,560px)!important;
+  padding:10px 14px!important;
+  border-radius:12px!important;
+  font-size:clamp(12px,2vw,16px)!important;
+  background:#061329f2!important;
+  box-shadow:0 10px 28px #000c!important;
+}
+
+/* 2) Weekly HP: place it near the boss's left foot instead of the top-right. */
+#weeklyHUD{
+  display:block!important;
+  position:absolute!important;
+  left:64.0%!important;
+  right:auto!important;
+  top:75.0%!important;
+  width:23.0%!important;
+  min-height:0!important;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  z-index:31!important;
+  pointer-events:none!important;
+}
+#weeklyHUD .title,#weeklyHUD .dailyStack{display:none!important}
+#weeklyHUD .row{
+  display:flex!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  margin:0 0 4px!important;
+  padding:0 3px!important;
+  color:#f5fbff!important;
+  background:transparent!important;
+  border:0!important;
+  text-shadow:0 2px 5px #000,0 0 8px #67cbff!important;
+}
+#weeklyHUD .row span{display:none!important}
+#weeklyHUD .row b{
+  display:block!important;
+  font-size:clamp(9px,1.5vw,12px)!important;
+  line-height:1!important;
+  font-weight:1000!important;
+  white-space:nowrap!important;
+}
+#weeklyHUD .row b::before{content:'HP ';font-size:.92em!important}
+#weeklyHUD .eBar{
+  display:block!important;
+  width:100%!important;
+  height:7px!important;
+  margin:0!important;
+  border-radius:999px!important;
+  overflow:hidden!important;
+  background:#250c16!important;
+  border:1px solid #6d3c51!important;
+  box-shadow:0 0 7px #f75b8c3d!important;
+}
+#weeklyHUD .eBar i{
+  display:block!important;
+  height:100%!important;
+  background:linear-gradient(90deg,#c72f5b,#ff7099)!important;
+  box-shadow:0 0 7px #ff659166!important;
+}
+
+/* Barrier text remains around the upper body. */
+.weeklyBarrierLabel{
+  right:4.2%!important;
+  top:27.2%!important;
+  z-index:33!important;
+}
+
+/* 3) Missing weekly enemy right-hand/wing supplement.
+      We mirror the existing opposite appendage from the scene art itself. */
+.weeklyMirrorArm{display:none!important;
+  position:absolute;
+  left:58.4%;
+  top:24.5%;
+  width:16.2%;
+  height:49.5%;
+  overflow:hidden;
+  z-index:16;
+  pointer-events:none;
+  transform:scaleX(-1) rotate(-2deg);
+  transform-origin:center center;
+  -webkit-mask-image:radial-gradient(ellipse at 48% 50%,#000 0 48%,#000 58%,transparent 82%);
+  mask-image:radial-gradient(ellipse at 48% 50%,#000 0 48%,#000 58%,transparent 82%);
+  filter:drop-shadow(0 4px 9px #0008) drop-shadow(0 0 8px #684cff55);
+}
+.weeklyMirrorArm img{
+  position:absolute;
+  width:617.3%;
+  max-width:none!important;
+  height:auto;
+  left:-522%;
+  top:-58%;
+  pointer-events:none;
+  user-select:none;
+}
+
+/* Keep Daily enemy graphics above the weekly-arm supplement. */
+.dailyFormation{z-index:28!important}
+.dailyPawn .enemyArt{display:block!important;visibility:visible!important;opacity:1!important}
+
+/* Reward panel: keep the now-good v23.22 placement untouched. */
+.rewardSingle{z-index:41!important}
+
+
+/* ===== SOURCE STYLE 14: v23_25_final ===== */
+.weeklyMirrorArm{display:none!important}
+.weeklyOriginalArt{
+  position:absolute;z-index:20;pointer-events:none;
+  left:54.5333%;top:25.9341%;width:45.3333%;height:74.0659%;
+  background:url("../images/enemies/weekly_enemy.webp") center/100% 100% no-repeat;
+  filter:drop-shadow(0 8px 10px #000b) drop-shadow(0 0 9px #786bff55);
+}
+.dailyFormation{z-index:28!important}
+.dailyPawn .enemyArt{
+  transform:scale(1.10);
+  filter:drop-shadow(0 8px 10px #000d) drop-shadow(0 0 10px #795dff77)!important;
+  -webkit-mask-image:radial-gradient(ellipse 73% 74% at 50% 51%,#000 54%,rgba(0,0,0,.96) 68%,transparent 95%)!important;
+  mask-image:radial-gradient(ellipse 73% 74% at 50% 51%,#000 54%,rgba(0,0,0,.96) 68%,transparent 95%)!important;
+}
+.dailyPawn .enemyName{
+  position:absolute;z-index:5;left:-35%;right:-35%;bottom:23%;
+  text-align:center;color:#f4f0ff;font-weight:1000;
+  font-size:clamp(6.3px,1.05vw,9px);line-height:1.05;white-space:nowrap;
+  text-shadow:0 2px 4px #000,0 0 8px #805cff;
+}
+.dailyPawn .hpMini{bottom:10%!important}
+.dailyPawn .age{bottom:-1%!important}
+
+#weeklyHUD{display:none!important}
+.weeklyFootStatus{
+  position:absolute;right:2.7%;bottom:19.0%;width:31.5%;z-index:34;
+  padding:5px 8px 6px;border-radius:10px;
+  background:linear-gradient(180deg,#071326e8,#0b1630e2);
+  border:1px solid #7f6bb2;color:#fff;box-shadow:0 4px 12px #000a;pointer-events:none;
+}
+.weeklyFootStatus .wname{
+  color:#f3eeff;font-weight:1000;font-size:clamp(7px,1.15vw,10px);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 4px #000,0 0 6px #6d67ff;
+}
+.weeklyFootStatus .wrow{display:flex;justify-content:space-between;align-items:center;gap:5px;margin-top:3px;font-size:clamp(7px,1.1vw,9px);font-weight:900}
+.weeklyFootStatus .wbar{height:6px;margin-top:3px;border-radius:999px;background:#240d18;border:1px solid #71405a;overflow:hidden}
+.weeklyFootStatus .wbar i{display:block;height:100%;background:linear-gradient(90deg,#be2855,#ff6c96);transition:width .25s ease}
+
+.actionCall{
+  position:absolute;z-index:75;left:50%;bottom:2.2%;transform:translate(-50%,8px) scale(.96);
+  width:min(88%,660px);min-height:27px;padding:5px 10px;
+  display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;
+  border:1px solid #a98645;border-radius:999px;
+  background:linear-gradient(90deg,#06152bea,#10264beb,#06152bea);
+  box-shadow:0 4px 14px #000a;opacity:0;pointer-events:none;
+  font-size:clamp(7.5px,1.28vw,10.5px);font-weight:900;
+}
+.actionCall.show{animation:actionCallShow .85s ease both}
+@keyframes actionCallShow{
+  0%{opacity:0;transform:translate(-50%,8px) scale(.95)}
+  12%,72%{opacity:1;transform:translate(-50%,0) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-5px) scale(1.01)}
+}
+.acActor{color:#9ed6ff} .acAction{color:#ffe09a} .acArrow{color:#fff8} .acTarget{color:#fff} .acEffect{color:#ff9bbb}
+
+.rapidDamage{
+  position:absolute;z-index:90;transform:translate(-50%,-50%);
+  color:#fff6dc;font-style:italic;font-weight:1000;font-size:clamp(19px,3.8vw,32px);
+  letter-spacing:-.04em;text-shadow:0 2px 0 #a91246,0 0 7px #ff367d,0 0 15px #894bff,0 4px 8px #000;
+  pointer-events:none;animation:rapidDamage .50s cubic-bezier(.15,.8,.22,1) forwards;
+}
+.rapidDamage.weekly{font-size:clamp(22px,4.2vw,35px);color:#fff0b9}
+@keyframes rapidDamage{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.55) rotate(-5deg)}
+  18%{opacity:1;transform:translate(-50%,-56%) scale(1.2) rotate(2deg)}
+  58%{opacity:1;transform:translate(-50%,-78%) scale(.98) rotate(-1deg)}
+  100%{opacity:0;transform:translate(-50%,-115%) scale(.82)}
+}
+
+
+/* ===== SOURCE STYLE 15: v23_26_final ===== */
+/* Weekly enemy HP: no frame/card. Keep only name, HP value and thin bar near the boss's left foot. */
+.weeklyFootStatus{
+  position:absolute!important;
+  right:3.6%!important;
+  bottom:5.6%!important;
+  width:30%!important;
+  z-index:36!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  color:#fff!important;
+  pointer-events:none!important;
+  text-shadow:0 2px 4px #000,0 0 8px #5040aa!important;
+}
+.weeklyFootStatus .wname{
+  font-size:clamp(7px,1.2vw,10px)!important;
+  font-weight:1000!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.weeklyFootStatus .wrow{
+  margin-top:2px!important;
+  display:flex!important;
+  justify-content:space-between!important;
+  align-items:center!important;
+  font-size:clamp(7px,1.12vw,9px)!important;
+  font-weight:1000!important;
+}
+.weeklyFootStatus .wbar{
+  height:6px!important;
+  margin-top:3px!important;
+  border-radius:999px!important;
+  background:#220c17cc!important;
+  border:1px solid #70435a!important;
+  overflow:hidden!important;
+  box-shadow:0 1px 4px #000a!important;
+}
+
+/* Daily enemy: restore the early-game richer, heavier crystal look. */
+.dailyPawn .enemyArt{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  transform:scale(1.13)!important;
+  filter:
+    drop-shadow(0 9px 10px #000d)
+    drop-shadow(0 0 11px #6f5dff88)
+    contrast(1.06) saturate(1.07)!important;
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+}
+.dailyPawn .enemyName{
+  bottom:21%!important;
+  color:#f5f1ff!important;
+  font-weight:1000!important;
+  text-shadow:0 2px 4px #000,0 0 8px #735dff!important;
+}
+.dailyPawn .hpMini{bottom:9%!important}
+.dailyPawn .age{bottom:-2%!important}
+
+/* Union / Overbreak: visible -100 storm above the special illustration. */
+.unionDamageStorm{
+  position:absolute;
+  z-index:140;
+  transform:translate(-50%,-50%) rotate(var(--rot,0deg));
+  color:#fff7d6;
+  font-style:italic;
+  font-weight:1000;
+  font-size:clamp(28px,6.3vw,54px);
+  letter-spacing:-.06em;
+  text-shadow:
+    0 2px 0 #b41442,
+    0 0 8px #ff346e,
+    0 0 18px #8b4dff,
+    0 5px 10px #000;
+  pointer-events:none;
+  animation:unionDamageStorm .60s cubic-bezier(.12,.82,.18,1) forwards;
+}
+.unionDamageStorm.minor{
+  z-index:139;
+  font-size:clamp(20px,4.6vw,40px);
+  color:#ffe3f6;
+  opacity:.9;
+}
+@keyframes unionDamageStorm{
+  0%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.45) rotate(var(--rot,0deg));
+  }
+  14%{
+    opacity:1;
+    transform:translate(-50%,-52%) scale(1.25) rotate(var(--rot,0deg));
+  }
+  62%{
+    opacity:1;
+    transform:translate(-50%,-72%) scale(1.0) rotate(var(--rot,0deg));
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-115%) scale(.75) rotate(var(--rot,0deg));
+  }
+}
+
+/* Keep the regular action call readable but slower battle pacing gives it time to be read. */
+.actionCall.show{animation-duration:1.05s!important}
+
+
+/* ===== SOURCE STYLE 16: v23_27_union_fix ===== */
+.unionDamageStorm{
+  position:absolute!important;
+  z-index:180!important;
+  transform:translate(-50%,-50%) rotate(var(--rot,0deg));
+  color:#fff8d5!important;
+  font-style:italic!important;
+  font-weight:1000!important;
+  font-size:clamp(34px,7.2vw,62px)!important;
+  line-height:1!important;
+  letter-spacing:-.07em!important;
+  text-shadow:
+    0 3px 0 #a5093e,
+    0 0 8px #ff316e,
+    0 0 20px #ff477e,
+    0 0 32px #7045ff,
+    0 6px 12px #000!important;
+  pointer-events:none!important;
+  animation:unionDamageStormV27 .74s cubic-bezier(.10,.83,.18,1) forwards!important;
+}
+.unionHitCounter{
+  position:absolute!important;
+  z-index:181!important;
+  transform:translate(-50%,-50%);
+  color:#cbe7ff!important;
+  font-size:clamp(8px,1.55vw,12px)!important;
+  font-weight:1000!important;
+  font-style:italic!important;
+  letter-spacing:.08em!important;
+  text-shadow:0 2px 4px #000,0 0 8px #4c8fff!important;
+  pointer-events:none!important;
+  animation:unionHitCounterV27 .50s ease-out forwards!important;
+}
+@keyframes unionDamageStormV27{
+  0%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.38) rotate(var(--rot,0deg));
+  }
+  12%{
+    opacity:1;
+    transform:translate(-50%,-53%) scale(1.25) rotate(var(--rot,0deg));
+  }
+  58%{
+    opacity:1;
+    transform:translate(-50%,-75%) scale(1.00) rotate(var(--rot,0deg));
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-118%) scale(.78) rotate(var(--rot,0deg));
+  }
+}
+@keyframes unionHitCounterV27{
+  0%{opacity:0;transform:translate(-50%,-20%) scale(.8)}
+  20%,68%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-82%) scale(.92)}
+}
+
+
+/* ===== SOURCE STYLE 17: v23_28_enemy_art_only ===== */
+/* ===== Enemy graphics only: adopted 2026-08-25 artwork ===== */
+
+/* DAILY: compact floating crystal/mechanical sentinel */
+.dailyPawn .enemyArt{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  transform:scale(1.03)!important;
+  filter:
+    drop-shadow(0 8px 11px rgba(0,0,0,.82))
+    drop-shadow(0 0 10px rgba(91,78,255,.60))
+    saturate(1.06) contrast(1.04)!important;
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+}
+
+/* WEEKLY: full-body celestial mechanical angel boss */
+.weeklyOriginalArt{
+  left:58.0%!important;
+  top:17.0%!important;
+  width:38.5%!important;
+  height:55.5%!important;
+  background-image:url("../images/enemies/weekly_enemy.webp")!important;
+  background-size:contain!important;
+  background-position:center bottom!important;
+  background-repeat:no-repeat!important;
+  filter:
+    drop-shadow(0 12px 15px rgba(0,0,0,.78))
+    drop-shadow(0 0 13px rgba(105,84,255,.50))!important;
+  opacity:1!important;
+}
+
+/* Keep names / HP / barrier / battle logic untouched. */
+
+
+/* ===== SOURCE STYLE 18: v23_34_depth_background ===== */
+/* CLEAN BATTLEFIELD: one castle, no baked-in old enemies */
+.scene{
+  background-image:url("../images/backgrounds/battlefield_clean.webp")!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+}
+#dailyPatch,#weeklyPatch{display:none!important}
+
+/* Original protagonist, separated from the old background */
+.heroOriginalV29{
+  position:absolute;
+  z-index:16;
+  left:-6.0%;
+  top:18.0%;
+  width:55.0%;
+  height:95.0%;
+  background:url("../images/characters/protagonist.webp") left top / auto 115% no-repeat;
+  pointer-events:none;
+  filter:drop-shadow(0 7px 9px rgba(0,0,0,.22));
+}
+
+/* v23.46 title: approved candidate 7 logo with transparent background */
+.sceneLoreV29{
+  position:absolute;z-index:17;left:2.8%;top:2.7%;width:39%;height:auto;
+  pointer-events:none;overflow:visible!important;
+}
+.sceneLoreV29 .ttl{
+  display:block;width:100%;aspect-ratio:502/100;
+  padding:0!important;border:none!important;background-color:transparent!important;
+  background-image:url("../images/ui/title_logo.webp")!important;
+  background-position:center!important;background-size:contain!important;background-repeat:no-repeat!important;
+  mix-blend-mode:normal;
+  font-size:0!important;line-height:0!important;letter-spacing:0!important;
+  color:transparent!important;-webkit-text-fill-color:transparent!important;-webkit-text-stroke:0 transparent!important;
+  filter:drop-shadow(0 0 4px rgba(108,178,255,.36)) drop-shadow(0 0 8px rgba(126,93,255,.18));
+  overflow:visible!important;
+}
+.sceneLoreV29 .ttl::before,.sceneLoreV29 .ttl::after{content:none!important;display:none!important}
+.sceneLoreV29 .sub{display:none}.sceneLoreV29 .goal{display:none}
+
+/* Wider perspective field: enemies occupy the space in front of the Weekly boss */
+.dailyFormation{
+  left:37.0%!important;
+  top:35.0%!important;
+  width:59.0%!important;
+  height:57.0%!important;
+  overflow:visible!important;
+  z-index:28!important;
+}
+.dailyPawn{
+  transform-origin:50% 100%!important;
+  transition:left .35s ease,top .35s ease,width .35s ease,height .35s ease,transform .35s ease,opacity .35s ease!important;
+}
+.dailyPawn .enemyArt{transform:scale(1.03)!important}
+.dailyPawn .enemyName{bottom:20%!important}
+.dailyPawn .hpMini{bottom:8%!important}
+.dailyPawn .age{bottom:-3%!important}
+
+/* ONE: very close */
+.dailyFormation[data-count="1"] .dailyPawn:nth-child(1){
+  left:13%!important;top:34%!important;width:38%!important;height:62%!important;
+  transform:scale(1.16)!important;z-index:46!important;
+}
+
+/* TWO: oldest remains closest, today's enemy is slightly farther */
+.dailyFormation[data-count="2"] .dailyPawn:nth-child(1){
+  left:-1%!important;top:43%!important;width:37%!important;height:60%!important;
+  transform:scale(1.14)!important;z-index:46!important;
+}
+.dailyFormation[data-count="2"] .dailyPawn:nth-child(2){
+  left:55%!important;top:36%!important;width:32%!important;height:52%!important;
+  transform:scale(.94)!important;z-index:39!important;
+}
+
+/* THREE */
+.dailyFormation[data-count="3"] .dailyPawn:nth-child(1){
+  left:-2%!important;top:47%!important;width:36%!important;height:58%!important;
+  transform:scale(1.11)!important;z-index:46!important;
+}
+.dailyFormation[data-count="3"] .dailyPawn:nth-child(2){
+  left:53%!important;top:49%!important;width:34%!important;height:55%!important;
+  transform:scale(1.04)!important;z-index:44!important;
+}
+.dailyFormation[data-count="3"] .dailyPawn:nth-child(3){
+  left:30%!important;top:22%!important;width:28%!important;height:44%!important;
+  transform:scale(.82)!important;z-index:36!important;
+}
+
+/* FOUR */
+.dailyFormation[data-count="4"] .dailyPawn:nth-child(1){
+  left:-3%!important;top:49%!important;width:35%!important;height:57%!important;
+  transform:scale(1.09)!important;z-index:46!important;
+}
+.dailyFormation[data-count="4"] .dailyPawn:nth-child(2){
+  left:55%!important;top:50%!important;width:33%!important;height:54%!important;
+  transform:scale(1.03)!important;z-index:44!important;
+}
+.dailyFormation[data-count="4"] .dailyPawn:nth-child(3){
+  left:23%!important;top:27%!important;width:28%!important;height:44%!important;
+  transform:scale(.83)!important;z-index:36!important;
+}
+.dailyFormation[data-count="4"] .dailyPawn:nth-child(4){
+  left:62%!important;top:22%!important;width:25%!important;height:40%!important;
+  transform:scale(.74)!important;z-index:33!important;
+}
+
+/* FIVE */
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(1){
+  left:-4%!important;top:50%!important;width:34%!important;height:56%!important;
+  transform:scale(1.07)!important;z-index:46!important;
+}
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(2){
+  left:55%!important;top:51%!important;width:32%!important;height:52%!important;
+  transform:scale(1.01)!important;z-index:44!important;
+}
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(3){
+  left:21%!important;top:29%!important;width:27%!important;height:43%!important;
+  transform:scale(.81)!important;z-index:37!important;
+}
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(4){
+  left:49%!important;top:27%!important;width:25%!important;height:40%!important;
+  transform:scale(.74)!important;z-index:34!important;
+}
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(5){
+  left:75%!important;top:15%!important;width:21%!important;height:34%!important;
+  transform:scale(.63)!important;z-index:31!important;opacity:.96!important;
+}
+
+/* SIX */
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(1){
+  left:-5%!important;top:51%!important;width:34%!important;height:55%!important;
+  transform:scale(1.06)!important;z-index:46!important;
+}
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(2){
+  left:56%!important;top:52%!important;width:31%!important;height:51%!important;
+  transform:scale(1.00)!important;z-index:44!important;
+}
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(3){
+  left:20%!important;top:30%!important;width:27%!important;height:42%!important;
+  transform:scale(.80)!important;z-index:37!important;
+}
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(4){
+  left:48%!important;top:28%!important;width:24%!important;height:39%!important;
+  transform:scale(.73)!important;z-index:34!important;
+}
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(5){
+  left:74%!important;top:17%!important;width:21%!important;height:34%!important;
+  transform:scale(.63)!important;z-index:31!important;opacity:.95!important;
+}
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(6){
+  left:37%!important;top:10%!important;width:19%!important;height:31%!important;
+  transform:scale(.56)!important;z-index:29!important;opacity:.91!important;
+}
+
+/* SEVEN: maximum stack — selected perspective formation */
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(1){
+  left:-6%!important;top:52%!important;width:34%!important;height:55%!important;
+  transform:scale(1.05)!important;z-index:46!important;
+}
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(2){
+  left:57%!important;top:53%!important;width:31%!important;height:50%!important;
+  transform:scale(.99)!important;z-index:44!important;
+}
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(3){
+  left:18%!important;top:31%!important;width:26%!important;height:42%!important;
+  transform:scale(.79)!important;z-index:37!important;
+}
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(4){
+  left:47%!important;top:29%!important;width:24%!important;height:38%!important;
+  transform:scale(.72)!important;z-index:34!important;
+}
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(5){
+  left:75%!important;top:18%!important;width:20%!important;height:33%!important;
+  transform:scale(.62)!important;z-index:31!important;opacity:.94!important;
+}
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(6){
+  left:35%!important;top:11%!important;width:18.5%!important;height:30%!important;
+  transform:scale(.55)!important;z-index:29!important;opacity:.90!important;
+}
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(7){
+  left:62%!important;top:7%!important;width:17%!important;height:28%!important;
+  transform:scale(.50)!important;z-index:27!important;opacity:.86!important;
+}
+
+/* WEEKLY boss: the more Daily enemies remain, the farther the boss recedes */
+.scene[data-daily-count="0"] .weeklyOriginalArt,
+.scene[data-daily-count="1"] .weeklyOriginalArt{left:58%!important;top:16.5%!important;width:38.5%!important;height:56%!important}
+.scene[data-daily-count="2"] .weeklyOriginalArt{left:60.5%!important;top:15.5%!important;width:36%!important;height:53%!important}
+.scene[data-daily-count="3"] .weeklyOriginalArt{left:62.5%!important;top:14.7%!important;width:33.5%!important;height:50%!important}
+.scene[data-daily-count="4"] .weeklyOriginalArt{left:64.0%!important;top:13.8%!important;width:31.5%!important;height:47%!important}
+.scene[data-daily-count="5"] .weeklyOriginalArt{left:65.5%!important;top:13.0%!important;width:29.5%!important;height:44%!important}
+.scene[data-daily-count="6"] .weeklyOriginalArt{left:66.5%!important;top:12.1%!important;width:27.5%!important;height:41%!important}
+.scene[data-daily-count="7"] .weeklyOriginalArt{left:67.5%!important;top:11.2%!important;width:25.5%!important;height:38%!important}
+
+/* BARRIER FIELD: slightly higher, follows the boss into depth */
+.scene[data-daily-count="0"] .weeklyBarrierLabel,
+.scene[data-daily-count="1"] .weeklyBarrierLabel{top:14.0%!important;right:4.0%!important}
+.scene[data-daily-count="2"] .weeklyBarrierLabel{top:13.0%!important;right:4.2%!important}
+.scene[data-daily-count="3"] .weeklyBarrierLabel{top:12.0%!important;right:4.6%!important}
+.scene[data-daily-count="4"] .weeklyBarrierLabel{top:11.2%!important;right:5.0%!important}
+.scene[data-daily-count="5"] .weeklyBarrierLabel{top:10.4%!important;right:5.4%!important}
+.scene[data-daily-count="6"] .weeklyBarrierLabel{top:9.6%!important;right:5.8%!important}
+.scene[data-daily-count="7"] .weeklyBarrierLabel{top:8.8%!important;right:6.2%!important}
+
+/* Weekly HP: chosen foot-level position; follows boss depth as Daily stack grows */
+.scene[data-daily-count="0"] .weeklyFootStatus,
+.scene[data-daily-count="1"] .weeklyFootStatus{right:3.6%!important;bottom:24.0%!important;width:30%!important}
+.scene[data-daily-count="2"] .weeklyFootStatus{right:4.0%!important;bottom:25.4%!important;width:28.5%!important}
+.scene[data-daily-count="3"] .weeklyFootStatus{right:4.4%!important;bottom:26.8%!important;width:27.5%!important}
+.scene[data-daily-count="4"] .weeklyFootStatus{right:4.8%!important;bottom:28.2%!important;width:26.5%!important}
+.scene[data-daily-count="5"] .weeklyFootStatus{right:5.2%!important;bottom:29.6%!important;width:25.5%!important}
+.scene[data-daily-count="6"] .weeklyFootStatus{right:5.6%!important;bottom:31.0%!important;width:24.5%!important}
+.scene[data-daily-count="7"] .weeklyFootStatus{right:6.0%!important;bottom:32.4%!important;width:23.5%!important}
+
+
+/* ===== SOURCE STYLE 19: v23_36_protagonist_final ===== */
+.heroOriginalV29{
+  left:-6.0%!important;
+  top:18.0%!important;
+  width:55.0%!important;
+  height:95.0%!important;
+  background-position:left top!important;
+  background-size:auto 115%!important;
+  background-repeat:no-repeat!important;
+  filter:drop-shadow(0 7px 9px rgba(0,0,0,.22))!important;
+}
+
+
+/* ===== SOURCE STYLE 20: v23_44_union_enemy_return_to_light ===== */
+/* v23.46
+   Union/Overbreak defeat order:
+   special animation end -> HP 0 visible -> return-to-light fade (2.5s) -> removal
+*/
+.dailyPawn.unionDamageZero,
+.weeklyOriginalArt.unionDamageZero,
+.weeklyFootStatus.unionDamageZero,
+.weeklyBarrierLabel.unionDamageZero{
+  opacity:1!important;
+}
+
+/* Enemy body: softly returns to blue-white light instead of popping away. */
+@keyframes unionReturnToLightBody{
+  0%{
+    opacity:1;
+    filter:brightness(1) saturate(1);
+  }
+  18%{
+    opacity:.98;
+    filter:brightness(1.08) saturate(1.04);
+  }
+  45%{
+    opacity:.78;
+    filter:brightness(1.30) saturate(.96)
+      drop-shadow(0 0 7px rgba(116,174,255,.42));
+  }
+  72%{
+    opacity:.40;
+    filter:brightness(1.62) saturate(.76)
+      drop-shadow(0 0 13px rgba(165,211,255,.60));
+  }
+  90%{
+    opacity:.12;
+    filter:brightness(1.92) saturate(.38)
+      drop-shadow(0 0 18px rgba(218,239,255,.78));
+  }
+  100%{
+    opacity:0;
+    filter:brightness(2.15) saturate(.15)
+      drop-shadow(0 0 20px rgba(240,249,255,.90));
+  }
+}
+
+@keyframes unionReturnToLightUi{
+  0%,12%{opacity:1}
+  48%{opacity:.72}
+  76%{opacity:.34}
+  100%{opacity:0}
+}
+
+.dailyPawn.unionReturnLight,
+.weeklyOriginalArt.unionReturnLight{
+  animation:unionReturnToLightBody 2.50s cubic-bezier(.22,.61,.36,1) forwards!important;
+  pointer-events:none!important;
+  will-change:opacity,filter;
+}
+
+/* HP/name/barrier fade with the defeated enemy after HP 0 has been shown. */
+.weeklyFootStatus.unionReturnLight,
+.weeklyBarrierLabel.unionReturnLight{
+  animation:unionReturnToLightUi 2.50s cubic-bezier(.22,.61,.36,1) forwards!important;
+  pointer-events:none!important;
+  will-change:opacity;
+}
+
+/* Pattern ④ central light: a small core appears, blooms, then collapses into a point. */
+.dailyPawn.unionReturnLight::after,
+.weeklyOriginalArt.unionReturnLight::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:48%;
+  width:58%;
+  aspect-ratio:1;
+  transform:translate(-50%,-50%) scale(.18);
+  transform-origin:center;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:20;
+  opacity:0;
+  background:
+    radial-gradient(circle,
+      rgba(255,255,255,.98) 0 5%,
+      rgba(183,220,255,.92) 7%,
+      rgba(105,158,255,.50) 18%,
+      rgba(92,92,255,.16) 34%,
+      transparent 62%);
+  mix-blend-mode:screen;
+  animation:unionReturnLightCore 2.50s ease-in-out forwards!important;
+}
+
+@keyframes unionReturnLightCore{
+  0%,8%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.12);
+  }
+  34%{
+    opacity:.48;
+    transform:translate(-50%,-50%) scale(.78);
+  }
+  60%{
+    opacity:.82;
+    transform:translate(-50%,-50%) scale(1.08);
+  }
+  82%{
+    opacity:.94;
+    transform:translate(-50%,-50%) scale(.46);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.06);
+  }
+}
+
+
+/* ===== SOURCE STYLE 21: v23_45_normal_attack_defeat_note ===== */
+/* Normal attacks and Tamed attacks intentionally reuse
+   .unionDamageZero + .unionReturnLight from v23.44.
+   This keeps all enemy defeats visually consistent:
+   HP 0 -> 0.4s pause -> 2.5s return-to-light fade -> removal. */
+
