@@ -7,9 +7,20 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" name="viewport"/>
 <meta content="#020714" name="theme-color"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="manifest" href="manifest.webmanifest"/>
 <title>ぼうけんノート Engine v1</title>
-<link href="css/game.css" rel="stylesheet"/><link href="css/layout-v1.css" rel="stylesheet"/><script defer="" src="data/characters.js"></script><script defer="" src="data/enemies.js"></script><script defer="" src="data/skills.js"></script><script defer="" src="data/missions.js"></script><script defer="" src="data/areas.js"></script><script defer="" src="js/game.js"></script><script defer="" src="js/patch-weekly-arm.js"></script><script defer="" src="js/patch-visual-runtime.js"></script><script defer="" src="js/patch-background-runtime.js"></script><script defer="" src="js/main.js"></script></head>
+<link href="css/game.css" rel="stylesheet"/><link href="css/layout-v1.css" rel="stylesheet"/><link href="css/layout-v2.css" rel="stylesheet"/><script defer="" src="data/characters.js"></script><script defer="" src="data/enemies.js"></script><script defer="" src="data/skills.js"></script><script defer="" src="data/missions.js"></script><script defer="" src="data/areas.js"></script><script defer="" src="js/game.js"></script><script defer="" src="js/patch-weekly-arm.js"></script><script defer="" src="js/patch-visual-runtime.js"></script><script defer="" src="js/patch-background-runtime.js"></script><script defer="" src="js/main.js"></script><script defer src="js/orientation.js"></script></head>
 <body>
+<div id="orientationGate" class="orientationGate" aria-live="polite">
+  <div class="orientationCard">
+    <div class="orientationMark">↻</div>
+    <div class="orientationTitle">横画面で冒険を開始</div>
+    <div class="orientationText" id="orientationText">端末を横向きにしてください</div>
+    <button id="orientationStart" type="button">横画面で開始</button>
+  </div>
+</div>
 <main id="g">
 <section class="scene" id="scene">
 <div class="cleanPatch" id="dailyPatch"></div>
@@ -32,6 +43,12 @@
 <div class="union" id="union"><div class="unionFrame"><div class="unionGlow"></div><img alt="スターライト・ユニオン特殊絵" src="images/effects/starlight_union.webp"/></div></div>
 </section>
 <section class="lowerRef" id="lowerRef">
+<div class="missionFrame missionFrameDaily" aria-hidden="true"></div>
+<div class="missionFrame missionFrameWeekly" aria-hidden="true"></div>
+<div class="missionFrame missionFrameSpecial" aria-hidden="true"></div>
+<button class="missionEdit missionEditDaily" type="button">ポイント編集</button>
+<button class="missionEdit missionEditWeekly" type="button">ポイント編集</button>
+<button class="missionEdit missionEditSpecial" type="button">ポイント編集</button>
 <div aria-label="仲間パーティー" class="partyParts" id="partyParts"></div>
 <div class="refHp" id="rhp0"><div class="num"><span id="rhp0n">600</span>/<span id="rhp0m">600</span></div><div class="bar"><i id="rhp0b"></i></div></div>
 <div class="refHp" id="rhp1"><div class="num"><span id="rhp1n">1200</span>/<span id="rhp1m">1200</span></div><div class="bar"><i id="rhp1b"></i></div></div>
