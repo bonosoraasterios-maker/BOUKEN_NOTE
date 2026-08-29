@@ -1,0 +1,340 @@
+/* ============================================================
+   BOUKEN NOTE Engine v1 — Patch 02
+   FINAL TARGET LAYOUT + LANDSCAPE-FIRST VIEWPORT
+   Reference: approved URL-less landscape mockup.
+   This layer overrides layout-v1.css only; battle/save logic unchanged.
+   ============================================================ */
+
+:root{
+  --bn-gold:#c9a35b;
+  --bn-gold2:#6f5227;
+  --bn-ink:#020714;
+  --bn-panel:rgba(3,10,25,.84);
+}
+
+html,body{
+  margin:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  overflow:hidden!important;
+  overscroll-behavior:none;
+  background:#000!important;
+}
+body{
+  display:block!important;
+  touch-action:manipulation;
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+/* Always fit the WHOLE 16:9 game canvas inside the real viewport.
+   This removes the vertical scroll seen in Safari/StackBlitz preview. */
+#g{
+  position:fixed!important;
+  left:50%!important;
+  top:50%!important;
+  width:min(100dvw,calc(100dvh * 16 / 9))!important;
+  height:min(100dvh,calc(100dvw * 9 / 16))!important;
+  max-width:none!important;
+  max-height:none!important;
+  aspect-ratio:16/9!important;
+  transform:translate(-50%,-50%)!important;
+  overflow:hidden!important;
+  background:#020714!important;
+}
+
+.scene{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  overflow:hidden!important;
+}
+
+/* ============================================================
+   UPPER BATTLEFIELD — final target proportions
+   ============================================================ */
+.heroOriginalV29{
+  left:1.2%!important;
+  top:5.0%!important;
+  width:38.0%!important;
+  height:58.5%!important;
+  background-size:auto 111%!important;
+  background-position:left top!important;
+}
+.sceneLoreV29{
+  left:2.2%!important;
+  top:2.0%!important;
+  width:20.5%!important;
+  z-index:42!important;
+}
+.coinHud{
+  right:2.3%!important;
+  top:2.2%!important;
+  z-index:65!important;
+}
+.weeklyOriginalArt{
+  left:64.2%!important;
+  top:6.8%!important;
+  width:31.8%!important;
+  height:49.8%!important;
+}
+.weeklyBarrierLabel{
+  top:8.3%!important;
+  right:3.1%!important;
+  z-index:64!important;
+}
+.dailyFormation{
+  left:39.0%!important;
+  top:18.0%!important;
+  width:29.5%!important;
+  height:39.5%!important;
+  z-index:30!important;
+}
+.dailyFormation[data-count="1"] .dailyPawn:nth-child(1){
+  left:4%!important;
+  top:2%!important;
+  width:74%!important;
+  height:92%!important;
+  transform:scale(.93)!important;
+}
+.dailyPawn .enemyName{bottom:15%!important;font-size:clamp(7px,1.0vw,12px)!important}
+.dailyPawn .hpMini{bottom:4%!important;height:7px!important}
+.dailyPawn .age{bottom:-6%!important}
+
+/* Weekly name / HP immediately above the lower HUD line, as in target. */
+.scene .weeklyFootStatus,
+.scene[data-daily-count="0"] .weeklyFootStatus,
+.scene[data-daily-count="1"] .weeklyFootStatus,
+.scene[data-daily-count="2"] .weeklyFootStatus,
+.scene[data-daily-count="3"] .weeklyFootStatus,
+.scene[data-daily-count="4"] .weeklyFootStatus,
+.scene[data-daily-count="5"] .weeklyFootStatus,
+.scene[data-daily-count="6"] .weeklyFootStatus,
+.scene[data-daily-count="7"] .weeklyFootStatus{
+  right:13.0%!important;
+  bottom:39.2%!important;
+  width:25.0%!important;
+  z-index:62!important;
+}
+.weeklyFootStatus .wname{font-size:clamp(8px,1.0vw,13px)!important}
+.weeklyFootStatus .wrow{font-size:clamp(8px,.9vw,12px)!important}
+.weeklyFootStatus .wbar{height:7px!important}
+
+/* ============================================================
+   LOWER HUD — starts around 61% of screen, target composition
+   ============================================================ */
+.lowerRef{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  z-index:35!important;
+  pointer-events:none!important;
+  border:0!important;
+  background:linear-gradient(to bottom,
+    transparent 0 59.5%,
+    rgba(2,7,20,.18) 59.5%,
+    rgba(2,7,20,.72) 65%,
+    rgba(2,7,20,.92) 100%)!important;
+}
+
+/* Decorative mission frames: individual components, not a baked UI image. */
+.missionFrame{
+  position:absolute;
+  top:61.8%;
+  height:35.5%;
+  z-index:39;
+  border:1.5px solid var(--bn-gold);
+  box-shadow:inset 0 0 0 1px var(--bn-gold2),0 5px 14px #000b;
+  background:linear-gradient(180deg,rgba(5,15,33,.94),rgba(2,8,20,.96));
+  clip-path:polygon(4% 0,96% 0,100% 4%,100% 96%,96% 100%,4% 100%,0 96%,0 4%);
+  pointer-events:none;
+}
+.missionFrame::before{
+  position:absolute;
+  left:0;right:0;top:4.5%;
+  text-align:center;
+  color:#f6ead0;
+  font-family:serif;
+  font-weight:900;
+  font-size:clamp(10px,1.12vw,17px);
+  letter-spacing:.04em;
+}
+.missionFrame::after{
+  position:absolute;
+  left:5%;right:5%;top:14%;
+  border-top:1px solid rgba(201,163,91,.48);
+  content:"";
+}
+.missionFrameDaily{left:1.4%;width:11.3%}.missionFrameDaily::before{content:"デイリー"}
+.missionFrameWeekly{left:13.0%;width:11.3%}.missionFrameWeekly::before{content:"ウィークリー"}
+.missionFrameSpecial{left:24.6%;width:11.3%}.missionFrameSpecial::before{content:"スペシャル"}
+
+/* Hide the v1 pseudo headings because the frames now own the headings. */
+.dqt0::before,.wqt0::before,.sqt0::before{display:none!important;content:none!important}
+
+.overlayText{
+  padding:3px 4px!important;
+  border:1px solid rgba(201,163,91,.58)!important;
+  border-radius:3px!important;
+  background:rgba(3,11,27,.88)!important;
+  font-size:clamp(6px,.68vw,10px)!important;
+  line-height:1.12!important;
+  z-index:45!important;
+}
+.lowerRef .quest{z-index:46!important;pointer-events:auto!important}
+.lowerRef .quest button{
+  width:100%!important;height:100%!important;
+  padding:0!important;
+  font-size:clamp(7px,.72vw,11px)!important;
+  color:#ffe5a8!important;
+  border:1px solid #a78345!important;
+  background:linear-gradient(180deg,#112c4f,#081a31)!important;
+}
+
+/* Daily */
+.dqt0,.dqt1,.dqt2{left:2.0%!important;width:6.6%!important;height:5.6%!important}
+.dqt0{top:69.1%!important}.dqt1{top:76.0%!important}.dqt2{top:82.9%!important}
+.rd0,.rd1,.rd2{left:8.8%!important;width:3.1%!important;height:5.6%!important}
+.rd0{top:69.1%!important}.rd1{top:76.0%!important}.rd2{top:82.9%!important}
+/* Weekly */
+.wqt0,.wqt1,.wqt2{left:13.6%!important;width:6.6%!important;height:5.6%!important}
+.wqt0{top:69.1%!important}.wqt1{top:76.0%!important}.wqt2{top:82.9%!important}
+.rw0,.rw1,.rw2{left:20.4%!important;width:3.1%!important;height:5.6%!important}
+.rw0{top:69.1%!important}.rw1{top:76.0%!important}.rw2{top:82.9%!important}
+/* Special */
+.sqt0,.sqt1,.sqt2{left:25.2%!important;width:6.6%!important;height:5.6%!important}
+.sqt0{top:69.1%!important}.sqt1{top:76.0%!important}.sqt2{top:82.9%!important}
+.rs0,.rs1,.rs2{left:32.0%!important;width:3.1%!important;height:5.6%!important}
+.rs0{top:69.1%!important}.rs1{top:76.0%!important}.rs2{top:82.9%!important}
+
+/* Dedicated edit buttons like the approved target. */
+.missionEdit{
+  position:absolute;
+  top:90.1%;
+  height:4.5%;
+  z-index:48;
+  pointer-events:auto;
+  border:1px solid #a78345;
+  border-radius:999px;
+  color:#f4ead6;
+  background:linear-gradient(180deg,#102848,#06182f);
+  font-family:serif;
+  font-weight:900;
+  font-size:clamp(6px,.7vw,10px);
+}
+.missionEditDaily{left:2.0%;width:9.9%}
+.missionEditWeekly{left:13.6%;width:9.9%}
+.missionEditSpecial{left:25.2%;width:9.9%}
+
+/* totals are still kept for logic/debug but not shown on the final combat HUD */
+.refTotal{display:none!important}
+
+/* Character cards — target size and row. */
+.partyParts{
+  left:38.2%!important;
+  top:61.7%!important;
+  width:37.2%!important;
+  height:36.2%!important;
+  gap:1.2%!important;
+  z-index:50!important;
+}
+.characterCard{
+  border:1.5px solid #d3aa5a!important;
+  box-shadow:inset 0 0 0 1px #654a25,0 5px 14px #000b!important;
+  padding:2.6% 2.8% 2.8%!important;
+  grid-template-rows:auto minmax(0,1fr) auto auto!important;
+  background:linear-gradient(180deg,rgba(4,13,30,.97),rgba(2,7,19,.98))!important;
+}
+.charName{font-size:clamp(9px,1.0vw,15px)!important}
+.charMeta{font-size:clamp(5px,.58vw,8px)!important}
+.charArt{object-fit:cover!important;object-position:center 20%!important}
+.charHpLine{font-size:clamp(6px,.62vw,9px)!important}
+.charHpLine strong{font-size:clamp(9px,.87vw,13px)!important}
+.charHpTrack{height:5px!important}
+.abilitySlot{min-height:30px!important;padding:2px!important}
+.abilityIcon{width:15px!important;height:15px!important}
+.abilityKind{font-size:clamp(5px,.5vw,7px)!important}
+.abilityName{font-size:clamp(6px,.56vw,8px)!important}
+
+/* Attack + reward right column. */
+.lowerAttack{
+  left:82.2%!important;
+  top:61.2%!important;
+  width:13.2%!important;
+  height:20.5%!important;
+  z-index:58!important;
+  pointer-events:auto!important;
+}
+.refDate{
+  left:82.0%!important;
+  top:80.2%!important;
+  width:13.6%!important;
+  height:5.1%!important;
+  z-index:59!important;
+  font-size:clamp(7px,.72vw,10px)!important;
+  background:rgba(3,10,24,.88)!important;
+}
+.rewardSingle{
+  left:77.5%!important;
+  top:86.0%!important;
+  width:21.3%!important;
+  height:12.0%!important;
+  z-index:58!important;
+  padding:4px 7px!important;
+  gap:2px!important;
+  grid-template-rows:auto auto auto minmax(18px,1fr)!important;
+  pointer-events:auto!important;
+}
+.rewardHead{font-size:clamp(8px,.82vw,12px)!important}
+.rewardLine,.rewardLine span{font-size:clamp(5px,.54vw,8px)!important}
+.rewardLine strong{font-size:clamp(6px,.64vw,9px)!important}
+#rewardSingleBtn{min-height:19px!important;font-size:clamp(7px,.7vw,10px)!important}
+
+/* Old reward/shop layers stay hidden; single reward card is authoritative. */
+.refCoin,.refShop,.shopRowText{display:none!important}
+.panels{display:none!important}
+
+/* ============================================================
+   LANDSCAPE GATE
+   In portrait the game cannot be played. We attempt API lock when
+   available; iPhone Safari currently requires manual rotation.
+   ============================================================ */
+.orientationGate{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background:radial-gradient(circle at 50% 35%,#102557,#020714 70%);
+  color:#fff;
+}
+.orientationCard{
+  width:min(78vw,430px);
+  padding:26px 22px;
+  text-align:center;
+  border:1px solid #b8944f;
+  border-radius:18px;
+  background:rgba(3,11,28,.94);
+  box-shadow:0 16px 50px #000b,inset 0 0 30px #3f62aa22;
+}
+.orientationMark{font-size:54px;line-height:1;color:#9dc7ff;transform:rotate(90deg)}
+.orientationTitle{margin-top:10px;font:900 22px/1.2 serif;color:#f6e3b4}
+.orientationText{margin:10px 0 16px;font-size:14px;color:#d8e4ff}
+#orientationStart{
+  min-width:180px;padding:11px 18px;border-radius:999px;
+  border:1px solid #c29c53;color:#fff;background:linear-gradient(#173c6b,#0a2142);
+  font-weight:900;font-size:15px;
+}
+@media (orientation:portrait){
+  .orientationGate{display:flex}
+  #g{visibility:hidden!important;pointer-events:none!important}
+}
+@media (orientation:landscape){
+  .orientationGate{display:none!important}
+  #g{visibility:visible!important;pointer-events:auto!important}
+}
