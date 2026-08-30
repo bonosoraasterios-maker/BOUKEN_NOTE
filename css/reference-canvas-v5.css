@@ -1,0 +1,305 @@
+/* BOUKEN NOTE PATCH 05 — REFERENCE CANVAS REBUILD
+   Source of truth: REFERENCE_PARTS V2 / 1672 x 941.
+   This stylesheet intentionally replaces the accumulated v1-v4 layout stack.
+   game.css remains loaded only for gameplay/effect primitives. */
+
+:root{
+  --v5-w:1672px;
+  --v5-h:941px;
+  --v5-hud-y:536px;
+  --v5-gold:#c5a05b;
+  --v5-gold-dim:#66502d;
+  --v5-ink:#050a16;
+  --v5-panel:rgba(5,11,24,.91);
+  --v5-text:#f7f4ed;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0!important;width:100%!important;height:100%!important;min-height:100%!important;background:#000!important;overflow:hidden!important;overscroll-behavior:none!important}
+body{font-family:"Hiragino Mincho ProN","Yu Mincho",serif!important;touch-action:manipulation}
+
+/* === ONE LOGICAL GAME CANVAS: 1672 x 941 === */
+#g{
+  position:fixed!important;
+  left:50%!important;
+  top:50%!important;
+  width:1672px!important;
+  height:941px!important;
+  min-width:1672px!important;
+  max-width:none!important;
+  min-height:941px!important;
+  margin:0!important;
+  overflow:hidden!important;
+  background:
+    linear-gradient(to bottom,rgba(2,5,15,.06) 0 48%,rgba(2,6,15,.26) 57%,rgba(2,6,15,.70) 100%),
+    url("../images/backgrounds/battlefield_clean.webp") center/cover no-repeat!important;
+  transform:translate(-50%,-50%) scale(var(--v5-scale,1))!important;
+  transform-origin:50% 50%!important;
+  box-shadow:0 0 0 1px rgba(166,139,78,.20),0 0 70px #000!important;
+}
+
+/* One shared plane. The scene holds animated combat actors; lowerRef holds interactive HUD. */
+.scene{
+  position:absolute!important;inset:0!important;width:1672px!important;height:941px!important;
+  aspect-ratio:auto!important;background:none!important;overflow:hidden!important;z-index:30!important;
+  pointer-events:none!important;
+}
+.lowerRef{
+  position:absolute!important;inset:0!important;width:1672px!important;height:941px!important;
+  aspect-ratio:auto!important;background:none!important;border:0!important;overflow:hidden!important;z-index:20!important;
+  pointer-events:none!important;
+}
+.lowerRef::before{
+  content:""!important;display:block!important;position:absolute!important;
+  left:0!important;top:536px!important;width:1672px!important;height:405px!important;
+  background:linear-gradient(to bottom,rgba(3,7,17,.58),rgba(3,7,17,.88) 20%,rgba(2,5,13,.97))!important;
+  border-top:1px solid rgba(197,160,91,.38)!important;
+  box-shadow:0 -18px 42px rgba(0,0,0,.22),inset 0 16px 45px rgba(7,18,45,.20)!important;
+  z-index:0!important;pointer-events:none!important;
+}
+.lowerRef::after{display:none!important;content:none!important}
+
+/* Hide obsolete layouts. Their logic remains in game.js, not their pixels. */
+.panels{position:absolute!important;left:-10000px!important;top:-10000px!important;width:800px!important;z-index:-1!important;padding:0!important;background:none!important}
+.refDate,.refCoin,.refHp,.refTotal,.shopRowText,.refShop{display:none!important}
+#dailyHUD,#weeklyHUD{position:absolute!important;left:-10000px!important;top:-10000px!important;display:block!important;opacity:0!important}
+#dailyPatch,#weeklyPatch,.weeklyMirrorArm{display:none!important}
+
+/* === TOP LEFT: logo / chapter / wave === */
+.sceneLoreV29{
+  position:absolute!important;z-index:55!important;left:32px!important;top:26px!important;width:339px!important;height:210px!important;
+  overflow:visible!important;pointer-events:none!important;color:white!important;
+}
+.sceneLoreV29 .ttl{
+  position:absolute!important;left:0!important;top:0!important;width:305px!important;height:82px!important;
+  aspect-ratio:auto!important;background:url("../images/ui/title_logo.webp") left center/contain no-repeat!important;
+  filter:drop-shadow(0 0 6px rgba(104,169,255,.34))!important;
+}
+.sceneLoreV29 .v5Chapter{
+  position:absolute;left:15px;top:102px;color:#fff;font-size:22px;font-weight:700;letter-spacing:.04em;
+  text-shadow:0 2px 5px #000,0 0 7px rgba(75,126,255,.38);white-space:nowrap;
+}
+.sceneLoreV29 .v5Wave{
+  position:absolute;left:15px;top:150px;color:#fff;font-size:23px;font-weight:700;letter-spacing:.04em;
+  text-shadow:0 2px 5px #000,0 0 7px rgba(75,126,255,.38);white-space:nowrap;
+}
+
+/* === HERO: width-driven scaling + crop, not contain === */
+.heroOriginalV29{
+  position:absolute!important;z-index:40!important;
+  left:66px!important;top:63px!important;width:579px!important;height:507px!important;
+  background-image:url("../images/characters/protagonist.webp")!important;
+  background-size:579px auto!important;
+  background-position:center top!important;background-repeat:no-repeat!important;
+  overflow:hidden!important;filter:drop-shadow(0 11px 14px rgba(0,0,0,.38))!important;
+  opacity:1!important;pointer-events:none!important;
+}
+
+/* === DAILY ENEMY: central actor === */
+.dailyFormation{
+  position:absolute!important;z-index:43!important;
+  left:688px!important;top:216px!important;width:266px!important;height:241px!important;
+  overflow:visible!important;pointer-events:none!important;
+}
+.dailyFormation .dailyPawn{display:none!important}
+.dailyFormation .dailyPawn:nth-child(1){
+  display:block!important;left:0!important;top:0!important;width:266px!important;height:241px!important;
+  transform:none!important;opacity:1!important;filter:none!important;z-index:45!important;
+}
+.dailyFormation .dailyPawn:nth-child(1) .enemyArt{
+  position:absolute!important;left:0!important;top:0!important;width:266px!important;height:241px!important;
+  inset:auto!important;object-fit:contain!important;transform:none!important;border:0!important;
+  filter:drop-shadow(0 10px 11px rgba(0,0,0,.68)) drop-shadow(0 0 13px rgba(100,89,255,.52))!important;
+  mask:none!important;-webkit-mask:none!important;
+}
+.dailyFormation .enemyName,.dailyFormation .hpMini,.dailyFormation .age{display:none!important}
+
+/* Keep additional stored Daily enemies visible as a depth stack, but never disturb the reference slot of #1. */
+.dailyFormation[data-count="2"] .dailyPawn:nth-child(2),
+.dailyFormation[data-count="3"] .dailyPawn:nth-child(2),
+.dailyFormation[data-count="4"] .dailyPawn:nth-child(2),
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(2),
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(2),
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(2){display:block!important;left:-95px!important;top:72px!important;width:178px!important;height:166px!important;transform:none!important;opacity:.94!important}
+.dailyFormation[data-count="3"] .dailyPawn:nth-child(3),
+.dailyFormation[data-count="4"] .dailyPawn:nth-child(3),
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(3),
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(3),
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(3){display:block!important;left:188px!important;top:78px!important;width:170px!important;height:158px!important;transform:none!important;opacity:.91!important}
+.dailyFormation[data-count="4"] .dailyPawn:nth-child(4),
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(4),
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(4),
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(4){display:block!important;left:58px!important;top:-78px!important;width:154px!important;height:146px!important;transform:none!important;opacity:.86!important}
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(5),
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(5),
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(5){display:block!important;left:-42px!important;top:-48px!important;width:135px!important;height:128px!important;transform:none!important;opacity:.78!important}
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(6),
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(6){display:block!important;left:180px!important;top:-42px!important;width:132px!important;height:124px!important;transform:none!important;opacity:.76!important}
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(7){display:block!important;left:90px!important;top:-118px!important;width:118px!important;height:112px!important;transform:none!important;opacity:.70!important}
+.dailyFormation .dailyPawn:not(:first-child) .enemyArt{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;transform:none!important}
+
+/* Dedicated frameless Daily HP status inserted by V5 runtime. */
+.v5DailyStatus{
+  position:absolute;z-index:58;left:672px;top:425px;width:310px;height:92px;color:white;pointer-events:none;
+  text-shadow:0 2px 5px #000,0 0 8px rgba(79,69,205,.40);
+}
+.v5DailyStatus .v5EnemyName{position:absolute;left:0;top:4px;font-size:20px;font-weight:900;white-space:nowrap}
+.v5DailyStatus .v5HpLine{position:absolute;left:0;right:0;top:37px;display:flex;justify-content:space-between;align-items:baseline;font-size:17px;font-weight:900}
+.v5DailyStatus .v5HpLine b{font-size:18px}
+.v5DailyStatus .v5HpTrack{position:absolute;left:0;right:0;top:66px;height:13px;border-radius:99px;background:#260b16;border:1px solid #74445c;overflow:hidden;box-shadow:0 2px 5px #000a}
+.v5DailyStatus .v5HpTrack i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#bc294f,#f24c71);transition:width .35s ease}
+
+/* === WEEKLY BOSS === */
+.weeklyOriginalArt{
+  position:absolute!important;z-index:42!important;left:1008px!important;top:94px!important;width:543px!important;height:370px!important;
+  background-image:url("../images/enemies/weekly_enemy.webp")!important;
+  background-size:contain!important;background-position:center center!important;background-repeat:no-repeat!important;
+  filter:drop-shadow(0 14px 17px rgba(0,0,0,.72)) drop-shadow(0 0 17px rgba(107,88,255,.44))!important;
+  opacity:1!important;pointer-events:none!important;
+}
+.weeklyFootStatus{
+  position:absolute!important;z-index:58!important;left:1015px!important;top:421px!important;width:448px!important;height:95px!important;
+  right:auto!important;bottom:auto!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#fff!important;
+  text-shadow:0 2px 5px #000,0 0 8px rgba(79,69,205,.45)!important;pointer-events:none!important;
+}
+.weeklyFootStatus .wname{font-size:20px!important;line-height:24px!important;font-weight:900!important;white-space:nowrap!important;overflow:visible!important}
+.weeklyFootStatus .wrow{margin-top:7px!important;font-size:17px!important;font-weight:900!important;display:flex!important;justify-content:space-between!important}
+.weeklyFootStatus .wrow b{font-size:18px!important}
+.weeklyFootStatus .wbar{height:13px!important;margin-top:8px!important;border:1px solid #74445c!important;border-radius:99px!important;background:#260b16!important;overflow:hidden!important}
+.weeklyFootStatus .wbar i{display:block!important;height:100%!important;background:linear-gradient(90deg,#bc294f,#f24c71)!important}
+.weeklyBarrierLabel{
+  position:absolute!important;z-index:60!important;left:1422px!important;top:95px!important;right:auto!important;
+  color:#f0f3ff!important;font-family:Arial,sans-serif!important;font-size:18px!important;font-weight:800!important;letter-spacing:.12em!important;
+  text-shadow:0 2px 4px #000,0 0 9px rgba(116,112,255,.42)!important;
+}
+.weeklyBarrierLabel::before{content:""!important}.weeklyBarrierLabel::after{content:"BARRIER FIELD"!important}
+
+/* === COIN === */
+.coinHud{
+  position:absolute!important;z-index:65!important;left:1377px!important;top:19px!important;right:auto!important;
+  width:255px!important;height:66px!important;min-width:0!important;padding:0 22px!important;
+  display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:12px!important;
+  border:2px solid #cda456!important;border-radius:40px!important;background:rgba(6,17,35,.90)!important;
+  color:#ffecad!important;font-family:Georgia,serif!important;font-size:42px!important;line-height:1!important;font-weight:900!important;
+  box-shadow:inset 0 0 0 2px rgba(72,52,23,.72),0 5px 14px rgba(0,0,0,.55)!important;
+}
+.coinHud::before{content:""!important;display:block!important;width:40px!important;height:40px!important;flex:0 0 40px!important;border-radius:50%!important;background:radial-gradient(circle at 38% 35%,#ffe281,#e6ae3f 55%,#9a631a)!important;box-shadow:0 0 10px rgba(255,210,89,.48)!important;margin:0!important}
+
+/* === HUD PANELS: exact REFERENCE_PARTS V2 boxes === */
+.missionFrame{
+  position:absolute!important;z-index:21!important;top:536px!important;width:208px!important;height:360px!important;
+  border:1px solid rgba(197,160,91,.86)!important;background:linear-gradient(180deg,rgba(6,12,25,.86),rgba(2,7,18,.94))!important;
+  box-shadow:inset 0 0 0 2px rgba(71,53,28,.70),inset 0 0 24px rgba(40,67,126,.10)!important;
+  pointer-events:none!important;
+}
+.missionFrame::before{position:absolute;left:0;right:0;top:17px;text-align:center;color:#f8ecd0;font-size:24px;font-weight:900;letter-spacing:.05em;text-shadow:0 2px 4px #000}
+.missionFrame::after{position:absolute;left:0;right:0;top:52px;text-align:center;color:#bfc7d8;font-family:Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.02em}
+.missionFrameDaily{left:16px!important}.missionFrameDaily::before{content:"デイリー"}.missionFrameDaily::after{content:"毎日リセット（3/3）"}
+.missionFrameWeekly{left:228px!important}.missionFrameWeekly::before{content:"ウィークリー"}.missionFrameWeekly::after{content:"毎週月曜日リセット（2/3）"}
+.missionFrameSpecial{left:440px!important}.missionFrameSpecial::before{content:"スペシャル"}.missionFrameSpecial::after{content:"期間限定ミッション"}
+.missionFrame:global(*){}
+
+/* Thin inner/outer gold ornament. */
+.missionFrame{outline:1px solid rgba(46,36,22,.94)!important;outline-offset:-5px!important}
+
+.overlayText{
+  position:absolute!important;z-index:35!important;height:54px!important;margin:0!important;padding:0 52px 0 31px!important;
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  border:1px solid rgba(129,101,55,.62)!important;border-radius:2px!important;background:rgba(5,12,27,.54)!important;
+  color:#fff!important;font-family:"Hiragino Mincho ProN","Yu Mincho",serif!important;font-size:15px!important;font-weight:800!important;line-height:1.18!important;
+  white-space:normal!important;overflow:hidden!important;box-shadow:inset 0 0 12px rgba(34,71,142,.07)!important;pointer-events:none!important;
+}
+.overlayText::before{content:"✦";position:absolute;left:10px;color:#85b8ff;font-size:20px;text-shadow:0 0 8px #4d75ff}
+.sqt0::before,.sqt1::before,.sqt2::before{color:#efc869;text-shadow:0 0 8px #ae7a26}
+.dqt0{left:28px!important;top:625px!important;width:184px!important}.dqt1{left:28px!important;top:684px!important;width:184px!important}.dqt2{left:28px!important;top:743px!important;width:184px!important}
+.wqt0{left:240px!important;top:625px!important;width:184px!important}.wqt1{left:240px!important;top:684px!important;width:184px!important}.wqt2{left:240px!important;top:743px!important;width:184px!important}
+.sqt0{left:452px!important;top:625px!important;width:184px!important}.sqt1{left:452px!important;top:684px!important;width:184px!important}.sqt2{left:452px!important;top:743px!important;width:184px!important}
+
+.lowerRef .quest{
+  position:absolute!important;z-index:38!important;width:54px!important;height:54px!important;padding:0!important;margin:0!important;border:0!important;background:none!important;pointer-events:auto!important;
+}
+.lowerRef .quest button{
+  width:54px!important;height:54px!important;border:0!important;border-radius:0!important;background:transparent!important;color:#f6d898!important;
+  font-family:Georgia,serif!important;font-size:16px!important;font-weight:900!important;text-shadow:0 1px 3px #000!important;box-shadow:none!important;padding:0!important;
+}
+.lowerRef .quest.done button{color:#c9ebff!important;font-family:Arial,sans-serif!important;font-size:11px!important;letter-spacing:.04em!important}
+.rd0{left:158px!important;top:625px!important}.rd1{left:158px!important;top:684px!important}.rd2{left:158px!important;top:743px!important}
+.rw0{left:370px!important;top:625px!important}.rw1{left:370px!important;top:684px!important}.rw2{left:370px!important;top:743px!important}
+.rs0{left:582px!important;top:625px!important}.rs1{left:582px!important;top:684px!important}.rs2{left:582px!important;top:743px!important}
+
+.missionEdit{
+  position:absolute!important;z-index:40!important;top:824px!important;width:164px!important;height:50px!important;border:1px solid rgba(197,160,91,.88)!important;
+  border-radius:28px!important;background:rgba(5,16,34,.90)!important;color:#f6e8c4!important;font-family:"Hiragino Mincho ProN","Yu Mincho",serif!important;
+  font-size:15px!important;font-weight:900!important;box-shadow:inset 0 0 0 2px rgba(61,46,25,.70),0 3px 10px #0008!important;pointer-events:auto!important;
+}
+.missionEdit::after{content:"✎";margin-left:14px;color:#efd497}
+.missionEditDaily{left:38px!important}.missionEditWeekly{left:250px!important}.missionEditSpecial{left:462px!important}
+
+/* === PARTY CARDS: exact lower center region === */
+.partyParts{
+  position:absolute!important;z-index:34!important;left:640px!important;top:536px!important;width:616px!important;height:360px!important;
+  display:block!important;pointer-events:none!important;
+}
+.characterCard{
+  position:absolute!important;top:1px!important;height:358px!important;margin:0!important;padding:10px!important;
+  display:grid!important;grid-template-rows:58px 158px 58px 74px!important;gap:0!important;overflow:hidden!important;
+  background:linear-gradient(180deg,rgba(6,12,26,.97),rgba(3,8,19,.98))!important;
+  border:1px solid rgba(205,166,91,.92)!important;border-radius:0!important;outline:1px solid rgba(70,53,29,.92)!important;outline-offset:-5px!important;
+  box-shadow:inset 0 0 22px rgba(40,74,139,.09),0 4px 14px rgba(0,0,0,.42)!important;color:#fff!important;
+}
+.characterCard:nth-child(1){left:1px!important;width:194px!important}.characterCard:nth-child(2){left:199px!important;width:194px!important}.characterCard:nth-child(3){left:397px!important;width:212px!important}
+.characterCard::after{left:18px!important;top:18px!important;width:22px!important;height:22px!important;transform:rotate(45deg)!important;border:1px solid #edce80!important}
+.characterCard::before{inset:5px!important;border-color:rgba(88,68,38,.74)!important;border-radius:0!important}
+.charHeader{height:58px!important;padding:5px 5px 0 35px!important;display:block!important;line-height:1.1!important}
+.classMark{display:none!important}
+.charName{font-size:20px!important;color:#fff1cf!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.charMeta{margin-top:5px!important;font-family:Georgia,serif!important;font-size:17px!important;color:#e6dfcf!important}
+.charArtWrap{height:158px!important;margin:0!important;border:1px solid rgba(70,86,115,.88)!important;background:#07101d!important;overflow:hidden!important}
+.charArt{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 28%!important;filter:saturate(1.08) contrast(1.03)!important}
+.charHp{height:58px!important;padding:9px 2px 0!important}
+.charHpLine{font-size:16px!important;line-height:20px!important;color:#fff!important}.charHpLine strong{font-size:22px!important;color:#fff!important}
+.charHpTrack{height:10px!important;margin-top:5px!important;border:1px solid #755a31!important;background:#241216!important}
+.charAbilities{height:74px!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;padding-top:5px!important}
+.abilitySlot{min-height:64px!important;padding:6px 3px 4px!important;border:1px solid #8c6d38!important;border-radius:0!important;background:rgba(5,15,34,.94)!important}
+.abilityIcon{width:42px!important;height:42px!important;margin:0 auto!important;border-radius:2px!important;font-size:27px!important;background:rgba(26,57,102,.46)!important;box-shadow:inset 0 0 9px rgba(100,153,255,.18)!important}
+.abilityKind,.abilityName{display:none!important}
+
+/* === ATTACK === */
+.lowerAttack{
+  position:absolute!important;z-index:46!important;left:1358px!important;top:505px!important;width:220px!important;height:220px!important;
+  border:0!important;border-radius:50%!important;padding:0!important;overflow:hidden!important;pointer-events:auto!important;
+  background-image:url("../images/ui/attack_button.webp")!important;background-size:220px auto!important;background-position:center top!important;background-repeat:no-repeat!important;
+  color:transparent!important;box-shadow:none!important;filter:drop-shadow(0 10px 14px rgba(0,0,0,.58))!important;
+}
+.lowerAttack:active{transform:scale(.97)!important;filter:brightness(1.12) drop-shadow(0 10px 14px rgba(0,0,0,.58))!important}
+
+/* === REWARD === */
+.rewardSingle{
+  position:absolute!important;z-index:43!important;left:1290px!important;top:724px!important;width:318px!important;height:172px!important;
+  display:grid!important;grid-template-rows:43px 35px 35px 45px!important;gap:0!important;padding:0 18px!important;margin:0!important;
+  border:1px solid rgba(205,166,91,.92)!important;border-radius:0!important;outline:1px solid rgba(72,54,29,.94)!important;outline-offset:-5px!important;
+  background:linear-gradient(180deg,rgba(5,13,28,.97),rgba(3,8,19,.99))!important;box-shadow:inset 0 0 25px rgba(42,75,143,.11),0 4px 15px #0009!important;
+  color:#fff!important;pointer-events:auto!important;overflow:hidden!important;
+}
+.rewardSingle::before{content:"◆";position:absolute;left:23px;top:61px;color:#72aaff;font-size:36px;text-shadow:0 0 12px #506cff;opacity:.9}
+.rewardHead{height:43px!important;padding:10px 0 6px!important;border-bottom:1px solid rgba(115,89,49,.82)!important;text-align:center!important;color:#f5e6c4!important;font-size:21px!important;line-height:27px!important;font-weight:900!important}
+.rewardLine{display:grid!important;grid-template-columns:96px 1fr!important;align-items:center!important;padding-left:46px!important;gap:4px!important;color:#c5ccda!important;font-family:Arial,sans-serif!important;font-size:12px!important}
+.rewardLine strong{color:#fff0c4!important;font-size:16px!important;font-weight:900!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#rewardSingleBtn{align-self:end!important;width:100%!important;height:40px!important;margin:0 0 5px!important;border:1px solid #d2aa59!important;border-radius:22px!important;background:linear-gradient(180deg,#9c7131,#6b491e)!important;color:#fff1cf!important;font-size:17px!important;font-weight:900!important;box-shadow:inset 0 0 0 2px rgba(75,50,22,.75),0 2px 8px #0008!important}
+
+/* === Combat FX preserved in same 1672 canvas === */
+.sceneFlash,.union,.toast,.actionCall,.float,.rapidDamage,.blessingFlash{pointer-events:none!important}
+.union{z-index:200!important}
+.toast{z-index:220!important}
+
+/* Editor modal is allowed to float over the logical canvas. */
+.uiModal{z-index:400!important}
+
+/* === Portrait gate === */
+.orientationGate{
+  position:fixed!important;inset:0!important;z-index:99999!important;background:#020611!important;display:none;align-items:center;justify-content:center;padding:22px;color:#fff;
+}
+.orientationCard{width:min(92vw,420px);padding:28px 24px;border:1px solid #ad8c4d;border-radius:18px;background:#071224;text-align:center;box-shadow:0 20px 60px #000}
+.orientationMark{font-size:58px;color:#8ec8ff}.orientationTitle{font-size:22px;font-weight:900;margin-top:8px}.orientationText{font-size:15px;color:#c7d2e5;margin:10px 0 18px}
+#orientationStart{border:1px solid #cda456;border-radius:999px;background:#0d3154;color:#fff0c9;padding:12px 20px;font-weight:900}
+@media (orientation:portrait){.orientationGate{display:flex!important}#g{opacity:0!important;pointer-events:none!important}}
