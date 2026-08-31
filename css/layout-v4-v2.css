@@ -1,0 +1,233 @@
+/* ============================================================
+   BOUKEN NOTE Engine v1 — PATCH 04 V2 COORDINATE LOCK
+   Source of truth: REFERENCE_PARTS_V2 / 00_REFERENCE_FULL.jpg
+   Reference canvas: 1672 x 941
+   HUD boundary: y=535 = 56.854%
+
+   This file intentionally loads AFTER layout-v4.css and only
+   corrects visual composition. Battle/save/mission logic untouched.
+   ============================================================ */
+
+:root{
+  --ref-hud-top:56.854%;
+  --ref-gold:#b99a58;
+  --ref-gold-hi:#e4c77f;
+  --ref-gold-low:#4c3719;
+  --ref-panel:#030815;
+  --ref-panel-2:#071126;
+  --ref-text:#f6f1e7;
+}
+
+/* === CANVAS / DEPTH === */
+#g{
+  position:relative!important;
+  overflow:hidden!important;
+  aspect-ratio:1672/941!important;
+  max-height:100dvh!important;
+  background:#01040c!important;
+}
+.scene,.lowerRef{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
+.scene{overflow:hidden!important;background-position:center center!important;background-size:cover!important}
+.lowerRef{overflow:visible!important;background:none!important;border:0!important;z-index:35!important;pointer-events:none!important}
+
+/* Reference uses a bright battlefield, but the HUD/base stays nearly black. */
+.scene::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:2!important;
+  pointer-events:none!important;
+  background:
+    linear-gradient(180deg,rgba(1,4,13,.03) 0%,rgba(1,4,13,.04) 47%,rgba(1,4,13,.16) 56%,rgba(1,4,13,.54) 100%),
+    linear-gradient(90deg,rgba(1,4,13,.12),transparent 34%,transparent 70%,rgba(1,4,13,.08))!important;
+}
+.lowerRef::before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  left:0!important;right:0!important;top:var(--ref-hud-top)!important;bottom:0!important;
+  z-index:36!important;
+  pointer-events:none!important;
+  border-top:1px solid rgba(201,166,92,.23)!important;
+  background:
+    linear-gradient(180deg,rgba(2,7,17,.80),rgba(1,5,14,.97) 22%,rgba(1,5,14,.99) 100%),
+    radial-gradient(circle at 45% 4%,rgba(46,75,127,.10),transparent 37%)!important;
+}
+
+/* === TOP-LEFT TITLE CLUSTER: x 1.7–23.3%, y 2.6–23.4% === */
+.sceneLoreV29{
+  left:1.675%!important;top:2.550%!important;width:21.65%!important;height:20.83%!important;
+  z-index:54!important;
+}
+.targetLoreMeta{
+  left:2.8%!important;top:12.8%!important;width:18.5%!important;z-index:55!important;
+}
+.targetLoreMeta .chapter{font-size:clamp(11px,1.17vw,20px)!important;letter-spacing:.06em!important}
+.targetLoreMeta .wave{margin-top:.75em!important;font-size:clamp(13px,1.42vw,24px)!important;letter-spacing:.075em!important}
+
+/* === HERO: x 3.23–38.88%, y 6.16–58.24% === */
+.heroOriginalV29{
+  left:3.230%!important;top:6.164%!important;width:35.646%!important;height:52.072%!important;
+  z-index:20!important;
+  transform:none!important;
+  transform-origin:50% 100%!important;
+  background-position:left bottom!important;
+  background-size:contain!important;
+  filter:drop-shadow(0 13px 18px rgba(0,0,0,.48)) drop-shadow(0 0 8px rgba(74,116,255,.10))!important;
+}
+
+/* === DAILY ENEMY BODY: x 40.37–58.01%, y 21.04–47.29% === */
+.dailyFormation{
+  left:40.371%!important;top:21.041%!important;width:17.644%!important;height:26.249%!important;
+  z-index:32!important;
+}
+.dailyFormation[data-count="1"] .dailyPawn:nth-child(1){
+  left:0!important;top:0!important;width:100%!important;height:100%!important;
+  transform:none!important;
+}
+.dailyPawn .enemyArt{inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important}
+.dailyPawn .enemyName,.dailyPawn .hpMini,.dailyPawn .age{display:none!important}
+
+/* Daily HP group: x 40.79–58.91%, y 45.91–53.67% */
+.dailyFootStatus{
+  left:40.789%!important;top:45.909%!important;width:18.122%!important;height:7.758%!important;
+  z-index:68!important;
+}
+.dailyFootStatus .dname{font-size:clamp(8px,.92vw,15px)!important;line-height:1.05!important;white-space:nowrap!important}
+.dailyFootStatus .drow{font-size:clamp(8px,.86vw,14px)!important;line-height:1!important}
+.dailyFootStatus .dbar{height:7px!important;margin-top:4px!important;border-radius:0!important}
+
+/* === WEEKLY BOSS BODY: x 58.61–93.42%, y 7.44–47.61% === */
+.weeklyOriginalArt{
+  left:58.612%!important;top:7.439%!important;width:34.809%!important;height:40.170%!important;
+  z-index:27!important;
+  background-position:center bottom!important;background-size:contain!important;
+  filter:drop-shadow(0 14px 20px rgba(0,0,0,.52)) drop-shadow(0 0 13px rgba(91,72,255,.24))!important;
+}
+.weeklyBarrierLabel{right:2.75%!important;top:8.7%!important;z-index:69!important}
+
+/* Weekly HP group: x 61.00–87.62%, y 45.70–53.67% */
+.scene .weeklyFootStatus,
+.scene[data-daily-count="0"] .weeklyFootStatus,.scene[data-daily-count="1"] .weeklyFootStatus,
+.scene[data-daily-count="2"] .weeklyFootStatus,.scene[data-daily-count="3"] .weeklyFootStatus,
+.scene[data-daily-count="4"] .weeklyFootStatus,.scene[data-daily-count="5"] .weeklyFootStatus,
+.scene[data-daily-count="6"] .weeklyFootStatus,.scene[data-daily-count="7"] .weeklyFootStatus{
+  left:61.005%!important;right:auto!important;top:45.696%!important;bottom:auto!important;
+  width:26.615%!important;height:7.971%!important;z-index:68!important;
+}
+.weeklyFootStatus .wname{font-size:clamp(8px,.92vw,15px)!important;line-height:1.05!important;white-space:nowrap!important}
+.weeklyFootStatus .wrow{font-size:clamp(8px,.86vw,14px)!important;line-height:1!important}
+.weeklyFootStatus .wbar{height:7px!important;margin-top:4px!important;border-radius:0!important}
+
+/* === COIN / BARRIER: reference top-right === */
+.coinHud{right:2.0%!important;top:2.0%!important;z-index:72!important}
+
+/* ============================================================
+   HUD: exact macro blocks from V2
+   missions x 1.08–38.64%, party x 38.40–75.12%, actions right
+   ============================================================ */
+
+/* Mission outer frames */
+.missionFrame{
+  top:56.854%!important;height:39.214%!important;
+  border:1px solid rgba(185,154,88,.82)!important;border-radius:0!important;
+  background:linear-gradient(180deg,rgba(3,9,22,.96),rgba(1,5,14,.99))!important;
+  box-shadow:inset 0 0 0 1px rgba(69,50,22,.84),inset 0 0 20px rgba(38,65,108,.05),0 5px 15px rgba(0,0,0,.52)!important;
+  z-index:42!important;
+}
+.missionFrameDaily{left:1.077%!important;width:12.201%!important}
+.missionFrameWeekly{left:13.517%!important;width:12.321%!important}
+.missionFrameSpecial{left:26.196%!important;width:12.440%!important}
+.missionFrame::before{
+  top:3.4%!important;font-family:"Yu Mincho","Hiragino Mincho ProN",serif!important;
+  color:var(--ref-text)!important;font-size:clamp(10px,1.00vw,17px)!important;letter-spacing:.06em!important;
+}
+.missionFrame::after{
+  top:11.8%!important;padding-top:3.0%!important;border-top:1px solid rgba(185,154,88,.34)!important;
+  color:#aa9d82!important;font-size:clamp(5px,.50vw,8px)!important;
+}
+
+/* Mission live rows — preserve existing click targets, enlarge containers instead of shrinking text */
+.overlayText{height:6.9%!important;padding:3px 5px!important;font-size:clamp(6px,.60vw,10px)!important;line-height:1.08!important}
+.lowerRef .quest{height:6.9%!important}
+.lowerRef .quest button{font-size:clamp(7px,.67vw,11px)!important}
+
+/* daily x 1.8–12.6 */
+.dqt0,.dqt1,.dqt2{left:1.80%!important;width:7.85%!important}
+.rd0,.rd1,.rd2{left:9.65%!important;width:2.90%!important}
+.dqt0,.rd0{top:66.05%!important}.dqt1,.rd1{top:74.05%!important}.dqt2,.rd2{top:82.05%!important}
+/* weekly x 14.2–25.0 */
+.wqt0,.wqt1,.wqt2{left:14.22%!important;width:7.85%!important}
+.rw0,.rw1,.rw2{left:22.07%!important;width:2.90%!important}
+.wqt0,.rw0{top:66.05%!important}.wqt1,.rw1{top:74.05%!important}.wqt2,.rw2{top:82.05%!important}
+/* special x 26.9–37.8 */
+.sqt0,.sqt1,.sqt2{left:26.90%!important;width:7.95%!important}
+.rs0,.rs1,.rs2{left:34.85%!important;width:2.90%!important}
+.sqt0,.rs0{top:66.05%!important}.sqt1,.rs1{top:74.05%!important}.sqt2,.rs2{top:82.05%!important}
+
+.missionEdit{top:89.5%!important;height:5.05%!important}
+.missionEditDaily{left:2.1%!important;width:10.0%!important}
+.missionEditWeekly{left:14.55%!important;width:10.0%!important}
+.missionEditSpecial{left:27.15%!important;width:10.0%!important}
+
+/* === PARTY ALL: x 38.397–75.120%, y 56.854–96.387% === */
+.partyParts{
+  left:38.397%!important;top:56.854%!important;width:36.722%!important;height:39.533%!important;
+  gap:1.05%!important;z-index:54!important;
+}
+.characterCard{
+  border:1px solid rgba(198,163,92,.90)!important;border-radius:0!important;
+  background:linear-gradient(180deg,rgba(3,9,22,.98),rgba(1,5,14,.995))!important;
+  grid-template-rows:13% 48% 12% 27%!important;
+  padding:2.1% 2.2% 2.2%!important;gap:.7%!important;
+  box-shadow:inset 0 0 0 1px rgba(74,54,24,.86),0 5px 16px rgba(0,0,0,.55)!important;
+}
+.charHeader{align-items:center!important;min-height:0!important}
+.charName{font-size:clamp(8px,.80vw,14px)!important}
+.charArtWrap{height:100%!important;min-height:0!important;margin:0!important;overflow:hidden!important}
+.charArt{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 18%!important}
+.charHpLine{font-size:clamp(7px,.60vw,10px)!important}
+.charHpLine strong{font-size:clamp(10px,.94vw,15px)!important}
+.charHpTrack{height:6px!important;border-radius:0!important}
+.charAbilities{gap:7%!important;padding:3% 8% 1%!important}
+.abilitySlot{border-radius:2px!important;border:1px solid rgba(166,130,65,.88)!important}
+.abilityIcon{font-size:clamp(20px,1.95vw,32px)!important}
+.refHp{display:none!important}
+
+/* === ATTACK: reference circle area x 80.74%, y 53.67% === */
+.lowerAttack{
+  left:80.742%!important;top:53.666%!important;width:14.593%!important;height:auto!important;aspect-ratio:1/1!important;
+  border-radius:50%!important;overflow:hidden!important;z-index:62!important;
+  background-image:url(../images/ui/attack_button.webp)!important;background-position:center top!important;background-size:100% auto!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.58),0 0 0 1px rgba(224,192,119,.23)!important;
+}
+.lowerAttack::before{inset:3.5%!important;border:1px solid rgba(224,192,119,.53)!important}
+.lowerAttack::after{bottom:17%!important;font-size:clamp(6px,.58vw,10px)!important}
+.refDate{display:none!important}
+
+/* === REWARD: x 77.03–96.29%, y 76.94–96.17% === */
+.rewardSingle{
+  left:77.033%!important;top:76.939%!important;width:19.258%!important;height:19.235%!important;
+  padding:8px 10px 9px!important;gap:4px!important;z-index:62!important;
+  border:1px solid rgba(185,154,88,.88)!important;border-radius:0!important;
+  background:linear-gradient(180deg,rgba(3,9,22,.98),rgba(1,5,14,.995))!important;
+  box-shadow:inset 0 0 0 1px rgba(72,52,23,.84),0 6px 18px rgba(0,0,0,.56)!important;
+}
+.rewardHead{font-size:clamp(9px,.92vw,15px)!important}
+.rewardLine,.rewardLine span{font-size:clamp(6px,.56vw,9px)!important}
+.rewardLine strong{font-size:clamp(8px,.74vw,12px)!important}
+
+/* === Remove legacy duplicate pieces === */
+#dailyHUD,#weeklyHUD,.refCoin,.refShop,.shopRowText,.refTotal,.panels{display:none!important}
+
+/* === LANDSCAPE ONLY: scale within viewport without vertical scrolling === */
+html,body{margin:0!important;width:100%!important;height:100%!important;overflow:hidden!important;background:#000!important}
+@media (orientation:landscape){
+  body{display:grid!important;place-items:center!important}
+  #g{width:min(100vw,calc(100dvh * 1672 / 941))!important;height:auto!important}
+}
+@media (orientation:landscape) and (max-height:430px){
+  .targetLoreMeta .chapter{font-size:9px!important}.targetLoreMeta .wave{font-size:11px!important}
+  .missionFrame::before{font-size:10px!important}.missionFrame::after{font-size:5px!important}
+  .overlayText{font-size:6px!important}.lowerRef .quest button{font-size:7px!important}
+}

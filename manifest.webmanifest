@@ -1,0 +1,9 @@
+{
+  "name": "ぼうけんノート",
+  "short_name": "ぼうけんノート",
+  "start_url": "./",
+  "display": "fullscreen",
+  "background_color": "#020714",
+  "theme_color": "#020714",
+  "orientation": "landscape"
+}
