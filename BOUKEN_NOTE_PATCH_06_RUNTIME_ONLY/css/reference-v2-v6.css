@@ -1,0 +1,184 @@
+/* BOUKEN NOTE PATCH 06 — REFERENCE PARTS V2 REBUILD
+   Visual goal: approved landscape mockup + REFERENCE_PARTS V2.
+   Preserved: gameplay/state, protagonist placement direction, ally portraits.
+   Rebuilt: HUD frames, mission panels, icons, enemies, HP presentation, attack, reward. */
+
+:root{
+  --v6-w:1672px;
+  --v6-h:941px;
+  --v6-scale:1;
+  --gold:#c9a35a;
+  --gold-hi:#f0d794;
+  --gold-deep:#4d3518;
+  --ink:#030815;
+  --panel:#07101f;
+  --panel2:#0a1426;
+  --white:#f7f3e9;
+  --muted:#b7c1d5;
+}
+*{box-sizing:border-box}
+html,body{margin:0!important;width:100%!important;height:100%!important;min-height:100%!important;overflow:hidden!important;background:#000!important;overscroll-behavior:none!important}
+body{font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif!important;touch-action:manipulation;color:var(--white)}
+button{font-family:inherit}
+
+/* === one fixed logical canvas === */
+#g{
+  position:fixed!important;left:50%!important;top:50%!important;
+  width:1672px!important;height:941px!important;min-width:1672px!important;min-height:941px!important;
+  margin:0!important;overflow:hidden!important;
+  transform:translate(-50%,-50%) scale(var(--v6-scale,1))!important;transform-origin:50% 50%!important;
+  background:
+    radial-gradient(circle at 54% 10%,rgba(89,92,255,.13),transparent 36%),
+    linear-gradient(to bottom,rgba(0,3,12,.24) 0 50%,rgba(0,4,12,.42) 57%,rgba(0,3,10,.91) 100%),
+    url("../images/backgrounds/battlefield_clean.webp") center/cover no-repeat!important;
+  box-shadow:0 0 90px #000;
+}
+#g::before{
+  content:"";position:absolute;inset:10px;z-index:300;pointer-events:none;
+  border:1px solid rgba(209,169,88,.92);
+  box-shadow:inset 0 0 0 3px rgba(64,43,19,.78),inset 0 0 0 5px rgba(203,159,76,.22);
+}
+#g::after{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(90deg,rgba(0,3,12,.20),transparent 27%,transparent 72%,rgba(0,2,8,.13));
+}
+
+.scene,.lowerRef{position:absolute!important;inset:0!important;width:1672px!important;height:941px!important;background:none!important;border:0!important;overflow:hidden!important;pointer-events:none!important}
+.scene{z-index:auto!important;aspect-ratio:auto!important}
+.lowerRef{z-index:30!important;aspect-ratio:auto!important}
+.lowerRef::before{
+  content:"";position:absolute;left:0;top:516px;width:1672px;height:425px;z-index:0;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(2,7,17,.55),rgba(3,8,18,.91) 12%,rgba(2,5,13,.98) 100%);
+  border-top:1px solid rgba(203,164,84,.40);box-shadow:0 -22px 50px rgba(0,0,0,.26),inset 0 18px 42px rgba(15,35,74,.14)
+}
+.lowerRef::after{display:none!important}
+
+/* old UI stays as logic-only sources */
+.panels{position:absolute!important;left:-12000px!important;top:-12000px!important;width:800px!important;z-index:-1!important}
+#dailyHUD,#weeklyHUD,#dailyPatch,#weeklyPatch,.weeklyMirrorArm,.refDate,.refCoin,.refHp,.refTotal,.shopRowText,.refShop,.overlayText,.lowerRef>.quest{display:none!important}
+
+/* === top-left lore === */
+.sceneLoreV29{position:absolute!important;left:48px!important;top:38px!important;width:315px!important;height:206px!important;z-index:24!important;color:#fff!important;pointer-events:none!important}
+.sceneLoreV29 .ttl{position:absolute!important;left:0!important;top:0!important;width:300px!important;height:82px!important;background:url("../images/ui/title_logo.webp") left center/contain no-repeat!important;filter:drop-shadow(0 0 8px rgba(76,140,255,.28))!important;color:transparent!important}
+.sceneLoreV29 .v5Chapter,.sceneLoreV29 .v6Chapter{position:absolute!important;left:16px!important;top:101px!important;color:#fff4dc!important;font-size:23px!important;line-height:1!important;letter-spacing:.035em!important;text-shadow:0 2px 4px #000!important;white-space:nowrap!important}
+.sceneLoreV29 .v5Wave,.sceneLoreV29 .v6Wave{position:absolute!important;left:16px!important;top:151px!important;color:#f5f6ff!important;font-family:Georgia,serif!important;font-size:23px!important;font-weight:700!important;letter-spacing:.06em!important;text-shadow:0 2px 4px #000!important;white-space:nowrap!important}
+.sceneLoreV29 .v5Wave::after,.sceneLoreV29 .v6Wave::after{content:"";display:block;width:150px;height:1px;margin-top:14px;background:linear-gradient(90deg,#e5c87c,rgba(229,200,124,0))}
+
+/* === protagonist: keep approved placement, but HUD fully covers its bottom edge === */
+.heroOriginalV29{
+  position:absolute!important;left:35px!important;top:34px!important;width:615px!important;height:500px!important;z-index:10!important;pointer-events:none!important;
+  background:url("../images/characters/protagonist.webp") center bottom/contain no-repeat!important;
+  filter:drop-shadow(0 11px 18px rgba(0,0,0,.48)) saturate(1.05)!important;
+}
+
+/* === daily enemy formation === */
+.dailyFormation{position:absolute!important;left:665px!important;top:176px!important;width:330px!important;height:290px!important;z-index:16!important;overflow:visible!important;pointer-events:none!important}
+.dailyFormation .dailyPawn{display:none!important;position:absolute!important;transform:none!important}
+.dailyFormation .dailyPawn:nth-child(1){display:block!important;left:22px!important;top:0!important;width:286px!important;height:260px!important;z-index:20!important;opacity:1!important}
+.dailyFormation .dailyPawn:nth-child(1) .enemyArt{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;filter:drop-shadow(0 11px 16px rgba(0,0,0,.48)) drop-shadow(0 0 8px rgba(73,110,255,.24))!important}
+.dailyFormation .enemyName,.dailyFormation .hpMini,.dailyFormation .age{display:none!important}
+/* additional carried-over dailies sit behind the active one */
+.dailyFormation[data-count="2"] .dailyPawn:nth-child(2),
+.dailyFormation[data-count="3"] .dailyPawn:nth-child(2),
+.dailyFormation[data-count="4"] .dailyPawn:nth-child(2),
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(2),
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(2),
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(2){display:block!important;left:-80px!important;top:76px!important;width:170px!important;height:156px!important;opacity:.68!important;z-index:12!important}
+.dailyFormation[data-count="3"] .dailyPawn:nth-child(3),
+.dailyFormation[data-count="4"] .dailyPawn:nth-child(3),
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(3),
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(3),
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(3){display:block!important;left:245px!important;top:80px!important;width:160px!important;height:148px!important;opacity:.62!important;z-index:11!important}
+.dailyFormation[data-count="4"] .dailyPawn:nth-child(4),
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(4),
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(4),
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(4){display:block!important;left:82px!important;top:-73px!important;width:150px!important;height:138px!important;opacity:.56!important;z-index:9!important}
+.dailyFormation[data-count="5"] .dailyPawn:nth-child(5),.dailyFormation[data-count="6"] .dailyPawn:nth-child(5),.dailyFormation[data-count="7"] .dailyPawn:nth-child(5){display:block!important;left:-12px!important;top:-48px!important;width:128px!important;height:120px!important;opacity:.46!important;z-index:8!important}
+.dailyFormation[data-count="6"] .dailyPawn:nth-child(6),.dailyFormation[data-count="7"] .dailyPawn:nth-child(6){display:block!important;left:212px!important;top:-46px!important;width:126px!important;height:118px!important;opacity:.44!important;z-index:7!important}
+.dailyFormation[data-count="7"] .dailyPawn:nth-child(7){display:block!important;left:108px!important;top:-120px!important;width:112px!important;height:105px!important;opacity:.38!important;z-index:6!important}
+.dailyFormation .dailyPawn:not(:first-child) .enemyArt{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;filter:brightness(.78) saturate(.72)!important}
+
+/* daily name + HP rebuilt as one clean block */
+.v6DailyStatus{position:absolute!important;left:690px!important;top:398px!important;width:306px!important;height:82px!important;z-index:24!important;color:#fff!important;pointer-events:none!important;text-shadow:0 2px 4px #000!important}
+.v6EnemyName{font-size:19px!important;font-weight:800!important;letter-spacing:.025em!important;line-height:25px!important;color:#f9f3e6!important;white-space:nowrap!important}
+.v6HpLine{display:grid!important;grid-template-columns:44px 1fr!important;align-items:end!important;height:24px!important;font-family:Arial,sans-serif!important;font-size:16px!important;font-weight:800!important}
+.v6HpLine b{text-align:right!important;font-family:Georgia,serif!important;font-size:18px!important;color:#f6f5ff!important}
+.v6HpTrack{height:11px!important;margin-top:4px!important;border:1px solid #722733!important;border-radius:8px!important;background:#1b0b12!important;overflow:hidden!important;box-shadow:inset 0 0 5px #000!important}
+.v6HpTrack i{display:block!important;height:100%!important;width:100%;background:linear-gradient(90deg,#d82050,#ff4f6b)!important;box-shadow:0 0 9px rgba(255,53,95,.48)!important;transition:width .22s ease!important}
+
+/* === weekly boss === */
+.weeklyOriginalArt{position:absolute!important;left:1012px!important;top:58px!important;width:555px!important;height:430px!important;z-index:15!important;pointer-events:none!important;background:url("../images/enemies/v6/weekly_celestia.png") center/contain no-repeat!important;filter:drop-shadow(0 16px 22px rgba(0,0,0,.50)) drop-shadow(0 0 9px rgba(102,76,255,.24))!important}
+.weeklyFootStatus{position:absolute!important;left:1040px!important;top:411px!important;width:432px!important;height:78px!important;z-index:25!important;color:#fff!important;text-shadow:0 2px 4px #000!important;pointer-events:none!important}
+.weeklyFootStatus .wname{font-size:19px!important;font-weight:800!important;letter-spacing:.025em!important;line-height:25px!important;color:#f9f3e6!important;white-space:nowrap!important}
+.weeklyFootStatus .wrow{display:grid!important;grid-template-columns:44px 1fr!important;align-items:end!important;height:24px!important;font-family:Arial,sans-serif!important;font-size:16px!important;font-weight:800!important}.weeklyFootStatus .wrow b{text-align:right!important;font-family:Georgia,serif!important;font-size:18px!important;color:#f7f5ff!important}
+.weeklyFootStatus .wbar{height:11px!important;margin-top:4px!important;border:1px solid #722733!important;border-radius:8px!important;background:#1b0b12!important;overflow:hidden!important}.weeklyFootStatus .wbar i{display:block!important;height:100%!important;background:linear-gradient(90deg,#d82050,#ff4f6b)!important;box-shadow:0 0 9px rgba(255,53,95,.48)!important;transition:width .22s ease!important}
+.weeklyBarrierLabel{position:absolute!important;left:1436px!important;top:209px!important;z-index:24!important;color:#e9efff!important;font-family:Arial,sans-serif!important;font-size:15px!important;font-weight:800!important;letter-spacing:.12em!important;text-shadow:0 2px 5px #000!important}.weeklyBarrierLabel::before{content:"BARRIER FIELD"!important}
+
+/* === coin counter === */
+.coinHud{position:absolute!important;left:1422px!important;top:30px!important;width:196px!important;height:60px!important;z-index:60!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:14px!important;padding:0 23px!important;border:1px solid var(--gold)!important;border-radius:31px!important;background:linear-gradient(180deg,rgba(19,27,48,.96),rgba(4,9,20,.98))!important;color:#fff0ba!important;font-family:Georgia,serif!important;font-size:31px!important;font-weight:900!important;line-height:1!important;box-shadow:inset 0 0 0 3px rgba(65,44,21,.74),0 5px 15px rgba(0,0,0,.38)!important}
+.coinHud::before{content:""!important;width:34px!important;height:34px!important;border-radius:50%!important;background:radial-gradient(circle at 35% 32%,#fff0a0,#e9b646 54%,#875413 100%)!important;box-shadow:0 0 11px rgba(255,206,82,.43)!important}
+
+/* === ornate frame primitive === */
+.v6MissionPanel,.characterCard,.rewardSingle{
+  background:linear-gradient(180deg,rgba(6,15,32,.97),rgba(2,7,16,.99))!important;
+  border:1px solid rgba(224,188,103,.92)!important;
+  box-shadow:inset 0 0 0 4px rgba(58,42,22,.92),inset 0 0 0 5px rgba(187,143,67,.35),0 8px 18px rgba(0,0,0,.34)!important;
+}
+.v6MissionPanel::before,.characterCard::before,.rewardSingle::before{content:""!important;position:absolute!important;inset:7px!important;pointer-events:none!important;border:1px solid rgba(134,102,52,.72)!important}
+
+/* === mission area === */
+.v6MissionArea{position:absolute!important;left:18px!important;top:516px!important;width:610px!important;height:405px!important;z-index:42!important;display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:9px!important;pointer-events:auto!important}
+.v6MissionPanel{position:relative!important;height:386px!important;overflow:hidden!important;padding:0 14px 12px!important;color:#fff!important}
+.v6MissionPanel::after{content:"";position:absolute;left:50%;top:-15px;transform:translateX(-50%);width:44px;height:44px;background-size:contain;background-repeat:no-repeat;background-position:center;filter:drop-shadow(0 0 7px rgba(72,133,255,.46));z-index:5}
+.v6MissionPanel[data-kind="daily"]::after{background-image:url("../images/ui/v6/icon-blue-star.svg")}
+.v6MissionPanel[data-kind="weekly"]::after{background-image:url("../images/ui/v6/icon-purple-star.svg")}
+.v6MissionPanel[data-kind="special"]::after{background-image:url("../images/ui/v6/icon-gold-star.svg")}
+.v6MissionHead{height:80px!important;padding-top:25px!important;text-align:center!important;border-bottom:1px solid rgba(145,109,54,.72)!important}
+.v6MissionTitle{font-size:25px!important;line-height:28px!important;color:#f7e9c7!important;font-weight:900!important;letter-spacing:.045em!important;text-shadow:0 2px 5px #000!important}
+.v6MissionSub{margin-top:5px!important;font-family:Arial,sans-serif!important;font-size:11px!important;line-height:14px!important;color:#c5cbd8!important;font-weight:700!important;white-space:nowrap!important}
+.v6MissionRows{height:226px!important;padding-top:8px!important;display:grid!important;grid-template-rows:repeat(3,1fr)!important;gap:7px!important}
+.v6MissionRow{position:relative!important;display:grid!important;grid-template-columns:29px 1fr 48px!important;align-items:center!important;gap:7px!important;min-height:0!important;padding:4px 8px!important;border:1px solid rgba(115,91,52,.64)!important;background:linear-gradient(180deg,rgba(10,21,42,.82),rgba(4,11,24,.90))!important;box-shadow:inset 0 0 10px rgba(25,53,105,.13)!important;cursor:pointer!important}
+.v6MissionRow.done{background:linear-gradient(180deg,rgba(13,42,66,.92),rgba(5,21,34,.96))!important;border-color:rgba(95,159,211,.76)!important}
+.v6MissionIcon{width:24px!important;height:24px!important;background-size:contain!important;background-repeat:no-repeat!important;background-position:center!important;filter:drop-shadow(0 0 5px rgba(62,115,255,.50))!important}
+.v6MissionPanel[data-kind="daily"] .v6MissionIcon{background-image:url("../images/ui/v6/icon-blue-star.svg")}
+.v6MissionPanel[data-kind="weekly"] .v6MissionIcon{background-image:url("../images/ui/v6/icon-purple-star.svg")}
+.v6MissionPanel[data-kind="special"] .v6MissionIcon{background-image:url("../images/ui/v6/icon-gold-star.svg")}
+.v6MissionLabel{font-size:13px!important;line-height:1.18!important;color:#f4f3ee!important;font-weight:700!important;overflow:hidden!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;text-shadow:0 1px 3px #000!important}
+.v6MissionPoints{text-align:right!important;font-family:Georgia,serif!important;font-size:16px!important;color:#ffda7c!important;font-weight:900!important;white-space:nowrap!important}
+.v6MissionRow.done .v6MissionPoints{font-family:Arial,sans-serif!important;font-size:11px!important;color:#bfeaff!important;letter-spacing:.04em!important}
+.v6MissionEdit{position:absolute!important;left:14px!important;right:14px!important;bottom:14px!important;height:43px!important;border:1px solid rgba(198,158,78,.92)!important;border-radius:23px!important;background:linear-gradient(180deg,rgba(12,30,55,.96),rgba(4,13,28,.98))!important;color:#f4dfb0!important;font-size:16px!important;font-weight:900!important;letter-spacing:.04em!important;box-shadow:inset 0 0 0 2px rgba(66,48,25,.80)!important;pointer-events:auto!important}
+.v6MissionEdit::after{content:"";display:inline-block;width:23px;height:23px;margin-left:12px;vertical-align:-6px;background:url("../images/ui/v6/edit-feather.svg") center/contain no-repeat}
+
+/* === party cards: keep ally art, rebuild everything around it === */
+.partyParts{position:absolute!important;left:642px!important;top:516px!important;width:602px!important;height:405px!important;z-index:44!important;display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:9px!important;pointer-events:none!important}
+.characterCard{position:relative!important;width:auto!important;height:386px!important;min-width:0!important;overflow:hidden!important;padding:0 9px 10px!important;border-radius:0!important;pointer-events:none!important;color:#fff!important}
+.characterCard::after{content:"";position:absolute;left:12px;right:12px;top:55px;height:1px;background:linear-gradient(90deg,transparent,#b68a46,transparent);opacity:.65}
+.charHeader{position:relative!important;height:66px!important;padding:14px 4px 0 4px!important;display:block!important;text-align:center!important;line-height:1.05!important}
+.classMark{display:block!important;position:absolute!important;left:7px!important;top:9px!important;width:34px!important;height:34px!important;border:1px solid rgba(225,194,116,.85)!important;transform:rotate(45deg)!important;background:linear-gradient(135deg,#0c3f74,#4fb9ff)!important;box-shadow:0 0 8px rgba(80,158,255,.30)!important}.characterCard[data-class="defender"] .classMark{background:linear-gradient(135deg,#402268,#b87dff)!important}.characterCard[data-class="attacker"] .classMark{background:linear-gradient(135deg,#6a4a19,#f0c56b)!important}
+.charTitle{display:block!important}.charName{display:block!important;font-size:21px!important;line-height:23px!important;color:#f7e9c8!important;font-weight:900!important;letter-spacing:.03em!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}.charMeta{display:block!important;margin-top:5px!important;font-family:Georgia,serif!important;font-size:16px!important;line-height:17px!important;color:#e7decd!important}
+.charArtWrap{height:194px!important;margin:0!important;border:1px solid rgba(89,109,151,.78)!important;background:#071020!important;overflow:hidden!important;box-shadow:inset 0 0 16px rgba(31,63,120,.24)!important}.charArt{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 24%!important;filter:saturate(1.07) contrast(1.04)!important}.characterCard[data-class="attacker"] .charArt{object-position:center 20%!important}
+.charHp{height:58px!important;padding:8px 0 0!important}.charHpLine{display:flex!important;align-items:baseline!important;justify-content:space-between!important;color:#fff!important;font-size:14px!important;font-family:Arial,sans-serif!important}.charHpLine strong{font-family:Georgia,serif!important;font-size:20px!important;line-height:22px!important;color:#fff!important;font-weight:500!important}.charHpTrack{height:9px!important;margin-top:4px!important;border:1px solid #6e542c!important;background:#1c1115!important;overflow:hidden!important}.charHpFill{display:block!important;height:100%!important;background:linear-gradient(90deg,#2faf6f,#62d991)!important;box-shadow:0 0 6px rgba(69,218,143,.30)!important}
+.charAbilities{height:62px!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:12px!important;padding-top:5px!important}.abilitySlot{position:relative!important;min-height:55px!important;padding:0!important;border:1px solid rgba(156,117,55,.88)!important;border-radius:0!important;background:linear-gradient(180deg,rgba(8,22,45,.98),rgba(3,10,23,.98))!important;box-shadow:inset 0 0 0 2px rgba(49,36,21,.68)!important}.abilityIcon{display:block!important;width:100%!important;height:100%!important;margin:0!important;background-size:50px 50px!important;background-repeat:no-repeat!important;background-position:center!important;color:transparent!important;font-size:0!important}.abilityKind,.abilityName{display:none!important}
+.characterCard[data-class="support"] .potentialSlot .abilityIcon{background-image:url("../images/ui/v6/icon-blue-star.svg")!important}.characterCard[data-class="support"] .skillSlot .abilityIcon{background-image:url("../images/ui/v6/icon-heal.svg")!important}.characterCard[data-class="defender"] .potentialSlot .abilityIcon{background-image:url("../images/ui/v6/icon-purple-star.svg")!important}.characterCard[data-class="defender"] .skillSlot .abilityIcon{background-image:url("../images/ui/v6/icon-shield.svg")!important}.characterCard[data-class="attacker"] .potentialSlot .abilityIcon{background-image:url("../images/ui/v6/icon-sword.svg")!important}.characterCard[data-class="attacker"] .skillSlot .abilityIcon{background-image:url("../images/ui/v6/icon-sun.svg")!important}
+.characterCard.down{filter:grayscale(.7) brightness(.55)!important}
+
+/* === attack: rebuilt, no legacy bitmap === */
+.lowerAttack{position:absolute!important;left:1332px!important;top:484px!important;width:276px!important;height:276px!important;z-index:52!important;border:0!important;border-radius:50%!important;background:url("../images/ui/v6/attack-ring.svg") center/contain no-repeat!important;color:transparent!important;box-shadow:none!important;filter:drop-shadow(0 11px 16px rgba(0,0,0,.45))!important;pointer-events:auto!important;overflow:visible!important}
+.lowerAttack::before{content:"攻撃"!important;position:absolute!important;left:0;right:0;top:91px;text-align:center;color:#f4deb0;font-size:47px;font-weight:900;line-height:52px;letter-spacing:.03em;text-shadow:0 2px 5px #000,0 0 8px rgba(106,174,255,.26)}
+.lowerAttack::after{content:"ATTACK"!important;position:absolute!important;left:0;right:0;top:148px;text-align:center;color:#e8d8b4;font-family:Georgia,serif;font-size:18px;letter-spacing:.08em;text-shadow:0 2px 4px #000}
+.lowerAttack:active{transform:scale(.97)!important;filter:brightness(1.14) drop-shadow(0 11px 16px rgba(0,0,0,.45))!important}
+
+/* === reward: rebuilt === */
+.rewardSingle{position:absolute!important;left:1270px!important;top:702px!important;width:348px!important;height:202px!important;z-index:48!important;display:block!important;padding:18px 20px 12px 112px!important;margin:0!important;border-radius:0!important;color:#fff!important;pointer-events:auto!important;overflow:hidden!important}
+.rewardSingle::before{content:""!important;position:absolute!important;left:24px!important;top:51px!important;width:68px!important;height:95px!important;inset:auto!important;border:0!important;background:url("../images/ui/v6/reward-crystal.svg") center/contain no-repeat!important;filter:drop-shadow(0 0 8px rgba(76,117,255,.48))!important}
+.rewardHead{height:45px!important;padding:0 0 9px!important;border-bottom:1px solid rgba(149,111,53,.72)!important;text-align:center!important;color:#f4dca4!important;font-size:26px!important;line-height:35px!important;font-weight:900!important;letter-spacing:.05em!important}
+.rewardLine{display:grid!important;grid-template-columns:85px 1fr!important;align-items:center!important;height:36px!important;gap:4px!important;padding:0!important;color:#bec6d5!important;font-family:Arial,sans-serif!important;font-size:11px!important}.rewardLine strong{color:#fff0c4!important;font-family:"Yu Mincho",serif!important;font-size:15px!important;font-weight:900!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#rewardSingleBtn{position:absolute!important;left:18px!important;right:18px!important;bottom:11px!important;width:auto!important;height:41px!important;margin:0!important;border:1px solid #d2aa59!important;border-radius:22px!important;background:linear-gradient(180deg,#94692b,#5b3c17)!important;color:#fff0c2!important;font-size:17px!important;font-weight:900!important;letter-spacing:.03em!important;box-shadow:inset 0 0 0 2px rgba(68,45,20,.82),0 2px 8px #0008!important}
+
+/* === combat FX and editor === */
+.sceneFlash,.union,.toast,.actionCall,.float,.rapidDamage,.blessingFlash{pointer-events:none!important}.union{z-index:250!important}.toast{z-index:270!important}.uiModal{z-index:500!important}.uiModalInner{font-family:Arial,sans-serif!important}
+
+/* === orientation gate === */
+.orientationGate{position:fixed!important;inset:0!important;z-index:99999!important;background:#020611!important;display:none;align-items:center;justify-content:center;padding:22px;color:#fff}
+.orientationCard{width:min(92vw,420px);padding:28px 24px;border:1px solid #ad8c4d;border-radius:18px;background:#071224;text-align:center;box-shadow:0 20px 60px #000}.orientationMark{font-size:58px;color:#8ec8ff}.orientationTitle{font-size:22px;font-weight:900;margin-top:8px}.orientationText{font-size:15px;color:#c7d2e5;margin:10px 0 18px}#orientationStart{border:1px solid #cda456;border-radius:999px;background:#0d3154;color:#fff0c9;padding:12px 20px;font-weight:900}
+@media (orientation:portrait){.orientationGate{display:flex!important}#g{opacity:0!important;pointer-events:none!important}}

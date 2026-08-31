@@ -1,0 +1,3 @@
+PATCH 06 RUNTIME ONLY
+GitHubへ反映する実行ファイルのみ。docs/reference画像は除外。
+フォルダ構造を保ったまま上書き・追加してください。

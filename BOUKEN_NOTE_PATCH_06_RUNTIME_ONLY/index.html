@@ -1,0 +1,147 @@
+<!doctype html>
+<!DOCTYPE html>
+
+<!-- v23.46 base + v1.2 UI componentization checkpoint 1: ally character cards -->
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" name="viewport"/>
+<meta content="#020714" name="theme-color"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<title>ぼうけんノート Engine v1 — Reference V2 Rebuild V6</title>
+<link href="css/game.css" rel="stylesheet"/>
+<link href="css/reference-v2-v6.css" rel="stylesheet"/>
+<script defer src="data/characters.js"></script>
+<script defer src="data/enemies.js"></script>
+<script defer src="data/skills.js"></script>
+<script defer src="data/missions.js"></script>
+<script defer src="data/areas.js"></script>
+<script defer src="data/reference-v2-layout.js"></script>
+<script defer src="js/game.js"></script>
+<script defer src="js/patch-visual-runtime.js"></script>
+<script defer src="js/patch-background-runtime.js"></script>
+<script defer src="js/main.js"></script>
+<script defer src="js/reference-v2-v6.js"></script>
+</head>
+<body>
+<div id="orientationGate" class="orientationGate" aria-live="polite">
+  <div class="orientationCard">
+    <div class="orientationMark">↻</div>
+    <div class="orientationTitle">横画面で冒険を開始</div>
+    <div class="orientationText" id="orientationText">端末を横向きにしてください</div>
+    <button id="orientationStart" type="button">横画面で開始</button>
+  </div>
+</div>
+<main id="g">
+<section class="scene" id="scene">
+<div class="cleanPatch" id="dailyPatch"></div>
+<div class="cleanPatch" id="weeklyPatch"></div>
+<div class="coinHud" id="coin">20</div>
+<div class="enemyHUD compact" id="weeklyHUD">
+<div class="title">✦ ウィークリーエネミー</div>
+<div class="row"><span>Lv.28</span><b id="weeklyText">180/180</b></div>
+<div class="eBar"><i id="weeklyBar"></i></div>
+</div>
+<div class="enemyHUD compact" id="dailyHUD">
+<div class="title" id="dailyTitle">✦ デイリーエネミー</div>
+<div class="row"><span>Lv.18</span><b id="dailyText">50/50</b></div>
+<div class="eBar"><i id="dailyBar"></i></div><div class="dailyStack" id="dailyStack"></div>
+</div>
+<div aria-hidden="true" class="weeklyBarrierLabel"></div>
+<div aria-hidden="true" class="dailyFormation" id="dailyFormation"></div>
+<div class="sceneFlash" id="flash"></div>
+<div class="toast" id="toast"></div>
+<div class="union" id="union"><div class="unionFrame"><div class="unionGlow"></div><img alt="スターライト・ユニオン特殊絵" src="images/effects/starlight_union.webp"/></div></div>
+</section>
+<section class="lowerRef" id="lowerRef">
+<div class="v6MissionArea" id="v6MissionArea" aria-label="ミッション"></div>
+<div aria-label="仲間パーティー" class="partyParts" id="partyParts"></div>
+<div class="refHp" id="rhp0"><div class="num"><span id="rhp0n">600</span>/<span id="rhp0m">600</span></div><div class="bar"><i id="rhp0b"></i></div></div>
+<div class="refHp" id="rhp1"><div class="num"><span id="rhp1n">1200</span>/<span id="rhp1m">1200</span></div><div class="bar"><i id="rhp1b"></i></div></div>
+<div class="refHp" id="rhp2"><div class="num"><span id="rhp2n">400</span>/<span id="rhp2m">400</span></div><div class="bar"><i id="rhp2b"></i></div></div>
+<button aria-label="攻撃" class="lowerAttack" id="attack"></button>
+<div class="refDate" id="refDate"></div>
+<div class="quest daily rd0" data-i="0"><button>達成</button></div>
+<div class="quest daily rd1" data-i="1"><button>達成</button></div>
+<div class="quest daily rd2" data-i="2"><button>達成</button></div>
+<div class="quest weekly rw0" data-i="0"><button>+20</button></div>
+<div class="quest weekly rw1" data-i="1"><button>+20</button></div>
+<div class="quest weekly rw2" data-i="2"><button>+20</button></div>
+<div class="quest special rs0" data-i="0"><button>+100</button></div>
+<div class="quest special rs1" data-i="1"><button>+100</button></div>
+<div class="quest special rs2" data-i="2"><button>+100</button></div>
+<div class="refCoin" id="refCoin">20 COIN</div>
+<div class="shop refShop rshop0"><button data-cost="1000">交換</button></div>
+<div class="shop refShop rshop1"><button data-cost="2000">交換</button></div>
+<div class="shop refShop rshop2"><button data-cost="800">交換</button></div>
+<div class="shop refShop rshop3"><button data-cost="1500">交換</button></div>
+<div class="refTotal" id="rDTotal">本日 +0</div>
+<div class="refTotal" id="rWTotal">今週 +0</div>
+<div class="refTotal" id="rSTotal">特別 +0</div>
+<div class="rewardSingle" id="rewardSingle">
+<div class="rewardHead">報酬交換</div>
+<div class="rewardLine"><span>報酬</span><strong id="rewardSingleName">図鑑</strong></div>
+<div class="rewardLine"><span>必要ポイント</span><strong id="rewardSingleCost">1,000ポイント</strong></div>
+<button id="rewardSingleBtn" type="button">交換</button>
+</div>
+<div class="overlayText dqt0" id="dq0t"></div>
+<div class="overlayText dqt1" id="dq1t"></div>
+<div class="overlayText dqt2" id="dq2t"></div>
+<div class="overlayText wqt0" id="wq0t"></div>
+<div class="overlayText wqt1" id="wq1t"></div>
+<div class="overlayText wqt2" id="wq2t"></div>
+<div class="overlayText sqt0" id="sq0t"></div>
+<div class="overlayText sqt1" id="sq1t"></div>
+<div class="overlayText sqt2" id="sq2t"></div>
+<div class="shopRowText shoprow0"><span class="shopName" id="shop0Name"></span><span class="shopCostText" id="shop0CostText"></span></div>
+<div class="shopRowText shoprow1"><span class="shopName" id="shop1Name"></span><span class="shopCostText" id="shop1CostText"></span></div>
+<div class="shopRowText shoprow2"><span class="shopName" id="shop2Name"></span><span class="shopCostText" id="shop2CostText"></span></div>
+<div class="shopRowText shoprow3"><span class="shopName" id="shop3Name"></span><span class="shopCostText" id="shop3CostText"></span></div>
+</section>
+<section class="panels">
+<details class="utility">
+<summary>戦闘スキル・リセット</summary>
+<div class="skillStrip">
+<div class="skillCard"><b>✦ クレリック：アリア</b><span>SKILL SP <strong id="healSP">0</strong><br/>【オート】ヒール：味方HP50%以下で自動発動／最重傷の味方を最大HP30%回復（1SP）<br/>【パッシブ】癒しの光：戦闘終了時、生存している味方全員のHPを20回復</span></div>
+<div class="skillCard"><b>🛡 ガーディアン：セレス</b><span>SKILL SP <strong id="warriorSP">0</strong><br/>【パッシブ】ホーリーガード：自身へのダメージ50%カット<br/>【オート】ホーリーフィールド：味方HP30%以下の被弾直前に発動／ダメージ<strong>100%カット</strong>（1SP）</span></div>
+<div class="skillCard"><b>🐉 テイマー：リネット</b><span>SKILL SP <strong id="tameSP">0</strong><br/>【パッシブ】テイム：デイリー撃破時に自動発動<br/>【オート】テイムガード：1SPで敵攻撃1回を肩代わり<br/>テイムエネミー：HP200／ATK50／所持5体すべてが通常フェーズ後に各1回攻撃</span><button id="tameBtn" style="display:none">自動テイム</button></div>
+<div class="skillCard"><b>◇ テイムエネミー</b><span id="beastSlot">未加入</span><br/><span>テイム枠5体／HP200／ATK50／やられたら次が自動出撃／週をまたいで引き継ぎ</span></div>
+</div>
+<div class="log" id="log">デイリーHP800・敵攻撃100。ウィークリーはバリアフィールドで通常攻撃無効。3Ptで星々の祝福→スターライト・ユニオン。</div>
+<div class="controls"><button id="bgmBtn">BGM ON</button><button id="openUiModal">項目編集</button><button id="resetBattle">戦闘だけリセット</button><button id="resetStart">最初からテスト</button><button id="resetAll">全データ初期化</button></div>
+<div class="editorBlock">
+<div class="editorTitle">表示項目編集</div>
+<div class="editorHint">※ 下のテキストと価格を変えると、画面下の表示と交換価格にそのまま反映されます。</div>
+<div class="editorGrid">
+<label>デイリー1<input id="ui_daily_0" maxlength="26" type="text"/></label>
+<label>デイリー2<input id="ui_daily_1" maxlength="26" type="text"/></label>
+<label>デイリー3<input id="ui_daily_2" maxlength="26" type="text"/></label>
+<label>ウィークリー1<input id="ui_weekly_0" maxlength="26" type="text"/></label>
+<label>ウィークリー2<input id="ui_weekly_1" maxlength="26" type="text"/></label>
+<label>ウィークリー3<input id="ui_weekly_2" maxlength="26" type="text"/></label>
+<label>スペシャル1<input id="ui_special_0" maxlength="30" type="text"/></label>
+<label>スペシャル2<input id="ui_special_1" maxlength="30" type="text"/></label>
+<label>スペシャル3<input id="ui_special_2" maxlength="30" type="text"/></label>
+<label>報酬品名<input id="ui_shop_name_0" maxlength="22" type="text"/></label>
+<label>必要ポイント<input id="ui_shop_cost_0" min="0" step="100" type="number"/></label>
+</div>
+<div class="editorBtns">
+<button id="saveUi" type="button">項目を保存</button>
+<button id="resetUi" type="button">初期化</button>
+</div>
+</div>
+</details>
+</section>
+<div aria-hidden="true" class="uiModal" id="uiModal">
+<div class="uiModalInner">
+<div class="uiModalHead">
+<div class="uiModalTitle">表示項目編集</div>
+<button class="uiModalClose" id="closeUiModal" type="button">閉じる</button>
+</div>
+<div class="uiModalBody"></div>
+</div>
+</div>
+</main>
+</body></html>
