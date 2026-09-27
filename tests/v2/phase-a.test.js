@@ -1,15 +1,24 @@
 'use strict';
 
 const assert = require('node:assert/strict');
-const schema = require('../../js/v2/schema.js');
-const migration = require('../../js/v2/save-migration.js');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const load = relative => vm.runInThisContext(fs.readFileSync(path.join(__dirname, relative), 'utf8'), { filename: relative });
+[
+  '../../data/v2/characters.js','../../data/v2/enemies.js','../../data/v2/skills.js',
+  '../../data/v2/status-effects.js','../../data/v2/battle-rules.js','../../data/v2/missions.js',
+  '../../js/v2/schema.js','../../js/v2/save-migration.js'
+].forEach(load);
+const schema = globalThis.BOUKEN_NOTE_V2.schema;
+const migration = globalThis.BOUKEN_NOTE_V2.saveMigration;
 const definitions = {
-  characters: require('../../data/v2/characters.js'),
-  enemies: require('../../data/v2/enemies.js'),
-  skills: require('../../data/v2/skills.js'),
-  statusEffects: require('../../data/v2/status-effects.js'),
-  battleRules: require('../../data/v2/battle-rules.js'),
-  missions: require('../../data/v2/missions.js')
+  characters: globalThis.BOUKEN_NOTE_V2.characters,
+  enemies: globalThis.BOUKEN_NOTE_V2.enemies,
+  skills: globalThis.BOUKEN_NOTE_V2.skills,
+  statusEffects: globalThis.BOUKEN_NOTE_V2.statusEffects,
+  battleRules: globalThis.BOUKEN_NOTE_V2.battleRules,
+  missions: globalThis.BOUKEN_NOTE_V2.missions
 };
 
 let passed = 0;
