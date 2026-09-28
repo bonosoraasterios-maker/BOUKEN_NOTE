@@ -82,8 +82,11 @@ test('Barrier reads State v2 barrier.current and uses maxHp for enemy percentage
 });
 test('HUD ability slots are definition-driven and retain Linnet passive and A separately',()=>{
   const {instance}=setup();
-  const abilityIds=byAttr(instance.root,'data-bn2-ability-id').map(node=>node.attributes['data-bn2-ability-id']);
+  const abilitySlots=byAttr(instance.root,'data-bn2-ability-id');
+  const abilityIds=abilitySlots.map(node=>node.attributes['data-bn2-ability-id']);
   assert.deepEqual(abilityIds,['sora_normal_attack','sora_starlight_union','aria_passive_healing_light','aria_s_heal','ceres_passive_majesty','ceres_d_holy_field','linnet_passive_tame','linnet_a_tame_attack']);
+  assert.deepEqual(abilitySlots.slice(0,2).map(node=>node.textContent),['通常攻撃','スターライトユニオン']);
+  assert.equal(abilitySlots[1].attributes['data-bn2-ability-kind'],'union');
   assert.equal(byAttr(instance.registry['hud-attacker'],'data-bn2-ability-slot','Passive').length,1);
   assert.equal(byAttr(instance.registry['hud-attacker'],'data-bn2-ability-slot','A').length,1);
 });
