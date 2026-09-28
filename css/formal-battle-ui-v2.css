@@ -34,6 +34,26 @@
 .bn2-attack-jp { font-size:clamp(18px,2vw,30px); }
 .bn2-attack-en { font-size:clamp(10px,.85vw,13px); letter-spacing:.16em; }
 .bn2-event-mount { position:absolute; inset:42% 25% auto; z-index:5; min-height:1.5em; text-align:center; pointer-events:none; }
+.bn2-fx-cue { display:inline-grid; place-items:center; min-width:7em; padding:6px 12px; border:1px solid rgba(220,239,255,.78); border-radius:999px; background:rgba(4,13,35,.82); color:#f8fbff; font-weight:700; text-shadow:0 0 8px #78bfff; }
+.bn2-fx-damage { color:#ffd2d8; border-color:#ff8a9a; animation:bn2-fx-pop .42s ease-out both; }
+.bn2-fx-vital-change, .bn2-fx-barrier-absorbed { color:#c7f5ff; border-color:#78e5ff; animation:bn2-fx-flash .52s ease-out both; }
+.bn2-fx-status-applied { color:#ffe6a0; border-color:#e9bb4e; animation:bn2-fx-pop .52s ease-out both; }
+.bn2-fx-status-removed { color:#c4f1c4; border-color:#83d593; animation:bn2-fx-flash .42s ease-out both; }
+.bn2-fx-knockout { color:#fff; border-color:#e6b5ca; animation:bn2-fx-knockout .65s ease-out both; }
+/* Existing adopted visual language, isolated from old state/targeting code:
+   Daily: HP 0 then ~2.5s return-to-light. Boss: ~6s core convergence to mist. */
+.bn2-fx-daily-defeat { color:#e4f5ff; animation:bn2-fx-return-light 2.5s cubic-bezier(.22,.61,.36,1) both; }
+.bn2-fx-boss-defeat { color:#f1e9ff; animation:bn2-fx-core-mist 6s ease-in-out both; }
+.bn2-fx-star-road { border:0; background:transparent; font-size:clamp(16px,2.1vw,30px); letter-spacing:.1em; animation:bn2-fx-star-road 1.1s ease both; }
+.bn2-fx-leader, .bn2-fx-union, .bn2-fx-overbreak { animation:bn2-fx-pop .8s ease-out both; }
+.bn2-fx-overbreak { color:#ffd1f1; border-color:#f098d2; }
+.bn2-fx-final { color:#c3d7ef; font-weight:500; }
+@keyframes bn2-fx-pop { 0% { opacity:0; transform:scale(.72); } 35% { opacity:1; transform:scale(1.08); } 100% { opacity:1; transform:scale(1); } }
+@keyframes bn2-fx-flash { 0%,100% { filter:brightness(1); } 42% { filter:brightness(1.8); } }
+@keyframes bn2-fx-knockout { 0% { opacity:0; transform:translateY(12px); } 45% { opacity:1; transform:translateY(0); } 100% { opacity:.7; } }
+@keyframes bn2-fx-return-light { 0%,12% { opacity:1; filter:brightness(1); transform:scale(1); } 58% { opacity:.84; filter:brightness(1.8) saturate(.3); transform:scale(.86); } 100% { opacity:0; filter:brightness(2.2) saturate(.1); transform:scale(.35); } }
+@keyframes bn2-fx-core-mist { 0% { opacity:0; transform:scale(.16); filter:blur(0); } 22% { opacity:1; transform:scale(1.1); filter:brightness(1.8); } 58% { opacity:.84; transform:scale(.64); filter:blur(2px); } 100% { opacity:0; transform:scale(1.5); filter:blur(12px); } }
+@keyframes bn2-fx-star-road { 0% { opacity:0; transform:scale(.7); } 35%,72% { opacity:1; transform:scale(1); } 100% { opacity:0; transform:scale(1.12); } }
 .bn2-hud { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; min-height:0; padding:6px 18px; }
 .bn2-hud-card { position:relative; min-width:0; overflow:hidden; padding:7px; border:1px solid var(--bn2-line); border-radius:14px; background:var(--bn2-panel); }
 .bn2-role-label { display:block; color:#9ecbff; font-size:clamp(9px,.75vw,12px); }
