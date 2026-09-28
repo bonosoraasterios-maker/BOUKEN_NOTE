@@ -1,0 +1,16 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const assets=require('../../data/v2/formal-battle-assets.js'),characters=require('../../data/v2/characters.js').characters;let passed=0;
+function test(n,f){try{f();passed++;process.stdout.write('ok - '+n+'\n');}catch(e){process.stderr.write('not ok - '+n+'\n'+e.stack+'\n');process.exitCode=1;}}
+const source=n=>fs.readFileSync(path.join(__dirname,'../../',n),'utf8');
+test('asset approval metadata is explicit',()=>{assert.equal(assets.resolve('portrait.sora').approval,'candidate');assert.equal(assets.resolve('enemy.legacyDailyCore').approval,'legacyPlaceholder');});
+test('repository paths are local',()=>Object.values(assets.ASSETS).forEach(a=>assert.equal(/^(?:https?:|\/\/|data:)/.test(a.path),false)));
+test('field and HUD keys are separate',()=>['sora','aria','ceres','linnet'].forEach(id=>{assert.equal(characters[id].fieldAssetKey,null);assert.ok(characters[id].hudPortraitAssetKey.startsWith('portrait.'));}));
+test('HUD art is not a field default',()=>assert.equal(Object.values(characters).some(c=>c.fieldAssetKey===c.hudPortraitAssetKey),false));
+test('missing field falls back safely',()=>assert.ok(source('js/v2/formal-battle-ui.js').includes("definition.fieldAssetKey || 'missing'")));
+test('legacy and candidate are not formal',()=>Object.values(assets.ASSETS).forEach(a=>assert.notEqual(a.approval,'formal')));
+test('metadata has no battle values',()=>Object.values(assets.ASSETS).forEach(a=>assert.equal(Object.hasOwn(a,'damage'),false)));
+test('FX adapter stays separate',()=>assert.equal(/formalBattleAssets|images\//.test(source('js/v2/battle-fx-adapter.js')),false));
+test('no external URL or unsafe HTML',()=>{const s=['data/v2/formal-battle-assets.js','js/v2/formal-battle-ui.js','css/formal-battle-ui-v2.css'].map(source).join('\n');[/https?:\/\//,/innerHTML/,/eval\s*\(/,/new\s+Function/,/\bfetch\s*\(/].forEach(p=>assert.equal(p.test(s),false));});
+test('viewport loads registry first',()=>{const s=source('tests/v2/formal-battle-viewport.html');assert.ok(s.indexOf('formal-battle-assets.js')<s.indexOf('formal-battle-ui.js'));});
+process.on('exit',()=>{if(!process.exitCode)process.stdout.write('# '+passed+' Phase F tests passed\n');});
