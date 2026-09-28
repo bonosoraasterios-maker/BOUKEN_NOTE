@@ -7,8 +7,8 @@
   'use strict';
   const skill = (id, ownerId, kind, name, spCost, extra) => Object.freeze(Object.assign({ id, ownerId, kind, name, spCost, source: 'BOUKEN_NOTE_SPEC_2026-09-26_1117' }, extra || {}));
   const skills = [
-    skill('sora_normal_attack','sora','normal','通常攻撃',0,{hudSlot:'通常攻撃',hudOrder:1}),
-    skill('sora_starlight_union','sora','leader','スターライトユニオン',0,{hudSlot:'Leader',hudOrder:2}),
+    skill('sora_normal_attack','sora','normal','通常攻撃',0,{hudSlot:'通常攻撃',hudLabel:'通常攻撃',hudOrder:1}),
+    skill('sora_starlight_union','sora','union','スターライトユニオン',0,{hudSlot:'スターライトユニオン',hudLabel:'スターライトユニオン',hudOrder:2}),
     skill('aria_passive_healing_light','aria','passive','癒しの光',0,{trigger:'battleEnd',healPerLivingAlly:20,hudSlot:'Passive',hudOrder:1}),
     skill('aria_s_heal','aria','S','ヒール',1,{repeatable:true,target:'lowestHpRatioAtOrBelow50',healMaxHpRatio:0.30,hudSlot:'S',hudOrder:2}),
     skill('aria_d_margin','aria','D','聖典の余白',1,{createsDebt:true}),
