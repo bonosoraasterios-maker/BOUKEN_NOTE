@@ -1,9 +1,9 @@
 (function (root, factory) {
-  const value = factory();
+  const value = factory(typeof module === 'object' && module.exports ? require('./battle-fx-adapter.js') : root.BOUKEN_NOTE_V2.battleFxAdapter);
   if (typeof module === 'object' && module.exports) module.exports = value;
   root.BOUKEN_NOTE_V2 = root.BOUKEN_NOTE_V2 || {};
   root.BOUKEN_NOTE_V2.formalBattleUi = value;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (battleFxAdapter) {
   'use strict';
 
   const ROLES = Object.freeze(['protagonist', 'supporter', 'defender', 'attacker']);
@@ -97,6 +97,9 @@
     eventMount.setAttribute('data-bn2-event-mount', '');
     eventMount.setAttribute('aria-live', 'polite');
     registry.eventMount = eventMount;
+    const fxAdapter = options.fxAdapter && typeof options.fxAdapter.present === 'function'
+      ? options.fxAdapter
+      : battleFxAdapter.create({ document, mount:eventMount });
 
     const hud = add(root, element(document, 'section', 'bn2-hud'));
     hud.setAttribute('aria-label', 'パーティーHUD');
@@ -219,7 +222,7 @@
     function present(payload) {
       if (!payload || !payload.snapshot) throw new TypeError('event and presentation snapshot required');
       render(payload.snapshot, { locked:true });
-      registry.eventMount.textContent = payload.event && payload.event.type ? String(payload.event.type) : 'battle-event';
+      fxAdapter.present(payload);
     }
     function destroy() { if (root.parentNode === host) host.removeChild(root); latestSnapshot = null; }
     setLocked(true);
