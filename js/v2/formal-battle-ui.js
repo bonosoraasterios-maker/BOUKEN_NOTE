@@ -135,7 +135,7 @@
     }
     function hudPortraitAsset(key) {
       const asset = assetFor(key);
-      return asset && (asset.usage === 'hudPortrait' || asset.approval === 'formal') ? asset : null;
+      return asset && (asset.approval === 'formal' || allowNonFormalPreviewAssets) ? asset : null;
     }
     function addImage(parent, className, asset, alt) {
       if (!asset) return null;
