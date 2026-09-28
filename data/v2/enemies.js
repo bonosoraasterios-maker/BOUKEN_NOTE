@@ -6,8 +6,8 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   const enemies = {
-    daily_base: { id: 'daily_base', kind: 'daily', name: null, baseMaxHp: 800, normalActions: 1, skillActions: 0, assetKey: null },
-    weekly_base: { id: 'weekly_base', kind: 'weekly', name: null, baseMaxHp: 3000, normalActions: 1, skillActions: 1, skillProfileId: null, assetKey: null },
+    daily_base: { id: 'daily_base', kind: 'daily', name: null, baseMaxHp: 800, normalActions: 1, skillActions: 0, assetKey: 'enemy.legacyDailyCore' },
+    weekly_base: { id: 'weekly_base', kind: 'weekly', name: null, baseMaxHp: 3000, normalActions: 1, skillActions: 1, skillProfileId: null, assetKey: 'enemy.legacyWeeklyCelestia' },
     area_boss_base: {
       id: 'area_boss_base', kind: 'areaBoss', name: null, baseMaxHp: 8000,
       normalActions: 1, skillActions: 1, skillProfileId: null, assetKey: null,

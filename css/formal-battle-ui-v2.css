@@ -7,6 +7,7 @@
   grid-template-rows: 7.5% 1fr 26% 6%;
   width: 100%; height: 100dvh; max-height: 100dvh;
   overflow: hidden; color: #f5f8ff; background: radial-gradient(circle at 63% 34%, #17335b, var(--bn2-bg) 58%);
+  background-position:center; background-repeat:no-repeat; background-size:cover;
   font-family: system-ui, -apple-system, "Hiragino Sans", sans-serif;
 }
 .bn2-shell, .bn2-shell * { box-sizing: border-box; }
@@ -21,13 +22,15 @@
 .bn2-route-title { margin:0; font-size:clamp(12px,1.15vw,18px); letter-spacing:.08em; }
 .bn2-route-content { color:#bcd5f2; font-size:clamp(10px,.9vw,14px); }
 .bn2-formation { display:grid; grid-template-columns:repeat(4,1fr); align-items:end; gap:4px; min-width:0; }
-.bn2-ally-mount { display:flex; align-items:flex-end; justify-content:center; min-width:0; height:72%; border-bottom:1px solid var(--bn2-line); }
+.bn2-ally-mount { display:flex; align-items:flex-end; justify-content:center; min-width:0; height:72%; overflow:hidden; border-bottom:1px solid var(--bn2-line); }
 .bn2-ally-placeholder { writing-mode:vertical-rl; padding:8px 3px; color:#b9c9e4; border:1px dashed var(--bn2-line); background:rgba(6,15,32,.56); }
+.bn2-ally-art { width:100%; height:100%; object-fit:contain; object-position:center bottom; filter:drop-shadow(0 0 10px rgba(106,184,255,.38)); }
 .bn2-enemies { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); align-items:end; gap:6px; min-width:0; }
 .bn2-enemy-card { min-width:0; padding:6px; border:1px solid var(--bn2-line); border-radius:12px; background:rgba(7,15,34,.72); }
 .bn2-enemy-card[data-bn2-enemy-kind="weekly"], .bn2-enemy-card[data-bn2-enemy-kind="areaBoss"] { grid-column:span 2; align-self:center; }
 .bn2-enemy-name { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:clamp(10px,.9vw,14px); }
-.bn2-enemy-placeholder { display:grid; place-items:center; aspect-ratio:3/4; max-height:24vh; color:#90a8c8; border:1px dashed var(--bn2-line); }
+.bn2-enemy-placeholder, .bn2-enemy-art { display:grid; place-items:center; width:100%; aspect-ratio:3/4; max-height:24vh; color:#90a8c8; border:1px dashed var(--bn2-line); }
+.bn2-enemy-art { display:block; object-fit:contain; object-position:center bottom; border:0; filter:drop-shadow(0 0 9px rgba(116,190,255,.32)); }
 .bn2-attack-area { display:grid; place-items:center; }
 .bn2-attack-button { display:grid; place-items:center; width:clamp(96px,11vw,164px); aspect-ratio:1; border-radius:50%; border:3px solid #d9e9ff; background:radial-gradient(circle,#234f83,#091a38 70%); box-shadow:0 0 24px rgba(116,190,255,.48); cursor:pointer; }
 .bn2-attack-button:disabled { cursor:not-allowed; opacity:.48; box-shadow:none; }
@@ -46,6 +49,7 @@
 .bn2-fx-boss-defeat { color:#f1e9ff; animation:bn2-fx-core-mist 6s ease-in-out both; }
 .bn2-fx-star-road { border:0; background:transparent; font-size:clamp(16px,2.1vw,30px); letter-spacing:.1em; animation:bn2-fx-star-road 1.1s ease both; }
 .bn2-fx-leader, .bn2-fx-union, .bn2-fx-overbreak { animation:bn2-fx-pop .8s ease-out both; }
+.bn2-fx-art { display:block; width:min(34vw,420px); max-height:34vh; margin:8px auto 0; object-fit:contain; object-position:center; pointer-events:none; animation:bn2-fx-pop .8s ease-out both; }
 .bn2-fx-overbreak { color:#ffd1f1; border-color:#f098d2; }
 .bn2-fx-final { color:#c3d7ef; font-weight:500; }
 @keyframes bn2-fx-pop { 0% { opacity:0; transform:scale(.72); } 35% { opacity:1; transform:scale(1.08); } 100% { opacity:1; transform:scale(1); } }
@@ -58,7 +62,8 @@
 .bn2-hud-card { position:relative; min-width:0; overflow:hidden; padding:7px; border:1px solid var(--bn2-line); border-radius:14px; background:var(--bn2-panel); }
 .bn2-role-label { display:block; color:#9ecbff; font-size:clamp(9px,.75vw,12px); }
 .bn2-character-name { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:clamp(11px,1vw,15px); }
-.bn2-portrait-placeholder { position:absolute; right:6px; top:6px; width:24%; aspect-ratio:1; display:grid; place-items:center; color:#7890b0; border:1px dashed var(--bn2-line); font-size:8px; }
+.bn2-portrait-placeholder, .bn2-portrait-art { position:absolute; right:6px; top:6px; width:24%; aspect-ratio:1; display:grid; place-items:center; color:#7890b0; border:1px dashed var(--bn2-line); font-size:8px; }
+.bn2-portrait-art { display:block; object-fit:cover; object-position:center top; border:1px solid rgba(155,207,255,.62); background:#0a1328; }
 .bn2-vital-frame { position:relative; height:12px; margin-top:5px; overflow:hidden; border:1px solid #c6d3e7; border-radius:7px; background:#171c2b; }
 .bn2-hp-fill, .bn2-barrier-fill { position:absolute; inset:0 auto 0 0; }
 .bn2-hp-fill { background:linear-gradient(90deg,#a8273b,#ef5260); }

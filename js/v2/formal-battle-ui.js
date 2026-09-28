@@ -1,9 +1,12 @@
 (function (root, factory) {
-  const value = factory(typeof module === 'object' && module.exports ? require('./battle-fx-adapter.js') : root.BOUKEN_NOTE_V2.battleFxAdapter);
+  const value = factory(
+    typeof module === 'object' && module.exports ? require('./battle-fx-adapter.js') : root.BOUKEN_NOTE_V2.battleFxAdapter,
+    typeof module === 'object' && module.exports ? require('../../data/v2/formal-battle-assets.js') : root.BOUKEN_NOTE_V2.formalBattleAssets
+  );
   if (typeof module === 'object' && module.exports) module.exports = value;
   root.BOUKEN_NOTE_V2 = root.BOUKEN_NOTE_V2 || {};
   root.BOUKEN_NOTE_V2.formalBattleUi = value;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function (battleFxAdapter) {
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (battleFxAdapter, formalBattleAssets) {
   'use strict';
 
   const ROLES = Object.freeze(['protagonist', 'supporter', 'defender', 'attacker']);
@@ -28,6 +31,7 @@
     return Math.max(0, Math.min(100, finite(value, 0) / max * 100));
   }
   function safeId(value) { return typeof value === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(value) ? value : ''; }
+  function safeAssetKey(value) { return typeof value === 'string' && /^[A-Za-z0-9._-]{1,80}$/.test(value) ? value : ''; }
   function shouldEnable(flags, verificationMode) {
     return verificationMode === true && !!flags && flags.formalBattleV2 === true;
   }
@@ -43,6 +47,10 @@
       ? Object.values(definitionBundle.skills.byId)
       : (definitionBundle.skills && Array.isArray(definitionBundle.skills.skills) ? definitionBundle.skills.skills : []);
     const onAttack = typeof options.onAttack === 'function' ? options.onAttack : function () {};
+    const assets = options.assetRegistry && typeof options.assetRegistry.resolve === 'function'
+      ? options.assetRegistry
+      : formalBattleAssets;
+    const allowNonFormalPreviewAssets = options.allowNonFormalPreviewAssets === true;
     const host = options.host;
     const registry = Object.create(null);
     let locked = true;
@@ -52,6 +60,11 @@
     root.setAttribute('data-bn2-root', 'formal-battle');
     root.setAttribute('aria-label', '正式戦闘画面');
     registry.root = root;
+    const battlefieldAsset = allowNonFormalPreviewAssets && assets && assets.resolve ? assets.resolve('background.legacyBattlefield') : null;
+    if (battlefieldAsset && battlefieldAsset.approval === 'legacyPlaceholder') {
+      root.setAttribute('data-bn2-background-asset-key', battlefieldAsset.key);
+      root.style.backgroundImage = `linear-gradient(rgba(3,9,25,.28), rgba(3,9,25,.62)), url("${battlefieldAsset.path}")`;
+    }
 
     const topbar = add(root, element(document, 'header', 'bn2-topbar'));
     const utilities = add(topbar, element(document, 'nav', 'bn2-utilities'));
@@ -115,6 +128,24 @@
     host.appendChild(root);
 
     function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+    function assetFor(key, fallbackKey) { return assets && assets.resolve ? assets.resolve(key, fallbackKey) : null; }
+    function formalFieldAsset(key, fallbackKey) {
+      const asset = assetFor(key, fallbackKey);
+      return asset && (asset.approval === 'formal' || allowNonFormalPreviewAssets) ? asset : null;
+    }
+    function hudPortraitAsset(key) {
+      const asset = assetFor(key);
+      return asset && (asset.approval === 'formal' || allowNonFormalPreviewAssets) ? asset : null;
+    }
+    function addImage(parent, className, asset, alt) {
+      if (!asset) return null;
+      const image = add(parent, element(document, 'img', className));
+      image.setAttribute('data-bn2-asset-key', asset.key);
+      image.setAttribute('data-bn2-asset-source', asset.sourcePath);
+      image.setAttribute('src', asset.path);
+      image.setAttribute('alt', typeof alt === 'string' ? alt : '');
+      return image;
+    }
     function characterDefinition(id) { return definitions[id] || { id, name:id || '未編成', maxHp:null, maxSp:null, resources:[] }; }
     function renderStatuses(parent, activeIds, statusInstances) {
       const active = new Set((Array.isArray(activeIds) ? activeIds : []).map(id => {
@@ -172,13 +203,19 @@
       const definition = characterDefinition(id);
       const state = snapshot && snapshot.charactersById && snapshot.charactersById[id];
       const ally = registry[`ally-${role}`]; clear(ally);
-      ally.setAttribute('data-bn2-asset-key', safeId(definition.assetKey || definition.id));
-      add(ally, element(document, 'span', 'bn2-ally-placeholder', definition.name));
+      const fieldAsset = formalFieldAsset(definition.fieldAssetKey);
+      const portraitAsset = hudPortraitAsset(definition.hudPortraitAssetKey);
+      ally.setAttribute('data-bn2-field-asset-key', safeAssetKey(definition.fieldAssetKey || 'missing'));
+      if (fieldAsset) addImage(ally, 'bn2-ally-art', fieldAsset, `${definition.name} フィールド`);
+      else add(ally, element(document, 'span', 'bn2-ally-placeholder', definition.name));
       const card = registry[`hud-${role}`]; clear(card);
       add(card, element(document, 'span', 'bn2-role-label', ROLE_LABELS[role]));
       add(card, element(document, 'strong', 'bn2-character-name', definition.name));
-      const portrait = add(card, element(document, 'div', 'bn2-portrait-placeholder', 'PORTRAIT'));
-      portrait.setAttribute('data-bn2-asset-key', safeId(definition.assetKey || definition.id));
+      if (portraitAsset) addImage(card, 'bn2-portrait-art', portraitAsset, `${definition.name} 肖像`);
+      else {
+        const portrait = add(card, element(document, 'div', 'bn2-portrait-placeholder', 'PORTRAIT'));
+        portrait.setAttribute('data-bn2-hud-portrait-asset-key', safeAssetKey(definition.hudPortraitAssetKey || 'missing'));
+      }
       if (definition.maxHp !== null && state) renderGauge(card, state, definition.maxHp);
       if (definition.maxSp !== null && state && state.sp !== null) {
         const sp = add(card, element(document, 'div', 'bn2-sp', `SP ${finite(state.sp, 0)} / ${finite(definition.maxSp, 5)}`));
@@ -196,10 +233,12 @@
         const state = snapshot.enemiesById && snapshot.enemiesById[id];
         if (!state || state.defeated) return;
         const card = add(registry.enemies, element(document, 'article', 'bn2-enemy-card'));
+        const enemyAsset = formalFieldAsset(state.assetKey || state.definitionId, assets && assets.fallbackEnemyKey ? assets.fallbackEnemyKey(state.kind) : null);
         card.setAttribute('data-bn2-enemy-kind', safeId(state.kind));
-        card.setAttribute('data-bn2-asset-key', safeId(state.assetKey || state.definitionId));
+        card.setAttribute('data-bn2-asset-key', safeAssetKey(state.assetKey || state.definitionId));
         add(card, element(document, 'strong', 'bn2-enemy-name', state.displayName || state.definitionId || 'Enemy'));
-        add(card, element(document, 'div', 'bn2-enemy-placeholder', 'ENEMY'));
+        if (enemyAsset) addImage(card, 'bn2-enemy-art', enemyAsset, `${state.displayName || state.definitionId || 'Enemy'} 敵素材`);
+        else add(card, element(document, 'div', 'bn2-enemy-placeholder', 'ENEMY'));
         renderGauge(card, state, state.maxHp);
         renderStatuses(card, state.statusIds, snapshot.statusInstances);
       });
@@ -223,6 +262,11 @@
       if (!payload || !payload.snapshot) throw new TypeError('event and presentation snapshot required');
       render(payload.snapshot, { locked:true });
       fxAdapter.present(payload);
+      const eventType = payload.event && payload.event.type;
+      if (eventType === 'STARLIGHT_UNION') {
+        const unionAsset = formalFieldAsset('fx.starlightUnionCandidate');
+        if (unionAsset) addImage(eventMount, 'bn2-fx-art', unionAsset, 'スターライトユニオン演出素材');
+      }
     }
     function destroy() { if (root.parentNode === host) host.removeChild(root); latestSnapshot = null; }
     setLocked(true);
