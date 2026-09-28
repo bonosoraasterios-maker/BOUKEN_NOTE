@@ -36,6 +36,7 @@
           snapshot = battleEvents.applyBattleEvent(snapshot, record.events[index], index);
           index += 1;
         }
+        notify(Object.freeze({ event:null, snapshot:battleEvents.safeClone(snapshot, '$presentation', 0), index, skipped:true }));
         return finish();
       } catch (cause) { return stop(cause); }
     }
