@@ -11,7 +11,7 @@
 }
 .bn2-shell, .bn2-shell * { box-sizing: border-box; }
 .bn2-topbar { display:flex; align-items:center; justify-content:flex-end; gap:16px; padding:6px 18px; min-height:0; }
-.bn2-owned-values { margin-right:auto; padding:6px 12px; border:1px solid var(--bn2-line); border-radius:14px; background:var(--bn2-panel); }
+.bn2-owned-values { padding:6px 12px; border:1px solid var(--bn2-line); border-radius:14px; background:var(--bn2-panel); }
 .bn2-utilities { display:flex; gap:8px; }
 .bn2-utility-button, .bn2-attack-button { min-width:44px; min-height:44px; color:inherit; border:1px solid var(--bn2-line); background:var(--bn2-panel); }
 .bn2-utility-button { padding:6px 12px; border-radius:12px; }
@@ -44,6 +44,8 @@
 .bn2-hp-fill { background:linear-gradient(90deg,#a8273b,#ef5260); }
 .bn2-barrier-fill { background:linear-gradient(90deg,rgba(118,229,255,.9),rgba(35,130,255,.78)); }
 .bn2-vital-text, .bn2-sp { display:block; font-size:clamp(8px,.72vw,11px); }
+.bn2-ability-mount { display:flex; flex-wrap:wrap; gap:3px; min-height:16px; margin-top:3px; overflow:hidden; }
+.bn2-ability-slot { overflow:hidden; max-width:100%; padding:1px 4px; color:#d9e9ff; border:1px solid rgba(155,207,255,.45); border-radius:4px; font-size:clamp(7px,.62vw,10px); text-overflow:ellipsis; white-space:nowrap; }
 .bn2-resource-mount { min-height:16px; display:flex; gap:4px; overflow:hidden; color:#f2d383; font-size:clamp(8px,.68vw,10px); }
 .bn2-resource-item { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .bn2-status-list { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:2px; margin-top:4px; }

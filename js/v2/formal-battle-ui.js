@@ -35,7 +35,13 @@
   function create(options) {
     if (!options || !options.document || !options.host) throw new TypeError('document and host are required');
     const document = options.document;
-    const definitions = options.definitions && options.definitions.characters ? options.definitions.characters : (options.definitions || {});
+    const definitionBundle = options.definitions || {};
+    const definitions = definitionBundle.characters && definitionBundle.characters.characters
+      ? definitionBundle.characters.characters
+      : (definitionBundle.characters || definitionBundle);
+    const skillDefinitions = definitionBundle.skills && definitionBundle.skills.byId
+      ? Object.values(definitionBundle.skills.byId)
+      : (definitionBundle.skills && Array.isArray(definitionBundle.skills.skills) ? definitionBundle.skills.skills : []);
     const onAttack = typeof options.onAttack === 'function' ? options.onAttack : function () {};
     const host = options.host;
     const registry = Object.create(null);
@@ -48,10 +54,10 @@
     registry.root = root;
 
     const topbar = add(root, element(document, 'header', 'bn2-topbar'));
-    const values = add(topbar, element(document, 'div', 'bn2-owned-values', '所持ポイント'));
-    values.setAttribute('data-bn2-owned-values', '');
     const utilities = add(topbar, element(document, 'nav', 'bn2-utilities'));
-    utilities.setAttribute('aria-label', 'ユーティリティ');
+    utilities.setAttribute('aria-label', '所持ポイントとユーティリティ');
+    const values = add(utilities, element(document, 'div', 'bn2-owned-values', '所持ポイント'));
+    values.setAttribute('data-bn2-owned-values', '');
     ['図鑑','設定','メニュー'].forEach(label => {
       const button = add(utilities, element(document, 'button', 'bn2-utility-button', label));
       button.type = 'button'; button.disabled = true; button.setAttribute('aria-disabled', 'true');
@@ -122,13 +128,29 @@
       });
     }
     function renderGauge(parent, state, maxHp) {
+      const barrierCurrent = state && state.barrier && typeof state.barrier === 'object'
+        ? finite(state.barrier.current, 0)
+        : 0;
       const frame = add(parent, element(document, 'div', 'bn2-vital-frame'));
       frame.setAttribute('data-bn2-vital-gauge', '');
       const hp = add(frame, element(document, 'span', 'bn2-hp-fill'));
       hp.style.width = `${percent(state && state.hp, maxHp)}%`;
       const barrier = add(frame, element(document, 'span', 'bn2-barrier-fill'));
-      barrier.style.width = `${percent(state && state.barrier, maxHp)}%`;
-      add(parent, element(document, 'span', 'bn2-vital-text', `${finite(state && state.hp, 0)} / ${finite(maxHp, 0)}　Barrier ${finite(state && state.barrier, 0)}`));
+      barrier.style.width = `${percent(barrierCurrent, maxHp)}%`;
+      add(parent, element(document, 'span', 'bn2-vital-text', `${finite(state && state.hp, 0)} / ${finite(maxHp, 0)}　Barrier ${barrierCurrent}`));
+    }
+    function renderAbilityMount(parent, definition) {
+      const mount = add(parent, element(document, 'div', 'bn2-ability-mount'));
+      mount.setAttribute('data-bn2-ability-mount', safeId(definition.id));
+      skillDefinitions.filter(skill => skill && skill.ownerId === definition.id && typeof skill.hudSlot === 'string')
+        .sort((left, right) => finite(left.hudOrder, 0) - finite(right.hudOrder, 0) || left.id.localeCompare(right.id))
+        .forEach(skill => {
+          const slot = add(mount, element(document, 'span', 'bn2-ability-slot'));
+          slot.setAttribute('data-bn2-ability-slot', safeId(skill.hudSlot));
+          slot.setAttribute('data-bn2-ability-id', safeId(skill.id));
+          slot.setAttribute('data-bn2-ability-kind', safeId(skill.kind));
+          slot.textContent = `${skill.hudSlot} ${skill.name}`;
+        });
     }
     function renderResourceMount(parent, characterState, definition) {
       const mount = add(parent, element(document, 'div', 'bn2-resource-mount'));
@@ -159,6 +181,7 @@
         const sp = add(card, element(document, 'div', 'bn2-sp', `SP ${finite(state.sp, 0)} / ${finite(definition.maxSp, 5)}`));
         sp.setAttribute('data-bn2-sp', '');
       }
+      renderAbilityMount(card, definition);
       renderResourceMount(card, state, definition);
       renderStatuses(card, state && state.statusIds, snapshot && snapshot.statusInstances);
     }
