@@ -149,7 +149,7 @@
           slot.setAttribute('data-bn2-ability-slot', safeId(skill.hudSlot));
           slot.setAttribute('data-bn2-ability-id', safeId(skill.id));
           slot.setAttribute('data-bn2-ability-kind', safeId(skill.kind));
-          slot.textContent = `${skill.hudSlot} ${skill.name}`;
+          slot.textContent = typeof skill.hudLabel === 'string' ? skill.hudLabel : `${skill.hudSlot} ${skill.name}`;
         });
     }
     function renderResourceMount(parent, characterState, definition) {
