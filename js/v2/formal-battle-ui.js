@@ -261,12 +261,13 @@
     function present(payload) {
       if (!payload || !payload.snapshot) throw new TypeError('event and presentation snapshot required');
       render(payload.snapshot, { locked:true });
-      fxAdapter.present(payload);
+      const fxResult = fxAdapter.present(payload);
       const eventType = payload.event && payload.event.type;
       if (eventType === 'STARLIGHT_UNION') {
         const unionAsset = formalFieldAsset('fx.starlightUnionCandidate');
         if (unionAsset) addImage(eventMount, 'bn2-fx-art', unionAsset, 'スターライトユニオン演出素材');
       }
+      return fxResult;
     }
     function destroy() { if (root.parentNode === host) host.removeChild(root); latestSnapshot = null; }
     setLocked(true);
