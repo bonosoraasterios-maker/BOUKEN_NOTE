@@ -14,11 +14,15 @@
     if (!options || !options.repository || typeof options.calculateBattle !== 'function') throw new TypeError('controller dependencies missing');
     const repository = options.repository;
     const calculateBattle = options.calculateBattle;
-    const present = options.present;
+    let present = typeof options.present === 'function' ? options.present : null;
     let locked = false;
     let active = null;
 
     function attach(record) { active = { record, player:eventPlayer.create(record, present) }; locked = true; return active.player.status(); }
+    function setPresenter(handler) {
+      if (locked) { const error = new Error('presentation is locked during battle'); error.code = 'PRESENTER_LOCKED'; throw error; }
+      present = typeof handler === 'function' ? handler : null;
+    }
     function attack(input, definitions, rngSeed) {
       if (locked || repository.loadPending()) { const error = new Error('battle input is locked'); error.code = 'ATTACK_LOCKED'; throw error; }
       locked = true;
@@ -49,7 +53,7 @@
     function playAll() { ensureActive(); return complete(active.player.playAll()); }
     function skip() { ensureActive(); return complete(active.player.skip()); }
     function finalize() { ensureActive(); return complete(active.player.finish()); }
-    return Object.freeze({ attack, recover, step, playAll, skip, finalize, isLocked:() => locked });
+    return Object.freeze({ attack, recover, step, playAll, skip, finalize, setPresenter, isLocked:() => locked });
   }
 
   return Object.freeze({ create });

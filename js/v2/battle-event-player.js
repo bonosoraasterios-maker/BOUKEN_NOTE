@@ -13,8 +13,19 @@
     let index = 0;
     let stopped = false;
     let error = null;
+    let lastPayload = null;
 
-    function status() { return Object.freeze({ index, total:record.events.length, done:index === record.events.length, stopped, error, snapshot:battleEvents.safeClone(snapshot, '$presentation', 0) }); }
+    function status() {
+      return Object.freeze({
+        index,
+        total:record.events.length,
+        done:index === record.events.length,
+        stopped,
+        error,
+        snapshot:battleEvents.safeClone(snapshot, '$presentation', 0),
+        lastPayload:lastPayload ? battleEvents.safeClone(lastPayload, '$lastPayload', 0) : null
+      });
+    }
     function stop(cause) { stopped = true; error = cause; return status(); }
     function step() {
       if (stopped) return status();
@@ -22,7 +33,8 @@
       try {
         const event = record.events[index];
         const next = battleEvents.applyBattleEvent(snapshot, event, index);
-        notify(Object.freeze({ event:battleEvents.safeClone(event, '$event', 0), snapshot:battleEvents.safeClone(next, '$presentation', 0), index }));
+        lastPayload = Object.freeze({ event:battleEvents.safeClone(event, '$event', 0), snapshot:battleEvents.safeClone(next, '$presentation', 0), index });
+        notify(lastPayload);
         snapshot = next;
         index += 1;
         return status();
@@ -36,7 +48,8 @@
           snapshot = battleEvents.applyBattleEvent(snapshot, record.events[index], index);
           index += 1;
         }
-        notify(Object.freeze({ event:null, snapshot:battleEvents.safeClone(snapshot, '$presentation', 0), index, skipped:true }));
+        lastPayload = Object.freeze({ event:null, snapshot:battleEvents.safeClone(snapshot, '$presentation', 0), index, skipped:true });
+        notify(lastPayload);
         return finish();
       } catch (cause) { return stop(cause); }
     }
