@@ -100,10 +100,12 @@ test('locked controller state disables ATTACK and unlocked click delegates once'
   instance.render(state(),{locked:true}); instance.registry.attack.click(); assert.equal(calls,0);
   instance.setLocked(false); instance.registry.attack.click(); assert.equal(calls,1);
 });
-test('event player presentation inlet renders its supplied snapshot only',()=>{
+test('event player presentation inlet renders its supplied snapshot and delegates DAMAGE cues to FX',()=>{
   const {instance}=setup(); const next=state(); next.charactersById.aria.hp=321;
-  instance.present({event:{type:'DAMAGE'},snapshot:next,index:0});
-  assert.equal(instance.registry.eventMount.textContent,'DAMAGE');
+  const result=instance.present({event:{type:'DAMAGE',eventId:'phase-d-damage'},snapshot:next,index:0});
+  assert.ok(walk(instance.registry['hud-supporter']).some(node=>node.className==='bn2-vital-text' && node.textContent.includes('321')));
+  assert.deepEqual(result.cues.map(cue=>cue.type),['damage','vitalChange']);
+  assert.deepEqual(byAttr(instance.registry.eventMount,'data-bn2-fx-cue').map(node=>node.attributes['data-bn2-fx-cue']),['damage','vitalChange']);
   assert.equal(instance.registry.attack.disabled,true);
 });
 test('placeholder asset keys are replaceable and unsafe keys are not assigned',()=>{
