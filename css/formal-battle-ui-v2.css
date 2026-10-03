@@ -85,3 +85,12 @@
   .bn2-status-slot { padding:1px; }
 }
 @media (prefers-reduced-motion: reduce) { .bn2-shell * { scroll-behavior:auto !important; } }
+
+/* Production verification host is independent of the retained legacy DOM. */
+body.bn2-verification-mode { display:block; margin:0; padding:0; width:100%; height:100dvh; overflow:hidden; }
+body.bn2-verification-mode > #g { display:none !important; }
+#bn2-verification-host[hidden] { display:none !important; }
+body.bn2-verification-mode > #bn2-verification-host { display:block; width:100%; max-width:none; height:100dvh; margin:0; padding:0; overflow:hidden; }
+#bn2-verification-host .bn2-topbar { gap:8px; }
+#bn2-verification-host [role="status"] { max-width:46%; font-size:11px; overflow-wrap:anywhere; }
+#bn2-verification-host .bn2-verification-stop { position:absolute; top:0; z-index:20; margin:0; padding:12px; color:#fff; background:#441525; }
