@@ -26,8 +26,14 @@ function test(name, fn) {
   catch (error) { process.stderr.write(`not ok - ${name}\n${error.stack}\n`); process.exitCode = 1; }
 }
 function legacyState() {
-  const source = { coin:20,dailyEnemies:[{id:1,hp:800,day:'2026-09-27'}],weeklyHP:0,party:[600,1200,400],daily:[0,0,0],weekly:[0,0,0],special:[0,0,0],battlePts:0,skillSP:0,beast:null,beastQueue:[],bleed:[0,0,0],weeklyPhaseSkillUsed:false,loginDay:'2026-09-27',enemyDay:'2026-09-27',weekKey:'2026-09-21' };
-  return migration.migrateLegacyToV2(JSON.stringify(source), {migratedAt:'2026-09-27T05:00:00+09:00'}).candidate;
+  const source = { coin:20,dailyEnemies:[{id:1,hp:800,day:'2026-09-27'}],weeklyHP:0,party:[600,1200,400],daily:[1,0,0],weekly:[0,0,0],special:[0,0,0],battlePts:0,skillSP:0,beast:null,beastQueue:[],bleed:[0,0,0],weeklyPhaseSkillUsed:false,loginDay:'2026-09-27',enemyDay:'2026-09-27',weekKey:'2026-09-21' };
+  const state = migration.migrateLegacyToV2(JSON.stringify(source), {migratedAt:'2026-09-27T05:00:00+09:00'}).candidate;
+  assert.equal(state.missions.daily.resultCount,1);
+  assert.deepEqual(state.missions.daily.completedIds,['daily_1']);
+  assert.equal(state.missions.daily.date,'2026-09-27');
+  assert.equal(state.calendar.localDate,'2026-09-27');
+  assert.equal(state.calendar.timezone,'Asia/Tokyo');
+  return state;
 }
 function memoryStorage() {
   const map = new Map();
@@ -44,7 +50,7 @@ function setup(counter) {
   repository.saveInitialState(legacyState());
   const calculate = (state,input,defs,seed) => { if (counter) counter.count += 1; return calculator.calculateBattle(state,input,defs,seed); };
   const controller = controllerApi.create({repository,calculateBattle:calculate});
-  const input = {battleId:'phase-c-battle',battleDate:'2026-09-27',dailyResult:0,attackerSkillId:null,leaderCharacterId:null};
+  const input = {battleId:'phase-c-battle',battleDate:'2026-09-27',dailyResult:1,attackerSkillId:null,leaderCharacterId:null};
   return {storage,repository,controller,input};
 }
 

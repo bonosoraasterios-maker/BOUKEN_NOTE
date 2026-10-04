@@ -17,9 +17,10 @@
     'js/v2/seeded-rng.js', 'js/v2/battle-events.js', 'js/v2/battle-calculator.js',
     'js/v2/save-repository.js', 'js/v2/battle-event-player.js', 'js/v2/battle-controller.js',
     'js/v2/battle-fx-adapter.js', 'js/v2/battle-presentation-scheduler.js',
-    'js/v2/formal-battle-ui.js', 'js/v2/formal-battle-bootstrap.js'
+    'js/v2/formal-battle-ui.js', 'js/v2/formal-battle-bootstrap.js',
+    'js/v2/app-operation-repository.js', 'js/v2/verification-operation-storage.js', 'js/v2/daily-attack-gate.js'
   ]);
-  const FIXTURE_INPUT = Object.freeze({battleId:'phase-g-pipeline', battleDate:'2026-09-27', dailyResult:0, attackerSkillId:null, leaderCharacterId:null});
+  const FIXTURE_INPUT = Object.freeze({battleId:'phase-g-pipeline', battleDate:'2026-09-27', dailyResult:1, attackerSkillId:null, leaderCharacterId:null});
   const FIXTURE_SEED = 'phase-g-seed';
   const fail = code => { const error = new Error(code); error.code = code; throw error; };
 
@@ -76,7 +77,7 @@
   }
   // The existing Phase G Daily-only test source; never a formal fresh State.
   function fixtureState(v2) {
-    const source = {coin:20,dailyEnemies:[{id:1,hp:800,day:'2026-09-27'}],weeklyHP:0,party:[600,1200,400],daily:[0,0,0],weekly:[0,0,0],special:[0,0,0],battlePts:0,skillSP:0,beast:null,beastQueue:[],bleed:[0,0,0],weeklyPhaseSkillUsed:false,loginDay:'2026-09-27',enemyDay:'2026-09-27',weekKey:'2026-09-21'};
+    const source = {coin:20,dailyEnemies:[{id:1,hp:800,day:'2026-09-27'}],weeklyHP:0,party:[600,1200,400],daily:[1,0,0],weekly:[0,0,0],special:[0,0,0],battlePts:0,skillSP:0,beast:null,beastQueue:[],bleed:[0,0,0],weeklyPhaseSkillUsed:false,loginDay:'2026-09-27',enemyDay:'2026-09-27',weekKey:'2026-09-21'};
     const result = v2.saveMigration.migrateLegacyToV2(JSON.stringify(source), {migratedAt:'2026-09-27T05:00:00+09:00'});
     if (!result.ok) fail('FIXTURE_MIGRATION_FAILED');
     return result.candidate;
@@ -130,7 +131,7 @@
     // Raw production bytes are read once; no production storage adapter is passed on.
     const rawLegacy = env.localStorage.getItem(v2.saveMigration.LEGACY_KEY);
     const fixture = rawLegacy === null;
-    const storage = isolatedStorage(env.sessionStorage, v2.saveRepository.KEYS, fixture ? 'phase-g-daily-only' : 'legacy-migration');
+    const storage = isolatedStorage(env.sessionStorage, v2.saveRepository.KEYS, fixture ? 'stage2a-daily1' : 'legacy-migration');
     const repository = v2.saveRepository.create(storage.adapter);
     if (storage.adapter.getItem(v2.saveRepository.KEYS.state) === null &&
         storage.adapter.getItem(v2.saveRepository.KEYS.backup) === null) {
@@ -148,7 +149,7 @@
     status.setAttribute('role', 'status');
     const skip = document.createElement('button');
     skip.type = 'button'; skip.textContent = '演出skip'; skip.disabled = true;
-    let instance, stopped = null, busy = false;
+    let instance, operationGate, operationRepository, stopped = null, busy = false;
     const attackRequest = () => ({input:FIXTURE_INPUT,definitions:defs,rngSeed:FIXTURE_SEED});
     function render() {
       const state = repository.loadState().state;
@@ -156,8 +157,9 @@
       const request = attackRequest();
       const gate = attackGate({v2,repository,defs,state,input:request.input,seed:request.rngSeed,
         fixture,checkWritable:storage.checkWritable,locked:busy || controller.isLocked()});
-      instance.ui.setLocked(!!stopped || !gate.ok);
-      status.textContent = (fixture ? 'Phase G Daily-only検証fixture（正式初期Stateではありません）' : '旧save migration確認専用') + ' / ' + (stopped || gate.reason);
+      const operation = fixture ? operationGate.inspect() : {ok:false,reason:gate.reason};
+      instance.ui.setLocked(!!stopped || !gate.ok || !operation.ok);
+      status.textContent = (fixture ? 'Stage 2A Daily1検証fixture（正式初期Stateではありません）' : '旧save migration確認専用') + ' / ' + (stopped || (!operation.ok ? operation.reason : gate.reason));
       skip.disabled = !!stopped || !controller.isLocked();
     }
     function stop(error) { stopped = error.code || error.message || 'VERIFICATION_STOP'; busy = false; instance.ui.setLocked(true); skip.disabled = true; status.textContent = 'STOP: ' + stopped; }
@@ -170,7 +172,7 @@
         if (!gate.ok) { render(); return; }
         busy = true;
         // Use Bootstrap's onAttack hook to own both sync errors and promise rejection.
-        const running = instance.scheduler.attack(request.input, request.definitions, request.rngSeed);
+        const running = operationGate.attack();
         skip.disabled = false;
         status.textContent = 'DAILY_ONLY_VERIFICATION_RUNNING';
         Promise.resolve(running).then(() => { busy = false; if (!stopped) render(); }).catch(stop);
@@ -188,9 +190,28 @@
     // Presenter is connected by Bootstrap. Establish its locked initial view
     // before recovery, then commit via skip, reload, render, and recheck gate.
     instance.ui.render(initialSnapshot, {locked:true});
-    if (controller.recover()) instance.scheduler.skip();
+    if (fixture) {
+      operationRepository = v2.appOperationRepository.create(v2.verificationOperationStorage.create(env.sessionStorage));
+      operationGate = v2.dailyAttackGate.create({
+        // Explicit verification clock; no production calendar update is performed.
+        clock:() => '2026-09-27T12:00:00+09:00',
+        createReservationId:() => 'verification-stage2a-daily1',
+        operationRepository,battleRepository:repository,
+        scheduler:{attack:(input,definitions,seed) => {
+          const running = instance.scheduler.attack(input,definitions,seed);
+          // Bootstrap's final presentation notice can unlock its UI. Hold it
+          // until the operation gate is rendered, including promotion failure.
+          return Promise.resolve(running).finally(() => instance.ui.setLocked(true));
+        }},definitions:defs,
+        requestFactory:() => ({battleId:FIXTURE_INPUT.battleId,rngSeed:FIXTURE_SEED,
+          attackerSkillId:FIXTURE_INPUT.attackerSkillId,leaderCharacterId:FIXTURE_INPUT.leaderCharacterId})
+      });
+      const plan = operationGate.recoveryPlan();
+      if (controller.recover()) instance.scheduler.skip();
+      operationGate.completeRecovery(plan);
+    } else if (controller.recover()) instance.scheduler.skip();
     render();
-    return Object.freeze({repository,controller,ui:instance.ui,scheduler:instance.scheduler,render,attack,attackRequest});
+    return Object.freeze({repository,controller,ui:instance.ui,scheduler:instance.scheduler,operationGate,operationRepository,render,attack,attackRequest});
   }
   async function start(env, options) {
     const document = env.document;
