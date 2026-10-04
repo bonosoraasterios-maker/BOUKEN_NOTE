@@ -24,7 +24,7 @@
       Object.freeze({ order: 4, id: 'suPackage', fixed: true, contents: Object.freeze(['starRoadReconnection', 'leaderSkill', 'suOrOb']) })
     ]),
     su: Object.freeze({ earnedByDailyResult: Object.freeze([0, 1, 3, 5]), activationCost: 5, maxActivationsPerDay: 1, carryRemainderMin: 0, carryRemainderMax: 4, resetAtWeekStart: false }),
-    unionHitsByWeeklyClearCount: Object.freeze([4, 5, 6, 10]),
+    unionHitsByWeeklyClearCount: Object.freeze([4, 6, 8, 10]),
     targetWeightsWithBoss: Object.freeze({ 0: Object.freeze({ daily: 0, boss: 100 }), 1: Object.freeze({ daily: 70, boss: 30 }), 2: Object.freeze({ daily: 75, boss: 25 }), 3: Object.freeze({ daily: 80, boss: 20 }), 4: Object.freeze({ daily: 85, boss: 15 }) }),
     rounding: Object.freeze({ multiplierResult: 'floor', multiHit: 'floorEachHit', minimumNonNullifiedDamage: 1, nullifiedDamage: 0 }),
     eventReplayPolicy: Object.freeze({
@@ -35,6 +35,6 @@
       finalInvariant: 'presentationSnapshotDeepEqualsFinalSnapshot',
       skipBehavior: 'renderFinalSnapshot'
     }),
-    unresolved: Object.freeze(['burnMultiHitRoundingWording', 'gravityNonNumericSuccessfulActionConsumption', 'daily0AttackAvailability', 'individualEnemyFinalStatsAndSkills'])
+    unresolved: Object.freeze(['burnMultiHitRoundingWording', 'gravityNonNumericSuccessfulActionConsumption', 'individualEnemyFinalStatsAndSkills'])
   });
 });
