@@ -61,8 +61,14 @@ function memoryStorage() {
   return { map, getItem:key=>map.has(key) ? map.get(key) : null, setItem:(key,value)=>map.set(key,String(value)), removeItem:key=>map.delete(key) };
 }
 function legacyState() {
-  const source = { coin:20,dailyEnemies:[{id:1,hp:800,day:'2026-09-27'}],weeklyHP:0,party:[600,1200,400],daily:[0,0,0],weekly:[0,0,0],special:[0,0,0],battlePts:0,skillSP:0,beast:null,beastQueue:[],bleed:[0,0,0],weeklyPhaseSkillUsed:false,loginDay:'2026-09-27',enemyDay:'2026-09-27',weekKey:'2026-09-21' };
-  return migration.migrateLegacyToV2(JSON.stringify(source), {migratedAt:'2026-09-27T05:00:00+09:00'}).candidate;
+  const source = { coin:20,dailyEnemies:[{id:1,hp:800,day:'2026-09-27'}],weeklyHP:0,party:[600,1200,400],daily:[1,0,0],weekly:[0,0,0],special:[0,0,0],battlePts:0,skillSP:0,beast:null,beastQueue:[],bleed:[0,0,0],weeklyPhaseSkillUsed:false,loginDay:'2026-09-27',enemyDay:'2026-09-27',weekKey:'2026-09-21' };
+  const state = migration.migrateLegacyToV2(JSON.stringify(source), {migratedAt:'2026-09-27T05:00:00+09:00'}).candidate;
+  assert.equal(state.missions.daily.resultCount,1);
+  assert.deepEqual(state.missions.daily.completedIds,['daily_1']);
+  assert.equal(state.missions.daily.date,'2026-09-27');
+  assert.equal(state.calendar.localDate,'2026-09-27');
+  assert.equal(state.calendar.timezone,'Asia/Tokyo');
+  return state;
 }
 
 test('scheduler preserves event order and holds Daily and Boss defeat FX for their adopted durations', async () => {
@@ -86,7 +92,7 @@ test('ATTACK flows Controller to Event Player to Formal UI and commits only afte
   const controller=controllerApi.create({repository,calculateBattle:calculator.calculateBattle});
   controller.setPresenter(instance.present);
   const scheduler=schedulerApi.create({controller,wait:()=>Promise.resolve(),onState:state=>instance.setLocked(state.running || controller.isLocked())});
-  const input={battleId:'phase-g-pipeline',battleDate:'2026-09-27',dailyResult:0,attackerSkillId:null,leaderCharacterId:null};
+  const input={battleId:'phase-g-pipeline',battleDate:'2026-09-27',dailyResult:1,attackerSkillId:null,leaderCharacterId:null};
   const final=await scheduler.attack(input,definitionBundle,'phase-g-seed');
   assert.equal(events.deepEqual(final,repository.loadState().state),true);
   assert.equal(repository.loadPending(),null);

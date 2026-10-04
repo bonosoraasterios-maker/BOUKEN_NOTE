@@ -10,6 +10,9 @@ const v2 = {
   schema:require('../../js/v2/schema.js'), saveMigration:require('../../js/v2/save-migration.js'),
   seededRng:require('../../js/v2/seeded-rng.js'), battleEvents:require('../../js/v2/battle-events.js'),
   battleCalculator:require('../../js/v2/battle-calculator.js'), saveRepository:require('../../js/v2/save-repository.js'),
+  appOperationRepository:require('../../js/v2/app-operation-repository.js'),
+  verificationOperationStorage:require('../../js/v2/verification-operation-storage.js'),
+  dailyAttackGate:require('../../js/v2/daily-attack-gate.js'),
   battleController:require('../../js/v2/battle-controller.js'), formalBattleBootstrap:require('../../js/v2/formal-battle-bootstrap.js')
 };
 const defs = entry.definitions(v2);
@@ -77,13 +80,13 @@ test('verification failure never appends legacy runtime',async()=>{
   const result=await entry.start(env);assert.equal(result.mode,'verification-stop');assert.deepEqual(paths,[entry.V2_SCRIPTS[0]]);assert.equal(old.hidden,true);
   assert.equal(old.inert,true);assert.equal(host.hidden,true);assert.equal(host.inert,true);
 });
-test('all 19 loads and Bootstrap keep host hidden and inert until safe initial render',async()=>{
+test('all 22 loads and Bootstrap keep host hidden and inert until safe initial render',async()=>{
   const {env,host,old}=environment();const paths=[];let pendingScript;
   env.document.head.appendChild=script=>{pendingScript=script;paths.push(script.src);assert.equal(host.hidden,true);assert.equal(host.inert,true);assert.equal(old.hidden,true);assert.equal(old.inert,true);};
   let bootCalls=0;
   env.BOUKEN_NOTE_V2={...v2,formalBattleBootstrap:{...v2.formalBattleBootstrap,start:options=>{bootCalls++;assert.equal(host.hidden,true);assert.equal(host.inert,true);return v2.formalBattleBootstrap.start(options);}}};
   const running=entry.start(env);assert.equal(host.hidden,true);assert.equal(host.inert,true);
-  for(let i=0;i<19;i++){assert.equal(paths.length,i+1);pendingScript.onload();await Promise.resolve();}
+  for(let i=0;i<22;i++){assert.equal(paths.length,i+1);pendingScript.onload();await Promise.resolve();}
   const result=await running;assert.equal(result.mode,'verification');assert.equal(bootCalls,1);assert.equal(host.hidden,false);assert.equal(host.inert,false);assert.equal(result.instance.ui.registry.attack.disabled,false);
 });
 test('CSS missing, forced load failure, disabled and empty sheets stop before V2 or legacy load',async()=>{
@@ -121,7 +124,7 @@ test('fresh verification is labelled fixture and all saved flags remain false',(
   const {env,host}=environment();const instance=entry.bootVerification(env);assert.equal(instance.ui.registry.attack.disabled,false);
   assert.ok(walk(host).some(node=>node.textContent.includes('正式初期Stateではありません')));
   assert.equal(instance.repository.loadState().state.featureFlags.formalBattleV2,false);assert.equal(env.localStorage.map.size,0);
-  assert.ok([...env.sessionStorage.map.keys()].every(key=>key.startsWith('bn2:verification:phase-g-daily-only:')));
+  assert.ok([...env.sessionStorage.map.keys()].every(key=>key.startsWith('bn2:verification:stage2a-daily1:')));
 });
 test('legacy raw copy migration leaves both production save bytes unchanged and ATTACK disabled',()=>{
   const {env}=environment();const raw=' {"coin":7,"weeklyHP":4000} ';
@@ -163,6 +166,7 @@ test('Daily-only ATTACK commits V2 save once and keeps production V2 bytes uncha
   const instance=entry.bootVerification(env,{wait:()=>Promise.resolve()});instance.attack();instance.attack();
   for(let i=0;i<100;i++) await Promise.resolve();
   assert.equal(instance.repository.loadPending(),null);assert.equal(instance.ui.registry.attack.disabled,true);
+  assert.equal(instance.operationRepository.load().dailyAttack.status,'consumed');
   const final=JSON.stringify(instance.repository.loadState().state);instance.attack();await Promise.resolve();assert.equal(JSON.stringify(instance.repository.loadState().state),final);
   assert.equal(env.localStorage.getItem(v2.saveRepository.KEYS.state),'untouched');assert.equal(instance.repository.loadState().state.featureFlags.formalBattleV2,false);
 });
@@ -174,8 +178,9 @@ test('skip commits the same approved final snapshot while cancelling replay',asy
 });
 test('reload pending recovery uses recover then skip with zero calculator calls and no duplicate commit',()=>{
   const {env}=environment();const initial=entry.fixtureState(v2);const result=v2.battleCalculator.calculateBattle(initial,entry.FIXTURE_INPUT,defs,entry.FIXTURE_SEED);
-  const isolated=entry.isolatedStorage(env.sessionStorage,v2.saveRepository.KEYS,'phase-g-daily-only');const repository=v2.saveRepository.create(isolated.adapter);
+  const isolated=entry.isolatedStorage(env.sessionStorage,v2.saveRepository.KEYS,'stage2a-daily1');const repository=v2.saveRepository.create(isolated.adapter);
   repository.saveInitialState(initial);repository.persistPending(v2.saveRepository.createPending(initial,result));
+  v2.appOperationRepository.create(v2.verificationOperationStorage.create(env.sessionStorage)).save({version:1,timezone:'Asia/Tokyo',dailyAttack:{dayKey:'2026-09-27',status:'reserved',reservationId:'verification-stage2a-daily1',battleId:entry.FIXTURE_INPUT.battleId,dailyResult:1}});
   const noCalculate={...v2,battleCalculator:{...v2.battleCalculator,calculateBattle:()=>{throw new Error('recalculation forbidden');}}};env.BOUKEN_NOTE_V2=noCalculate;
   const instance=entry.bootVerification(env);assert.deepEqual(instance.repository.loadState().state,result.finalSnapshot);assert.equal(instance.repository.loadPending(),null);
   const bytes=isolated.adapter.getItem(v2.saveRepository.KEYS.state);const second=environment();second.env.sessionStorage=env.sessionStorage;second.env.BOUKEN_NOTE_V2=noCalculate;
@@ -183,8 +188,9 @@ test('reload pending recovery uses recover then skip with zero calculator calls 
 });
 test('reload order is Bootstrap, explicit locked initial render, recover, skip, reload, render, gate',async()=>{
   const {env,host}=environment();const initial=entry.fixtureState(v2);const result=v2.battleCalculator.calculateBattle(initial,entry.FIXTURE_INPUT,defs,entry.FIXTURE_SEED);
-  const isolated=entry.isolatedStorage(env.sessionStorage,v2.saveRepository.KEYS,'phase-g-daily-only');const repository=v2.saveRepository.create(isolated.adapter);
+  const isolated=entry.isolatedStorage(env.sessionStorage,v2.saveRepository.KEYS,'stage2a-daily1');const repository=v2.saveRepository.create(isolated.adapter);
   repository.saveInitialState(initial);repository.persistPending(v2.saveRepository.createPending(initial,result));
+  v2.appOperationRepository.create(v2.verificationOperationStorage.create(env.sessionStorage)).save({version:1,timezone:'Asia/Tokyo',dailyAttack:{dayKey:'2026-09-27',status:'reserved',reservationId:'verification-stage2a-daily1',battleId:entry.FIXTURE_INPUT.battleId,dailyResult:1}});
   const trace=[];let skipped=false,calculations=0;
   env.BOUKEN_NOTE_V2={...v2,battleCalculator:{...v2.battleCalculator,calculateBattle:()=>{calculations++;throw new Error('unexpected calculator');}},
     saveRepository:{...v2.saveRepository,create:storage=>{const real=v2.saveRepository.create(storage);return {...real,loadState:()=>{if(skipped)trace.push('reload');return real.loadState();}};}},
@@ -193,7 +199,7 @@ test('reload order is Bootstrap, explicit locked initial render, recover, skip, 
       ui:{...real.ui,render:(state,flags)=>{trace.push('locked render');assert.equal(flags.locked,true);assert.equal(host.hidden,true);assert.equal(host.inert,true);real.ui.render(state,flags);},setLocked:value=>{trace.push('gate');real.ui.setLocked(value);}},
       scheduler:{...real.scheduler,skip:()=>{trace.push('skip');const final=real.scheduler.skip();skipped=true;return final;}}};}}};
   env.document.head.appendChild=script=>script.onload();
-  const started=await entry.start(env);assert.equal(started.mode,'verification');assert.deepEqual(trace,['Bootstrap','locked render','recover','skip','reload','locked render','gate']);
+  const started=await entry.start(env);assert.equal(started.mode,'verification');assert.deepEqual(trace,['Bootstrap','locked render','recover','skip','reload','locked render','reload','gate']);
   assert.equal(calculations,0);assert.deepEqual(started.instance.repository.loadState().state,result.finalSnapshot);assert.equal(host.hidden,false);assert.equal(host.inert,false);
 });
 test('actual Repository STATE_CONFLICT stops reload without recalculation, fallback or production writes',async()=>{
@@ -212,9 +218,45 @@ test('actual Repository STATE_CONFLICT stops reload without recalculation, fallb
   assert.ok(walk(env.document.body).some(node=>node.attributes.role==='alert'&&node.textContent.includes('STATE_CONFLICT')));
 });
 test('rollback selects legacy from reload and preserves isolated pending bytes',async()=>{
-  const {env}=environment();const isolated=entry.isolatedStorage(env.sessionStorage,v2.saveRepository.KEYS,'phase-g-daily-only');isolated.adapter.setItem(v2.saveRepository.KEYS.pending,'preserved-pending');
+  const {env}=environment();const isolated=entry.isolatedStorage(env.sessionStorage,v2.saveRepository.KEYS,'stage2a-daily1');isolated.adapter.setItem(v2.saveRepository.KEYS.pending,'preserved-pending');
   env.location.search='';const paths=[];env.document.head.appendChild=script=>{paths.push(script.src);script.onload();};await entry.start(env);
   assert.deepEqual(paths,entry.LEGACY_SCRIPTS);assert.equal(isolated.adapter.getItem(v2.saveRepository.KEYS.pending),'preserved-pending');
+});
+test('Stage 2A verification Daily1 State/input agree and production localStorage writes are zero',async()=>{
+  const {env}=environment();let writes=0;
+  env.localStorage.setItem=()=>{writes++;throw new Error('production write forbidden');};
+  env.localStorage.removeItem=()=>{writes++;throw new Error('production remove forbidden');};
+  const x=entry.bootVerification(env,{wait:()=>Promise.resolve()});const state=x.repository.loadState().state;
+  assert.equal(state.missions.daily.resultCount,1);assert.deepEqual(state.missions.daily.completedIds,['daily_1']);
+  assert.equal(entry.FIXTURE_INPUT.dailyResult,1);assert.equal(state.calendar.timezone,'Asia/Tokyo');
+  assert.equal(state.calendar.localDate,entry.FIXTURE_INPUT.battleDate);assert.equal(state.missions.daily.date,entry.FIXTURE_INPUT.battleDate);
+  x.attack();for(let i=0;i<100;i++)await Promise.resolve();assert.equal(writes,0);
+  assert.equal(x.operationRepository.load().dailyAttack.status,'consumed');
+  assert.ok([...env.sessionStorage.map.keys()].every(k=>k.startsWith('bn2:verification:stage2a-daily1:')));
+});
+test('Stage 2A managed pending without operation stops without recalculation or record inference',async()=>{
+  const {env}=environment();const state=entry.fixtureState(v2),result=v2.battleCalculator.calculateBattle(state,entry.FIXTURE_INPUT,defs,entry.FIXTURE_SEED);
+  const repository=v2.saveRepository.create(entry.isolatedStorage(env.sessionStorage,v2.saveRepository.KEYS,'stage2a-daily1').adapter);
+  repository.saveInitialState(state);repository.persistPending(v2.saveRepository.createPending(state,result));
+  let calculations=0;env.BOUKEN_NOTE_V2={...v2,battleCalculator:{...v2.battleCalculator,calculateBattle:()=>{calculations++;throw Error('forbidden');}}};
+  env.document.head.appendChild=script=>script.onload();const resultBoot=await entry.start(env);
+  assert.equal(resultBoot.reason,'ATTACK_OPERATION_MISSING');assert.equal(calculations,0);assert.ok(repository.loadPending());
+  assert.equal(v2.verificationOperationStorage.create(env.sessionStorage).getItem(v2.appOperationRepository.KEY),null);
+});
+test('Stage 2A consumed promotion failure preserves reservation through completion and reload STOP',async()=>{
+  const {env}=environment();const set=env.sessionStorage.setItem;
+  env.sessionStorage.setItem=(key,value)=>{if(key.endsWith(v2.appOperationRepository.KEY)&&JSON.parse(value).dailyAttack.status==='consumed')throw Error('operation quota');set(key,value);};
+  const x=entry.bootVerification(env,{wait:()=>Promise.resolve()});x.attack();for(let i=0;i<100;i++)await Promise.resolve();
+  assert.equal(x.operationRepository.load().dailyAttack.status,'reserved');assert.equal(x.repository.loadPending(),null);
+  assert.equal(x.ui.registry.attack.disabled,true);const before=x.repository.loadState().state;x.attack();assert.deepEqual(x.repository.loadState().state,before);
+  assert.throws(()=>entry.bootVerification(env),e=>e.code==='ATTACK_RESERVATION_UNRESOLVED');
+});
+test('Stage 2A ignores and preserves old Phase G verification storage without inferring operation',()=>{
+  const {env}=environment();const prefix='bn2:verification:phase-g-daily-only:';
+  for(const key of Object.values(v2.saveRepository.KEYS))env.sessionStorage.setItem(prefix+key,'old-verification-bytes');
+  const x=entry.bootVerification(env);
+  assert.equal(x.operationRepository.load(),null);assert.equal(x.repository.loadState().state.missions.daily.resultCount,1);
+  for(const key of Object.values(v2.saveRepository.KEYS))assert.equal(env.sessionStorage.getItem(prefix+key),'old-verification-bytes');
 });
 test('candidate assets are absent in production verification',()=>{
   const {env,host}=environment();entry.bootVerification(env);assert.equal(walk(host).some(node=>node.tagName==='IMG'),false);
