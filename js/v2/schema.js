@@ -11,7 +11,7 @@
   const DANGEROUS_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
   const STATE_KEYS = new Set(['schemaVersion','revision','writtenAt','definitionsVersion','featureFlags','profile','calendar','partySlots','charactersById','enemiesById','enemyOrder','missions','battleProgress','leaderCarry','statusInstances','pendingBattle','migration']);
   const CHARACTER_KEYS = new Set(['characterId','hp','sp','barrier','statusIds','resources','flags','weekly','battle']);
-  const ENEMY_KEYS = new Set(['instanceId','definitionId','kind','hp','maxHp','barrier','phase','statusIds','spawnedOn','defeated','flags']);
+  const ENEMY_KEYS = new Set(['instanceId','definitionId','kind','hp','maxHp','barrier','phase','statusIds','spawnedOn','defeated','flags','encounterDescriptorId']);
   const STATUS_KEYS = new Set(['instanceId','statusId','ownerType','ownerId','sourceType','sourceId','severity','appliedBattleId','counters','payload','persistsAcrossBattle','clearsAtWeekStart']);
   const isObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);
   const isInt = v => Number.isInteger(v);
@@ -71,6 +71,52 @@
     return { ok: errors.length === 0, errors };
   }
 
+  function validateMissions(state) {
+    const errors = [], missions = state && state.missions;
+    if (!isObject(missions) || !['daily','weekly','special'].every(k => isObject(missions[k])))
+      return {ok:false, errors:[issue('missions','three mission groups required')], initialized:false};
+    rejectUnexpected(missions,new Set(['daily','weekly','special']),'missions',errors);
+    const initialized = ['daily','weekly','special'].map(k => Object.prototype.hasOwnProperty.call(missions[k], 'slots'));
+    if (initialized.some(Boolean) && !initialized.every(Boolean))
+      return {ok:false, errors:[issue('missions','partial initialization rejected')], initialized:false};
+    if (!initialized.every(Boolean)) {
+      // Preserve the existing migration shape, including its unresolved dates,
+      // area and legacy counters. It is not an operational Mission snapshot.
+      const allowed = {daily:['date','completedIds','resultCount'],weekly:['weekKey','completedIds','clearCount'],special:['completedIds']};
+      for (const kind of Object.keys(allowed)) {
+        rejectUnexpected(missions[kind], new Set(allowed[kind]), 'missions.'+kind, errors);
+        if (!Array.isArray(missions[kind].completedIds)) errors.push(issue('missions.'+kind+'.completedIds','array required'));
+      }
+      return {ok:errors.length===0,errors,initialized:false};
+    }
+    const id = v => typeof v === 'string' && v.length > 0 && v.length <= 128 && !DANGEROUS_KEYS.has(v);
+    for (const kind of ['daily','weekly','special']) {
+      const group = missions[kind], path = 'missions.'+kind;
+      const keys = kind === 'daily' ? ['date','completedIds','resultCount','slots'] : kind === 'weekly' ? ['weekKey','completedIds','clearCount','slots'] : ['completedIds','areaId','slots'];
+      rejectUnexpected(group,new Set(keys),path,errors);
+      if (!keys.every(k => Object.prototype.hasOwnProperty.call(group,k))) errors.push(issue(path,'required field missing'));
+      if (!Array.isArray(group.slots) || (kind === 'special' ? group.slots.length > 3 : group.slots.length !== 3)) { errors.push(issue(path+'.slots','invalid slot count')); continue; }
+      const ids = [];
+      group.slots.forEach((slot,i) => {
+        if (!isObject(slot)) { errors.push(issue(path+'.slots.'+i,'object required')); return; }
+        rejectUnexpected(slot,new Set(['slotId','assignmentRef','pointValue']),path+'.slots.'+i,errors);
+        if (!id(slot.slotId) || !id(slot.assignmentRef) || !Number.isSafeInteger(slot.pointValue)) errors.push(issue(path+'.slots.'+i,'invalid immutable slot snapshot'));
+        ids.push(slot.slotId);
+      });
+      if (new Set(ids).size !== ids.length) errors.push(issue(path+'.slots','duplicate slotId'));
+      if (!Array.isArray(group.completedIds) || group.completedIds.some(x => !id(x) || !ids.includes(x)) || new Set(group.completedIds).size !== group.completedIds.length) errors.push(issue(path+'.completedIds','unique active slot subset required'));
+      if (kind !== 'special' && (!Number.isInteger(group[kind === 'daily' ? 'resultCount' : 'clearCount']) || group[kind === 'daily' ? 'resultCount' : 'clearCount'] !== (Array.isArray(group.completedIds) ? group.completedIds.length : -1))) errors.push(issue(path,'completion count mismatch'));
+    }
+    const day = missions.daily.date;
+    const parsedDay = typeof day === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(day) ? new Date(day+'T00:00:00Z') : null;
+    if (!parsedDay || !Number.isFinite(parsedDay.getTime()) || parsedDay.toISOString().slice(0,10) !== day || !state.calendar || state.calendar.timezone !== 'Asia/Tokyo' || day !== state.calendar.localDate) errors.push(issue('missions.daily.date','valid Asia/Tokyo calendar day required'));
+    if (typeof missions.weekly.weekKey !== 'string' || !missions.weekly.weekKey.length) errors.push(issue('missions.weekly.weekKey','trusted period key required'));
+    if (!state.calendar || missions.weekly.weekKey !== state.calendar.weekKey) errors.push(issue('missions.weekly.weekKey','calendar mismatch'));
+    if (!state.profile || !id(state.profile.currentAreaId) || missions.special.areaId !== state.profile.currentAreaId) errors.push(issue('missions.special.areaId','area unresolved or mismatched'));
+    if (!state.profile || !Number.isSafeInteger(state.profile.points)) errors.push(issue('profile.points','safe integer required'));
+    return {ok:errors.length===0,errors,initialized:true};
+  }
+
   function validateState(state) {
     const errors = [];
     if (!isObject(state)) return { ok: false, errors: [issue('$', 'state must be an object')] };
@@ -94,7 +140,10 @@
     });
     if (!isObject(state.enemiesById) || !Array.isArray(state.enemyOrder)) errors.push(issue('enemies', 'enemy map/order missing'));
     else {
-      Object.entries(state.enemiesById).forEach(([id,e]) => rejectUnexpected(e, ENEMY_KEYS, `enemiesById.${id}`, errors));
+      Object.entries(state.enemiesById).forEach(([id,e]) => {
+        rejectUnexpected(e, ENEMY_KEYS, `enemiesById.${id}`, errors);
+        if (e.encounterDescriptorId !== undefined && (typeof e.encounterDescriptorId !== 'string' || !e.encounterDescriptorId.length || e.encounterDescriptorId.length > 128)) errors.push(issue(`enemiesById.${id}.encounterDescriptorId`, 'invalid descriptor identity'));
+      });
       state.enemyOrder.forEach((id,i) => { if (!state.enemiesById[id]) errors.push(issue(`enemyOrder.${i}`, 'unknown enemy id')); });
       const alive = state.enemyOrder.map(id => state.enemiesById[id]).filter(e => e && !e.defeated);
       const bosses = alive.filter(e => e.kind === 'weekly' || e.kind === 'areaBoss');
@@ -110,9 +159,10 @@
       if (!STATUS_IDS.has(s.statusId)) errors.push(issue(`statusInstances.${id}.statusId`, 'non-formal status'));
     });
     if (!isObject(state.battleProgress) || !isInt(state.battleProgress.suPoints) || state.battleProgress.suPoints < 0 || state.battleProgress.suPoints > 4) errors.push(issue('battleProgress.suPoints', 'must be integer 0..4'));
+    errors.push(...validateMissions(state).errors);
     if (!isObject(state.migration) || state.migration.sourceKey !== 'bouken_note_v23_20_battle_system') errors.push(issue('migration', 'migration audit missing'));
     return { ok: errors.length === 0, errors };
   }
 
-  return Object.freeze({ SCHEMA_VERSION: 2, DEFINITIONS_VERSION: '2026-09-26-1117', validateDefinitions, validateState });
+  return Object.freeze({ SCHEMA_VERSION: 2, DEFINITIONS_VERSION: '2026-09-26-1117', validateDefinitions, validateState, validateMissions });
 });

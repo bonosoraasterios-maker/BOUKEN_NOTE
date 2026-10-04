@@ -9,3 +9,7 @@ require('./phase-g.test.js');
 require('./production-verification-entry.test.js');
 require('./stage1-rule-alignment.test.js');
 require('./stage2-daily-attack-gate.test.js');
+require('./stage3-mission-lifecycle.test.js');
+require('./stage3-calendar-lifecycle.test.js');
+require('./stage3-enemy-lifecycle.test.js');
+require('./stage3-lifecycle-integration.test.js');

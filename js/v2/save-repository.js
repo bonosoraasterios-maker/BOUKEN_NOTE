@@ -112,7 +112,26 @@
       return pending.finalSnapshot;
     }
 
-    return Object.freeze({ loadState, saveInitialState, loadPending, persistPending, commitPending });
+    function commitStateTransition(expectedState, nextState, validateTransition) {
+      if (loadPending() !== null) fail('NON_BATTLE_PENDING', 'pending battle blocks State transition');
+      const current = loadState().state;
+      if (!battleEvents.deepEqual(current, expectedState)) fail('STATE_CONFLICT', 'stale expected State');
+      if (typeof validateTransition !== 'function') fail('TRANSITION_POLICY_REQUIRED', 'domain invariant required');
+      const candidate = battleEvents.safeClone(nextState, '$nextState', 0);
+      if (validateTransition(battleEvents.safeClone(current), battleEvents.safeClone(candidate)) !== true)
+        fail('INVALID_STATE_TRANSITION', 'domain invariant rejected');
+      validateState(candidate);
+      // Exact equality is an idempotent no-op, never a field merge.
+      if (battleEvents.deepEqual(current,candidate)) return candidate;
+      const currentBytes = encode(current), nextBytes = encode(candidate);
+      write(KEYS.backup,currentBytes);
+      if (read(KEYS.backup) !== currentBytes) fail('STORAGE_VERIFY_FAILED','backup verification failed');
+      write(KEYS.state,nextBytes);
+      if (read(KEYS.state) !== nextBytes) fail('STORAGE_VERIFY_FAILED','State transition verification failed');
+      return candidate;
+    }
+
+    return Object.freeze({ loadState, saveInitialState, loadPending, persistPending, commitPending, commitStateTransition });
   }
 
   return Object.freeze({ KEYS, LIMITS, createPending, validatePending, create });
