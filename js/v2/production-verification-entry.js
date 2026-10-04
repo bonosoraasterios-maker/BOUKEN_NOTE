@@ -40,6 +40,15 @@
       document.head.appendChild(script);
     });
   }
+  function verifyStylesheet(document) {
+    // The link precedes this deferred entry: its load attempt has completed
+    // before execution. A failed/missing sheet must never expose the V2 host.
+    const link = document.getElementById('bn2-verification-css');
+    try {
+      if (!link || link.disabled || !link.sheet ||
+          !Array.from(link.sheet.cssRules).some(rule => rule.selectorText === '.bn2-shell')) fail('V2_CSS_LOAD_FAILED');
+    } catch (_) { fail('V2_CSS_LOAD_FAILED'); }
+  }
   // Only the Repository's three logical keys can reach sessionStorage.
   function isolatedStorage(storage, keys, scenario) {
     if (!storage) fail('SESSION_STORAGE_UNAVAILABLE');
@@ -132,7 +141,8 @@
       bootGate(v2, migrated.candidate, defs);
       repository.saveInitialState(migrated.candidate);
     }
-    bootGate(v2, repository.loadState().state, defs);
+    const initialSnapshot = repository.loadState().state;
+    bootGate(v2, initialSnapshot, defs);
     const controller = v2.battleController.create({repository,calculateBattle:v2.battleCalculator.calculateBattle});
     const status = document.createElement('span');
     status.setAttribute('role', 'status');
@@ -142,10 +152,11 @@
     const attackRequest = () => ({input:FIXTURE_INPUT,definitions:defs,rngSeed:FIXTURE_SEED});
     function render() {
       const state = repository.loadState().state;
+      instance.ui.render(state, {locked:true});
       const request = attackRequest();
       const gate = attackGate({v2,repository,defs,state,input:request.input,seed:request.rngSeed,
         fixture,checkWritable:storage.checkWritable,locked:busy || controller.isLocked()});
-      instance.ui.render(state, {locked:!!stopped || !gate.ok});
+      instance.ui.setLocked(!!stopped || !gate.ok);
       status.textContent = (fixture ? 'Phase G Daily-only検証fixture（正式初期Stateではありません）' : '旧save migration確認専用') + ' / ' + (stopped || gate.reason);
       skip.disabled = !!stopped || !controller.isLocked();
     }
@@ -174,7 +185,9 @@
       if (stopped || !controller.isLocked()) return;
       try { instance.scheduler.skip(); busy = false; render(); } catch (error) { stop(error); }
     });
-    // Standard reload recovery: presenter first, recover, skip, reload, render.
+    // Presenter is connected by Bootstrap. Establish its locked initial view
+    // before recovery, then commit via skip, reload, render, and recheck gate.
+    instance.ui.render(initialSnapshot, {locked:true});
     if (controller.recover()) instance.scheduler.skip();
     render();
     return Object.freeze({repository,controller,ui:instance.ui,scheduler:instance.scheduler,render,attack,attackRequest});
@@ -189,11 +202,18 @@
     const host = document.getElementById('bn2-verification-host');
     if (!oldRoot || !host || host.parentNode !== document.body) fail('INVALID_VERIFICATION_HOST');
     oldRoot.hidden = true;
-    host.hidden = false;
+    oldRoot.inert = true;
+    host.hidden = true;
+    host.inert = true;
     document.body.classList.add('bn2-verification-mode');
     try {
+      verifyStylesheet(document);
       await loadSequential(document, V2_SCRIPTS);
-      return {mode:'verification',instance:bootVerification(env, options)};
+      const instance = bootVerification(env, options);
+      // Expose only a successfully initialized, recovered and rendered host.
+      host.hidden = false;
+      host.inert = false;
+      return {mode:'verification',instance};
     } catch (error) {
       // No same-page legacy fallback. Pending bytes remain in isolated storage.
       const attack = host.querySelector('.bn2-attack-button');
