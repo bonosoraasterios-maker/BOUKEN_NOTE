@@ -17,6 +17,7 @@
       if(!context||!schema.validateWeekContext(state).ok)fail('WEEK_CONTEXT_UNCONFIGURED');
       const role=context.areaWeekIndex===4?'degradedWeeklyClone':'standardDaily';
       if(descriptor.encounterRole!==role||(role==='degradedWeeklyClone'&&descriptor.sourceEncounterDescriptorId!==context.degradedWeeklySourceEncounterDescriptorId)||(role==='standardDaily'&&descriptor.sourceEncounterDescriptorId!==undefined))fail('DEGRADED_WEEKLY_DESCRIPTOR_UNRESOLVED');
+      if(descriptor.enemy.defeated!==false||!Number.isFinite(descriptor.enemy.hp)||!Number.isFinite(descriptor.enemy.maxHp)||descriptor.enemy.hp<=0||descriptor.enemy.maxHp<=0||descriptor.enemy.hp>descriptor.enemy.maxHp)fail('DAILY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
       const record=events.safeClone(descriptor.enemy);
       const fields=['instanceId','definitionId','kind','hp','maxHp','barrier','phase','statusIds','spawnedOn','defeated','flags'];
       if(!fields.every(key=>Object.prototype.hasOwnProperty.call(record,key))||typeof record.defeated!=='boolean'||!record.phase||typeof record.phase!=='object'||!record.flags||typeof record.flags!=='object')fail('DAILY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');

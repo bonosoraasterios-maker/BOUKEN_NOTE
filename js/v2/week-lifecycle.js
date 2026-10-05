@@ -13,13 +13,24 @@
     if(context.areaId!==state.profile.currentAreaId)fail(state.calendar.weekContext&&context.weekKey===state.calendar.weekKey?'WEEK_CONTEXT_CONFLICT':'AREA_TRANSITION_STAGE3B_HOLD');
     return context;
   }
+  function currentWeekly(state,errorCode){
+    if(!Array.isArray(state.enemyOrder)||!plain(state.enemiesById))fail(errorCode);
+    const records=[];
+    for(const enemyId of state.enemyOrder){
+      if(!id(enemyId)||!own(state.enemiesById,enemyId))fail(errorCode);
+      const record=state.enemiesById[enemyId];
+      if(!plain(record)||record.instanceId!==enemyId)fail(errorCode);
+      if(record.kind==='weekly')records.push(record);
+    }
+    if(records.length!==1||!plain(records[0].flags)||!id(records[0].flags.encounterDescriptorId))fail(errorCode);
+    return records[0];
+  }
   function sourceIdentity(state){
-    const records=Object.values(state.enemiesById).filter(e=>e.kind==='weekly');
-    if(records.length!==1||!records[0].flags||!id(records[0].flags.encounterDescriptorId))fail('DEGRADED_WEEKLY_SOURCE_UNRESOLVED');
-    return records[0].flags.encounterDescriptorId;
+    // Hidden map records are not current battlefield authority.
+    return currentWeekly(state,'DEGRADED_WEEKLY_SOURCE_UNRESOLVED').flags.encounterDescriptorId;
   }
   function persistent(context,source){return {weekKey:context.weekKey,areaId:context.areaId,areaWeekIndex:context.areaWeekIndex,weekRole:context.weekRole,degradedWeeklySourceEncounterDescriptorId:source};}
-  function bind(state,context){
+  function bind(state,context,definitions){
     validateContext(context,state,state.calendar.localDate);
     const old=state.calendar.weekContext;
     if(old!==undefined&&old!==null){
@@ -29,6 +40,9 @@
     if(context.weekKey!==state.calendar.weekKey)fail('WEEK_CONTEXT_CONFLICT');
     // An old week-four State cannot establish its week-three provenance.
     if(context.areaWeekIndex===4)fail('DEGRADED_WEEKLY_SOURCE_UNRESOLVED');
+    const record=currentWeekly(state,'CURRENT_WEEK_BOSS_UNRESOLVED');
+    const definition=definitions&&definitions.enemies&&definitions.enemies.enemies&&own(definitions.enemies.enemies,record.definitionId)&&definitions.enemies.enemies[record.definitionId];
+    if(!definition||definition.kind!=='weekly')fail('CURRENT_WEEK_BOSS_UNRESOLVED');
     const next=events.safeClone(state);next.calendar.weekContext=persistent(context,null);return next;
   }
   function resetCharacters(state,definitions){
@@ -77,6 +91,7 @@
       const d=provider.forWeek({weekKey:context.weekKey,startDate:context.date,areaId:context.areaId,previousWeekKey,state:events.safeClone(state)});
       if(!plain(d)||!id(d.instanceId)||!id(d.encounterDescriptorId)||!id(d.definitionId)||d.kind!==context.weekRole||d.spawnedOn!==context.date||!plain(d.enemy))fail('WEEKLY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
       const def=definitions.enemies.enemies[d.definitionId];if(!def||def.kind!==d.kind)fail('WEEKLY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
+      if(d.enemy.defeated!==false||!Number.isFinite(d.enemy.hp)||!Number.isFinite(d.enemy.maxHp)||d.enemy.hp<=0||d.enemy.maxHp<=0||d.enemy.hp>d.enemy.maxHp)fail('WEEKLY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
       const e=events.safeClone(d.enemy),keys=['instanceId','definitionId','kind','hp','maxHp','barrier','phase','statusIds','spawnedOn','defeated','flags'];
       if(!keys.every(k=>own(e,k))||!plain(e.flags)||!plain(e.phase)||typeof e.defeated!=='boolean'||!Array.isArray(e.statusIds)||e.statusIds.length||!['instanceId','definitionId','kind','spawnedOn'].every(k=>e[k]===d[k]))fail('WEEKLY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
       if(e.flags.encounterDescriptorId!==undefined&&e.flags.encounterDescriptorId!==d.encounterDescriptorId)fail('WEEKLY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
@@ -98,7 +113,7 @@
       next.calendar.weekContext=persistent(context,source);
       return spawnBoss(next,context,old.weekKey);
     }
-    return Object.freeze({bind,transition});
+    return Object.freeze({bind:(state,context)=>bind(state,context,definitions),transition});
   }
   return Object.freeze({create,bind,validateContext,resetCharacters,validateTransition});
 });
