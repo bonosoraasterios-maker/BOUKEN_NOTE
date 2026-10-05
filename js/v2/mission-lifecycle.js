@@ -61,7 +61,14 @@
       next.missions.daily={date,completedIds:[],resultCount:0,slots:clone(slots)};
       next.calendar.localDate=date;assertInitialized(next);return next;
     }
-    return Object.freeze({assertInitialized,initialize,completeDaily,rolloverDaily});
+    function rolloverWeekly(state,weekKey,configuration){
+      assertInitialized(state);const next=clone(state);
+      const slots=configuration===null||configuration===undefined?state.missions.weekly.slots:configuration.slots;
+      if(!Array.isArray(slots))fail('MISSION_LIFECYCLE_UNINITIALIZED');
+      next.calendar.weekKey=weekKey;next.missions.weekly={weekKey,completedIds:[],clearCount:0,slots:clone(slots)};
+      assertInitialized(next);return next;
+    }
+    return Object.freeze({assertInitialized,initialize,completeDaily,rolloverDaily,rolloverWeekly});
   }
   return Object.freeze({create});
 });

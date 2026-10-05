@@ -117,6 +117,16 @@
     return {ok:errors.length===0,errors,initialized:true};
   }
 
+  function validateWeekContext(state) {
+    const c=state.calendar&&state.calendar.weekContext,errors=[];
+    if(c===undefined||c===null)return {ok:true,errors};
+    const keys=['weekKey','areaId','areaWeekIndex','weekRole','degradedWeeklySourceEncounterDescriptorId'];
+    const id=v=>typeof v==='string'&&v.length>0&&v.length<=128&&!DANGEROUS_KEYS.has(v);
+    if(!isObject(c)||Object.keys(c).length!==5||!keys.every(k=>Object.prototype.hasOwnProperty.call(c,k)))return {ok:false,errors:[issue('calendar.weekContext','exact five fields required')]};
+    if(!id(c.weekKey)||!id(c.areaId)||![1,2,3,4].includes(c.areaWeekIndex)||c.weekKey!==state.calendar.weekKey||!state.profile||c.areaId!==state.profile.currentAreaId||c.weekRole!==(c.areaWeekIndex===4?'areaBoss':'weekly')||(c.areaWeekIndex===4?!id(c.degradedWeeklySourceEncounterDescriptorId):c.degradedWeeklySourceEncounterDescriptorId!==null))errors.push(issue('calendar.weekContext','invalid trusted context'));
+    return {ok:errors.length===0,errors};
+  }
+
   function validateState(state) {
     const errors = [];
     if (!isObject(state)) return { ok: false, errors: [issue('$', 'state must be an object')] };
@@ -158,10 +168,10 @@
       if (!STATUS_IDS.has(s.statusId)) errors.push(issue(`statusInstances.${id}.statusId`, 'non-formal status'));
     });
     if (!isObject(state.battleProgress) || !isInt(state.battleProgress.suPoints) || state.battleProgress.suPoints < 0 || state.battleProgress.suPoints > 4) errors.push(issue('battleProgress.suPoints', 'must be integer 0..4'));
-    errors.push(...validateMissions(state).errors);
+    errors.push(...validateMissions(state).errors,...validateWeekContext(state).errors);
     if (!isObject(state.migration) || state.migration.sourceKey !== 'bouken_note_v23_20_battle_system') errors.push(issue('migration', 'migration audit missing'));
     return { ok: errors.length === 0, errors };
   }
 
-  return Object.freeze({ SCHEMA_VERSION: 2, DEFINITIONS_VERSION: '2026-09-26-1117', validateDefinitions, validateState, validateMissions });
+  return Object.freeze({ SCHEMA_VERSION: 2, DEFINITIONS_VERSION: '2026-09-26-1117', validateDefinitions, validateState, validateMissions, validateWeekContext });
 });

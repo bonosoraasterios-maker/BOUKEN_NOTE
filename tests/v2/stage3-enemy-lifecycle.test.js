@@ -4,8 +4,8 @@ const enemyApi=require('../../js/v2/enemy-lifecycle.js'),entry=require('../../js
 const definitions=entry.definitions(v2);
 // Fully materialized fixture only; lifecycle production code supplies no HP,
 // enemy class, action profile or status defaults.
-function descriptor(date='2026-09-28',instanceId='fixture-'+date,descriptorId='enc-'+date){return {instanceId,encounterDescriptorId:descriptorId,spawnedOn:date,kind:'daily',definitionId:'daily_base',enemy:{instanceId,definitionId:'daily_base',kind:'daily',hp:800,maxHp:800,barrier:null,phase:{current:null,pending:null,pendingAppliesAt:null},statusIds:[],spawnedOn:date,defeated:false,flags:{encounterDescriptorId:descriptorId}}};}
-function spawnState(){const s=initialized().state;s.calendar.localDate='2026-09-28';s.missions.daily.date='2026-09-28';s.calendar.enemySpawnDate='2026-09-27';return s;}
+function descriptor(date='2026-09-28',instanceId='fixture-'+date,descriptorId='enc-'+date){return {instanceId,encounterRole:'standardDaily',encounterDescriptorId:descriptorId,spawnedOn:date,kind:'daily',definitionId:'daily_base',enemy:{instanceId,definitionId:'daily_base',kind:'daily',hp:800,maxHp:800,barrier:null,phase:{current:null,pending:null,pendingAppliesAt:null},statusIds:[],spawnedOn:date,defeated:false,flags:{encounterDescriptorId:descriptorId,encounterRole:'standardDaily'}}};}
+function spawnState(){const s=initialized().state;s.calendar.weekContext={weekKey:s.calendar.weekKey,areaId:s.profile.currentAreaId,areaWeekIndex:1,weekRole:'weekly',degradedWeeklySourceEncounterDescriptorId:null};s.calendar.localDate='2026-09-28';s.missions.daily.date='2026-09-28';s.calendar.enemySpawnDate='2026-09-27';return s;}
 const provider={forDate:c=>descriptor(c.date)};
 const enemy=(p=provider,defs=definitions)=>enemyApi.create({dailyEncounterProvider:p,definitions:defs});
 let passed=0,total=0;function test(name,fn){total++;try{fn();passed++;console.log('ok - Stage 3 Enemy: '+name);}catch(e){process.exitCode=1;console.error('not ok - Stage 3 Enemy: '+name+'\n'+e.stack);}}

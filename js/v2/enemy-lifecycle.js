@@ -13,19 +13,28 @@
       if(!descriptor||!id(descriptor.instanceId)||!id(descriptor.encounterDescriptorId)||!id(descriptor.definitionId)||descriptor.kind!=='daily'||descriptor.spawnedOn!==date||!descriptor.enemy)fail('DAILY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
       const definition=definitions&&definitions.enemies&&definitions.enemies.enemies&&definitions.enemies.enemies[descriptor.definitionId];
       if(!definition||definition.kind!==descriptor.kind)fail('DAILY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
+      const context=state.calendar.weekContext;
+      if(!context||!schema.validateWeekContext(state).ok)fail('WEEK_CONTEXT_UNCONFIGURED');
+      const role=context.areaWeekIndex===4?'degradedWeeklyClone':'standardDaily';
+      if(descriptor.encounterRole!==role||(role==='degradedWeeklyClone'&&descriptor.sourceEncounterDescriptorId!==context.degradedWeeklySourceEncounterDescriptorId)||(role==='standardDaily'&&descriptor.sourceEncounterDescriptorId!==undefined))fail('DEGRADED_WEEKLY_DESCRIPTOR_UNRESOLVED');
+      if(descriptor.enemy.defeated!==false||!Number.isFinite(descriptor.enemy.hp)||!Number.isFinite(descriptor.enemy.maxHp)||descriptor.enemy.hp<=0||descriptor.enemy.maxHp<=0||descriptor.enemy.hp>descriptor.enemy.maxHp)fail('DAILY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
       const record=events.safeClone(descriptor.enemy);
       const fields=['instanceId','definitionId','kind','hp','maxHp','barrier','phase','statusIds','spawnedOn','defeated','flags'];
       if(!fields.every(key=>Object.prototype.hasOwnProperty.call(record,key))||typeof record.defeated!=='boolean'||!record.phase||typeof record.phase!=='object'||!record.flags||typeof record.flags!=='object')fail('DAILY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
       for(const key of ['instanceId','definitionId','kind','spawnedOn'])if(record[key]!==descriptor[key])fail('DAILY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
       if(record.flags.encounterDescriptorId!==undefined&&record.flags.encounterDescriptorId!==descriptor.encounterDescriptorId)fail('DAILY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
+      if(record.flags.encounterRole!==undefined&&record.flags.encounterRole!==role)fail('DAILY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
+      if(record.flags.sourceEncounterDescriptorId!==undefined&&record.flags.sourceEncounterDescriptorId!==descriptor.sourceEncounterDescriptorId)fail('DAILY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
       record.flags.encounterDescriptorId=descriptor.encounterDescriptorId;
+      record.flags.encounterRole=role;
+      if(role==='degradedWeeklyClone')record.flags.sourceEncounterDescriptorId=descriptor.sourceEncounterDescriptorId;
       const isolated=events.safeClone(state);isolated.enemiesById={[record.instanceId]:record};isolated.enemyOrder=[record.instanceId];
       if(!schema.validateState(isolated).ok)fail('DAILY_ENCOUNTER_DESCRIPTOR_UNSUPPORTED');
       const bound=Object.values(state.enemiesById).find(e=>e.spawnedOn===date&&e.flags&&e.flags.encounterDescriptorId===descriptor.encounterDescriptorId&&e.instanceId!==descriptor.instanceId);
       if(bound)fail('ENCOUNTER_INSTANCE_CONFLICT');
       const existing=state.enemiesById[descriptor.instanceId];
       if(existing){
-        if((!['instanceId','spawnedOn','kind','definitionId'].every(k=>existing[k]===descriptor[k])||!existing.flags||existing.flags.encounterDescriptorId!==descriptor.encounterDescriptorId))fail('ENCOUNTER_INSTANCE_CONFLICT');
+        if((!['instanceId','spawnedOn','kind','definitionId'].every(k=>existing[k]===descriptor[k])||!existing.flags||existing.flags.encounterDescriptorId!==descriptor.encounterDescriptorId||existing.flags.encounterRole!==role||existing.flags.sourceEncounterDescriptorId!==descriptor.sourceEncounterDescriptorId))fail('ENCOUNTER_INSTANCE_CONFLICT');
         if(state.calendar.enemySpawnDate!==date||!state.enemyOrder.includes(descriptor.instanceId))fail('DAILY_SPAWN_LEDGER_CONFLICT');
         return events.safeClone(state);
       }
