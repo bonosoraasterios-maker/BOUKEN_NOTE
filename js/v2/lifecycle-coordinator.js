@@ -1,4 +1,4 @@
-(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./mission-lifecycle.js'):root.BOUKEN_NOTE_V2.missionLifecycle,typeof module==='object'&&module.exports?require('./calendar-lifecycle.js'):root.BOUKEN_NOTE_V2.calendarLifecycle,typeof module==='object'&&module.exports?require('./enemy-lifecycle.js'):root.BOUKEN_NOTE_V2.enemyLifecycle,typeof module==='object'&&module.exports?require('./battle-events.js'):root.BOUKEN_NOTE_V2.battleEvents);if(typeof module==='object'&&module.exports)module.exports=api;root.BOUKEN_NOTE_V2=root.BOUKEN_NOTE_V2||{};root.BOUKEN_NOTE_V2.lifecycleCoordinator=api;})(typeof globalThis!=='undefined'?globalThis:this,function(missionApi,calendarApi,enemyApi,events){
+(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./mission-lifecycle.js'):root.BOUKEN_NOTE_V2.missionLifecycle,typeof module==='object'&&module.exports?require('./calendar-lifecycle.js'):root.BOUKEN_NOTE_V2.calendarLifecycle,typeof module==='object'&&module.exports?require('./enemy-lifecycle.js'):root.BOUKEN_NOTE_V2.enemyLifecycle,typeof module==='object'&&module.exports?require('./battle-events.js'):root.BOUKEN_NOTE_V2.battleEvents,typeof module==='object'&&module.exports?require('./week-lifecycle.js'):root.BOUKEN_NOTE_V2.weekLifecycle);if(typeof module==='object'&&module.exports)module.exports=api;root.BOUKEN_NOTE_V2=root.BOUKEN_NOTE_V2||{};root.BOUKEN_NOTE_V2.lifecycleCoordinator=api;})(typeof globalThis!=='undefined'?globalThis:this,function(missionApi,calendarApi,enemyApi,events,weekApi){
   'use strict';
   const fail=code=>{const e=new Error(code);e.code=code;throw e;};
   function create(options){
@@ -16,11 +16,11 @@
         // A narrow domain mask: all unrelated Battle/audit State is immutable.
         const mask=value=>{const copy=events.safeClone(value);delete copy.missions;
           if(kind==='completion')delete copy.profile.points;
-          if(kind==='calendar'){delete copy.calendar.localDate;delete copy.calendar.enemySpawnDate;delete copy.enemiesById;delete copy.enemyOrder;delete copy.battleProgress.pendingElliottHits;}
+          if(kind==='calendar'){delete copy.calendar;delete copy.enemiesById;delete copy.enemyOrder;delete copy.charactersById;delete copy.statusInstances;delete copy.battleProgress.pendingElliottHits;}
           return copy;};
         if(!events.deepEqual(mask(current),mask(candidate)))fail('INVALID_STATE_TRANSITION');
         if(kind==='completion'&&(!events.deepEqual(current.missions.weekly,candidate.missions.weekly)||!events.deepEqual(current.missions.special,candidate.missions.special)||!events.deepEqual(current.missions.daily.slots,candidate.missions.daily.slots)||current.missions.daily.date!==candidate.missions.daily.date))fail('INVALID_STATE_TRANSITION');
-        if(kind==='calendar'&&(!events.deepEqual(current.missions.weekly,candidate.missions.weekly)||!events.deepEqual(current.missions.special,candidate.missions.special)))fail('INVALID_STATE_TRANSITION');
+        if(kind==='calendar'){if(!events.deepEqual(candidate,next)||!events.deepEqual(current.missions.special,candidate.missions.special))fail('INVALID_STATE_TRANSITION');weekApi.validateTransition(current,candidate,options.definitions);}
         return true;
       });
     }
@@ -34,12 +34,12 @@
     function simulateCalendar(before){
       mission.assertInitialized(before);
       const target=calendar.target();if(target<before.calendar.localDate)fail('CALENDAR_TIME_REVERSED');
-      let next=events.safeClone(before);
+      let next=calendar.bind(before);
       while(next.calendar.localDate<target){
         const dateStep=calendar.step(next);
         const config=options.missionConfigurationProvider&&options.missionConfigurationProvider.forPeriod({kind:'daily',date:dateStep.calendar.localDate,areaId:next.profile.currentAreaId});
-        next=mission.rolloverDaily(next,dateStep.calendar.localDate,config);
-        next.battleProgress.pendingElliottHits=dateStep.battleProgress.pendingElliottHits;
+        const date=dateStep.calendar.localDate;dateStep.calendar.localDate=next.calendar.localDate;
+        next=mission.rolloverDaily(dateStep,date,config);
         next=enemy.spawn(next);
       }
       return next;
